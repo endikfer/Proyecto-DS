@@ -16,36 +16,47 @@ public class Reto {
 	public String getNombre() {
 		return nombre;
 	}
+	
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
 	public String getDeporte() {
 		return deporte;
 	}
+	
 	public void setDeporte(String deporte) {
 		this.deporte = deporte;
 	}
+	
 	public LocalDate getFecha_inicio() {
 		return fecha_inicio;
 	}
+	
 	public void setFecha_inicio(LocalDate fecha_inicio) {
 		this.fecha_inicio = fecha_inicio;
 	}
+	
 	public LocalDate getFecha_fin() {
 		return fecha_fin;
 	}
+	
 	public void setFecha_fin(LocalDate fecha_fin) {
 		this.fecha_fin = fecha_fin;
 	}
+	
 	public int getDistancia() {
 		return distancia;
 	}
+	
 	public void setDistancia(int distancia) {
 		this.distancia = distancia;
 	}
+	
 	public int getTiempo() {
 		return tiempo;
 	}
+	
 	public void setTiempo(int tiempo) {
 		this.tiempo = tiempo;
 	}

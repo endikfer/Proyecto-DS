@@ -14,9 +14,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import es.deusto.sd.auctions.entity.Article;
-import es.deusto.sd.auctions.entity.Category;
-import es.deusto.sd.auctions.entity.User;
 import es.deusto.sd.auctions.service.AuctionsService;
 import es.deusto.sd.auctions.service.AuthService;
 
