@@ -23,8 +23,4 @@ public class Usuario {
 		retosAceptados2.add(reto);
     }
 	
-	public HashSet<Reto> getRetos() {
-        return retos;
-    }
-	
 }
