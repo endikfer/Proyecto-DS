@@ -9,15 +9,17 @@ import org.springframework.http.ResponseEntity;
 
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Sesion;
+import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.service.RetoService;
 
 public class RetoController {
+	private final Map<Long, Usuario> usuarios = new HashMap<>();
 	private final RetoService RS;
 	public RetoController(RetoService RS) {
 		this.RS = RS;
 	}
 	
-	public void AceptarReto(Reto r, List<Sesion> ListaSesion) {
+	public void aceptarReto(Reto r, List<Sesion> ListaSesion) {
 		for (Sesion s : ListaSesion) {
 			if(true) {//Mirar que la fecha de inicio sea mayor que la fecha de inicio y lo mismo con la fecha final
 				
