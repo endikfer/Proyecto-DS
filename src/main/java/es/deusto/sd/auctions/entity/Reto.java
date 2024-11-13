@@ -10,18 +10,23 @@ public class Reto {
 	public String deporte;// ciclismo o running
 	public LocalDate fecha_inicio;
 	public LocalDate fecha_fin;
-	public int distancia; //en km
-	public int tiempo; // en minutos
+	public Integer distancia; //en km
+	public Integer tiempo; // en minutos
 	
 	
-	public Reto(long id, String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, int distancia,
-			int tiempo) {
+	public Reto(long id, String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
+			Integer tiempo) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.deporte = deporte;
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
+		
+		if ((distancia == null && tiempo == null) || (distancia != null && tiempo != null)) {
+            throw new IllegalArgumentException("El reto debe tener un objetivo de distancia o de tiempo, pero no ambos.");
+        }
+		
 		this.distancia = distancia;
 		this.tiempo = tiempo;
 	}

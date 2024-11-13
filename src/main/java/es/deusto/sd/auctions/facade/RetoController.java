@@ -62,10 +62,16 @@ public class RetoController {
 		)
 		@GetMapping("/retos")
 		public ResponseEntity<List<CategoryDTO>> crearReto(Usuario usuario) {
+			if (!usuario.estaAutenticado()) {
+		        System.out.println("El usuario no ha iniciado sesión.");
+		        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Devolver una respuesta de no autorizado
+		    }
 			try {
 				Long id = 0L;
 				LocalDate fecha_ini;
 				LocalDate fecha_f;
+		        Integer distancia = null;
+		        Integer tiempo = null;
 				Scanner scanner = new Scanner(System.in);
 		        System.out.print("Nombre del reto: ");
 		        String nombre = scanner.nextLine();
@@ -75,14 +81,19 @@ public class RetoController {
 		        String fecha_inicio = scanner.nextLine();
 		        System.out.print("Fecha en la que termina el reto: ");
 		        String fecha_fin = scanner.nextLine();
-		        System.out.print("Distancia(km): ");
-		        String distancia = scanner.nextLine();
-		        System.out.print("Tiempo(mins): ");
-		        String tiempo = scanner.nextLine();
-		        scanner.close();
-		        
-		        int dist = Integer.parseInt(distancia);
-		        int temp = Integer.parseInt(tiempo);
+		        System.out.print("¿Cuál es el objetivo del reto? (Escriba 'distancia' o 'tiempo'): ");
+		        String objetivo = scanner.nextLine();
+
+		        if ("distancia".equalsIgnoreCase(objetivo)) {
+		            System.out.print("Distancia (km): ");
+		            distancia = Integer.parseInt(scanner.nextLine());
+		        } else if ("tiempo".equalsIgnoreCase(objetivo)) {
+		            System.out.print("Tiempo (mins): ");
+		            tiempo = Integer.parseInt(scanner.nextLine());
+		        } else {
+		            System.out.println("Objetivo no válido. Debe ser 'distancia' o 'tiempo'.");
+		            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		        }
 		        
 		        try {
 		            fecha_ini = LocalDate.parse(fecha_inicio);
@@ -92,20 +103,14 @@ public class RetoController {
 		        }
 				
 		        id++;
-				
-				Reto r= new Reto(id,nombre,deporte,fecha_ini,fecha_f, dist,temp);
-				
+				Reto r= new Reto(id,nombre,deporte,fecha_ini,fecha_f, distancia,tiempo);
 				usuario.añadirReto(r);
-				
 				System.out.println("Reto añadido correctamente.");
-				
-				System.out.println(usuario.getRetos());
-				
+				System.out.println(usuario.retosAceptados2);
 				
 				if (categories.isEmpty()) {
 					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 				}
-				
 				return new ResponseEntity<>(dtos, HttpStatus.OK);
 			} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

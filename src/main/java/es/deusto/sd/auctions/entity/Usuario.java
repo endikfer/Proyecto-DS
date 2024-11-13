@@ -6,7 +6,8 @@ import java.util.Set;
 public class Usuario {
 	private Long id;
     private String nombre;
-    private Set<Reto> retosAceptados2 = new HashSet<>();
+    private String token;
+    public Set<Reto> retosAceptados2 = new HashSet<>();
     private Set<Long> retosAceptados = new HashSet<>();
 	public Usuario(Long id, String nombre) {
 		super();
@@ -21,6 +22,10 @@ public class Usuario {
 	
 	public void añadirReto(Reto reto) {
 		retosAceptados2.add(reto);
+    }
+	
+	public boolean estaAutenticado() {
+        return token != null;
     }
 	
 }
