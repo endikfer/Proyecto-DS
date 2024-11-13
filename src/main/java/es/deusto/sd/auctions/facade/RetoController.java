@@ -38,6 +38,4 @@ public class RetoController {
 		}
 		return retosAceptados;
 	}
-	
-	//prueba
 }
