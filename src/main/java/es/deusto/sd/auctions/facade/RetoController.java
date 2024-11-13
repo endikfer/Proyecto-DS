@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import es.deusto.sd.auctions.dto.CategoryDTO;
+import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.auctions.entity.Usuario;
@@ -50,7 +51,7 @@ public class RetoController {
 	}
 	
 	
-	// GET all categories
+	// Crear Reto
 		@Operation(
 			summary = "Create reto",
 			description = "Returns a list of all available categories",
@@ -61,10 +62,10 @@ public class RetoController {
 			}
 		)
 		@GetMapping("/retos")
-		public ResponseEntity<List<CategoryDTO>> crearReto(Usuario usuario) {
+		public ResponseEntity<List<RetoDTO>> crearReto(Usuario usuario) {
 			if (!usuario.estaAutenticado()) {
 		        System.out.println("El usuario no ha iniciado sesión.");
-		        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // Devolver una respuesta de no autorizado
+		        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		    }
 			try {
 				Long id = 0L;
@@ -106,7 +107,7 @@ public class RetoController {
 				Reto r= new Reto(id,nombre,deporte,fecha_ini,fecha_f, distancia,tiempo);
 				usuario.añadirReto(r);
 				System.out.println("Reto añadido correctamente.");
-				System.out.println(usuario.retosAceptados2);
+				usuario.mostrarRetos();
 				
 				if (categories.isEmpty()) {
 					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -115,5 +116,9 @@ public class RetoController {
 			} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
+		}
+		
+		private RetoDTO retoToDTO(Reto reto) {
+			return new RetoDTO(reto.getNombre());
 		}
 }

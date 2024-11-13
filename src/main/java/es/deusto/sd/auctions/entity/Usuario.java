@@ -24,6 +24,17 @@ public class Usuario {
 		retosAceptados2.add(reto);
     }
 	
+	public void mostrarRetos() {
+        if (retosAceptados.isEmpty()) {
+            System.out.println("No hay retos aceptados.");
+        } else {
+            System.out.println("Retos aceptados:");
+            for (Reto reto : retosAceptados2) {
+                System.out.println(reto);
+            }
+        }
+    }
+	
 	public boolean estaAutenticado() {
         return token != null;
     }
