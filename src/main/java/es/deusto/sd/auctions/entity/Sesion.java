@@ -1,7 +1,6 @@
 package es.deusto.sd.auctions.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Sesion {
 
@@ -14,7 +13,7 @@ public class Sesion {
     private int duracion; // Duración en minutos
 
     // Constructor
-    public void SesionEntrenamiento(Long id, Long usuarioId, String titulo, String deporte, double distancia, DateTime fechaInicio, int duracion) {
+    public void SesionEntrenamiento(Long id, Long usuarioId, String titulo, String deporte, double distancia, LocalDate fechaInicio, int duracion) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.titulo = titulo;
