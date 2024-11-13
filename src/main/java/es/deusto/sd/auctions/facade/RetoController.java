@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import es.deusto.sd.auctions.dto.CategoryDTO;
 import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Sesion;
@@ -111,7 +110,36 @@ public class RetoController {
 		        System.out.println("Reto añadido correctamente.");
 
 		        // Obtener la lista de retos del usuario
-		        Set<Reto> retos = usuario.getRetosAceptados();
+		        Set<Reto> retos = usuario.getRetosAceptados2();
+		        
+		        if (retos.isEmpty()) {
+		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		        }
+
+		        // Convertir la lista de Reto a RetoDTO
+		        List<RetoDTO> dtos = new ArrayList<>();
+		        retos.forEach(r -> dtos.add(retoToDTO(r)));
+
+		        return new ResponseEntity<>(dtos, HttpStatus.OK);
+		    } catch (DateTimeParseException e) {
+		        System.out.println("Formato de fecha incorrecto. Asegúrate de usar el formato yyyy-MM-dd.");
+		        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		    } catch (Exception e) {
+		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
+		}
+		
+		public ResponseEntity<List<RetoDTO>> consultarReto(Usuario usuario) {
+		    if (!usuario.estaAutenticado()) {
+		        System.out.println("El usuario no ha iniciado sesión.");
+		        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		    }
+
+		    try {
+		        
+		    	
+		    	
+		        Set<Reto> retos = usuario.getRetosAceptados2();
 		        
 		        if (retos.isEmpty()) {
 		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -56,11 +56,6 @@ public class Usuario {
 	}
 
 
-	public Set<Long> getRetosAceptados() {
-		return retosAceptados;
-	}
-
-
 	public void setRetosAceptados(Set<Long> retosAceptados) {
 		this.retosAceptados = retosAceptados;
 	}
