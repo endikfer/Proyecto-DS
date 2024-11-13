@@ -13,7 +13,13 @@ public class ProgresoRetoDTO {
         this.progreso = progreso;
     }
 
-    // Getters y Setters
+    public ProgresoRetoDTO(long retoId, double progreso) {
+		// TODO Auto-generated constructor stub
+    	this.retoId = retoId;
+    	this.progreso = progreso;
+	}
+
+	// Getters y Setters
     public Long getRetoId() {
         return retoId;
     }
