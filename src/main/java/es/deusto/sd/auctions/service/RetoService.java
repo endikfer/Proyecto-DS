@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import es.deusto.sd.auctions.dto.ProgresoRetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Sesion;
 

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -171,7 +172,7 @@ public class RetoController {
 			    }
 			)
 		@GetMapping("/retos")
-		public ResponseEntity<List<RetoDTO>> consultarReto(Usuario usuario) {
+		public ResponseEntity<List<RetoDTO>> consultarReto(Usuario usuario, LocalDate fechaFiltro, String deporteFiltro) {
 		    if (!usuario.estaAutenticado()) {
 		        System.out.println("El usuario no ha iniciado sesión.");
 		        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -180,6 +181,13 @@ public class RetoController {
 		    try {
 		        
 		    	Set<Reto> retosAceptados = usuario.getRetosAceptados2();
+		    	
+		    	if (fechaFiltro != null) { 
+		    		retosAceptados = retosAceptados.stream() .filter(reto -> reto.getFecha_inicio().equals(fechaFiltro)) .collect(Collectors.toSet()); 
+		    		} 
+		    	if (deporteFiltro != null && !deporteFiltro.isEmpty()) { 
+		    		retosAceptados = retosAceptados.stream() .filter(reto -> reto.getDeporte().equalsIgnoreCase(deporteFiltro)) .collect(Collectors.toSet()); 
+		    		}
 		        
 		        if (retosAceptados.isEmpty()) {
 		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);

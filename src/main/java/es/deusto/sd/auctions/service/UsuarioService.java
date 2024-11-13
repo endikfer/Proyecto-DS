@@ -10,7 +10,6 @@
 	import java.util.concurrent.atomic.AtomicLong;
 	import java.util.stream.Collectors;
 	
-	import es.deusto.sd.auctions.dto.ProgresoRetoDTO;
 	import es.deusto.sd.auctions.entity.Reto;
 	import es.deusto.sd.auctions.entity.Sesion;
 	import es.deusto.sd.auctions.entity.Usuario;
@@ -29,16 +28,5 @@
 	    public Optional<Usuario> obtenerUsuario(Long usuarioId) {
 	        return Optional.ofNullable(usuarios.get(usuarioId));
 	    }
-	
-	
-	    
-	
-	    
-	    
-	
-	    
-	    
-	
-	
 	
 	}
