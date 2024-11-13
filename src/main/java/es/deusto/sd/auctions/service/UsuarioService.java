@@ -1,4 +1,4 @@
-package es.deusto.sd.auctions.facade;
+package es.deusto.sd.auctions.service;
 
 import java.util.HashMap;
 import java.util.HashSet;
