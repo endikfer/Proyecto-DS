@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public class Reto {
 	
+	public long id;
 	public String nombre;
 	public String deporte;// ciclismo o running
 	public LocalDate fecha_inicio;
@@ -13,6 +14,26 @@ public class Reto {
 	public int tiempo; // en minutos
 	
 	
+	public Reto(long id, String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, int distancia,
+			int tiempo) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.deporte = deporte;
+		this.fecha_inicio = fecha_inicio;
+		this.fecha_fin = fecha_fin;
+		this.distancia = distancia;
+		this.tiempo = tiempo;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -60,27 +81,18 @@ public class Reto {
 	public void setTiempo(int tiempo) {
 		this.tiempo = tiempo;
 	}
-	
-	public Reto(String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, int distancia, int tiempo) {
-		super();
-		this.nombre = nombre;
-		this.deporte = deporte;
-		this.fecha_inicio = fecha_inicio;
-		this.fecha_fin = fecha_fin;
-		this.distancia = distancia;
-		this.tiempo = tiempo;
-	}
-	
+
 	@Override
 	public String toString() {
-		return "Reto [nombre=" + nombre + ", deporte=" + deporte + ", fecha_inicio=" + fecha_inicio + ", fecha_fin="
-				+ fecha_fin + ", distancia=" + distancia + ", tiempo=" + tiempo + "]";
+		return "Reto [id=" + id + ", nombre=" + nombre + ", deporte=" + deporte + ", fecha_inicio=" + fecha_inicio
+				+ ", fecha_fin=" + fecha_fin + ", distancia=" + distancia + ", tiempo=" + tiempo + "]";
 	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(deporte, distancia, fecha_fin, fecha_inicio, nombre, tiempo);
+		return Objects.hash(deporte, distancia, fecha_fin, fecha_inicio, id, nombre, tiempo);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -90,8 +102,8 @@ public class Reto {
 		if (getClass() != obj.getClass())
 			return false;
 		Reto other = (Reto) obj;
-		return Objects.equals(deporte, other.deporte) && distancia == other.distancia
-				&& Objects.equals(fecha_fin, other.fecha_fin) && Objects.equals(fecha_inicio, other.fecha_inicio)
-				&& Objects.equals(nombre, other.nombre) && tiempo == other.tiempo;
+		return Objects.equals(id, other.id);
 	}
+	
+	
 }
