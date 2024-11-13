@@ -16,6 +16,56 @@ public class Usuario {
 	}
     
 	
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public String getNombre() {
+		return nombre;
+	}
+
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+
+	public String getToken() {
+		return token;
+	}
+
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+
+	public Set<Reto> getRetosAceptados2() {
+		return retosAceptados2;
+	}
+
+
+	public void setRetosAceptados2(Set<Reto> retosAceptados2) {
+		this.retosAceptados2 = retosAceptados2;
+	}
+
+
+	public Set<Long> getRetosAceptados() {
+		return retosAceptados;
+	}
+
+
+	public void setRetosAceptados(Set<Long> retosAceptados) {
+		this.retosAceptados = retosAceptados;
+	}
+
+
 	public void aceptarReto(Long retoId) {
         retosAceptados.add(retoId);
     }
