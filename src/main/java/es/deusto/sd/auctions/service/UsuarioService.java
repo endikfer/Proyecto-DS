@@ -5,16 +5,18 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import es.deusto.sd.auctions.entity.Usuario;
 
 public class UsuarioService {
 	private final Map<Long, Usuario> usuarios = new HashMap<>();
+	private final AtomicLong idGenerator = new AtomicLong(0);
 
     public UsuarioService() {
         // Inicialización con datos de ejemplo
-        usuarios.put(1L, new Usuario(1L, "Usuario1"));
-        usuarios.put(2L, new Usuario(2L, "Usuario2"));
+        usuarios.put(idGenerator.get(), new Usuario(idGenerator.incrementAndGet(), "Usuario1"));
+        usuarios.put(idGenerator.get(), new Usuario(idGenerator.incrementAndGet(), "Usuario2"));
     }
 
     public Optional<Usuario> obtenerUsuario(Long usuarioId) {
