@@ -47,7 +47,8 @@ public class UsuarioService {
         // Filtrar sesiones relevantes para el reto
         List<Sesion> sesionesFiltradas = sesiones.stream()
                 .filter(s -> s.getDeporte().equalsIgnoreCase(reto.getDeporte()))
-                .filter(s -> !s.getFechaInicio().isBefore(reto.getFecha_inicio()) && !s.getFechaInicio().isAfter(reto.getFechaFin()))
+                .filter(s -> !s.getFechaInicio().toLocalDate().isBefore(reto.getFecha_fin()) && 
+                        !s.getFechaInicio().toLocalDate().isAfter(reto.getFecha_fin()))
                 .collect(Collectors.toList());
 
         // Calcular progreso
