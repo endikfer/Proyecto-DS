@@ -11,8 +11,17 @@ public class Sesion {
     private double distancia; // Distancia en kilómetros
     private LocalDate fechaInicio; // Fecha y hora de inicio
     private int duracion; // Duración en minutos
+    private int tiempo;
 
-    // Constructor
+    public int getTiempo() {
+		return tiempo;
+	}
+
+	public void setTiempo(int tiempo) {
+		this.tiempo = tiempo;
+	}
+
+	// Constructor
     public void SesionEntrenamiento(Long id, Long usuarioId, String titulo, String deporte, double distancia, LocalDate fechaInicio, int duracion) {
         this.id = id;
         this.usuarioId = usuarioId;

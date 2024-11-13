@@ -17,38 +17,68 @@ import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.auctions.entity.Usuario;
-import es.deusto.sd.auctions.service.RetoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 public class RetoController {
-	private final Map<Long, Usuario> usuarios = new HashMap<>();
-	private final RetoService RS;
-	public RetoController(RetoService RS) {
-		this.RS = RS;
-	}
 	
-	public void aceptarReto(Reto r, List<Sesion> ListaSesion) {
-		for (Sesion s : ListaSesion) {
-			if(true) {//Mirar que la fecha de inicio sea mayor que la fecha de inicio y lo mismo con la fecha final
-				
-			}
-		}
-		//Aceptar el reto
-		
-	}
+	public void aceptarReto(Reto reto, List<Sesion> sesiones) {
+        // Verificar que las fechas de las sesiones son compatibles con las fechas del reto
+        for (Sesion sesion : sesiones) {
+            if (sesion.getFechaInicio().isBefore(reto.getFecha_inicio()) || sesion.getFechaInicio().isAfter(reto.getFecha_fin())) {
+                throw new IllegalArgumentException("La sesión no se encuentra dentro del rango de fechas del reto.");
+            }
+        }
+        // Si todas las fechas son válidas, aceptar el reto
+        System.out.println("Reto aceptado: " + reto.getNombre());
+    }
 	
-	public Map<Reto, Integer> RetosAceptados(List<Reto> ListaR){
-		Map<Reto, Integer> retosAceptados = new HashMap<>();
-		Integer progreso = 0;
-		for (Reto r : ListaR) {
-			if(true) {//comprobar que estan los retos aceptados por el usuario
-				retosAceptados.put(r, progreso);
-				//coger el pregreso y meterlo
-			}
-		}
-		return retosAceptados;
+	public boolean retoSuperado(Reto reto, List<Sesion> sesiones) {
+	    // Variables para almacenar el total de distancia o tiempo
+	    double totalDistancia = 0;
+	    double totalTiempo = 0;
+
+	    // Filtrar las sesiones que están dentro del rango del reto
+	    for (Sesion sesion : sesiones) {
+	        if (!sesion.getFechaInicio().isBefore(reto.getFecha_inicio()) && !sesion.getFechaInicio().isAfter(reto.getFecha_fin())) {
+	            // Si la sesión está dentro del rango, sumar su distancia o tiempo
+	            if (reto.getDistancia() != 0) {
+	                totalDistancia += sesion.getDistancia(); // Sumar distancia si el reto es de distancia
+	            }
+	            if (reto.getTiempo() != 0) {
+	                totalTiempo += sesion.getTiempo(); // Sumar tiempo si el reto es de tiempo
+	            }
+	        }
+	    }
+
+	    // Verificar si se ha superado el reto (comparing with target values)
+	    boolean retoSuperado = false;
+
+	    if (reto.getDistancia() != 0 && totalDistancia >= reto.getDistancia()) {
+	        retoSuperado = true;  // Si se ha superado la distancia
+	    } else if (reto.getTiempo() != 0 && totalTiempo >= reto.getTiempo()) {
+	        retoSuperado = true;  // Si se ha superado el tiempo
+	    }
+
+	    return retoSuperado;
 	}
+
+	
+	public Map<Reto, Integer> RetosAceptados(List<Reto> ListaR) {
+        Map<Reto, Integer> retosAceptados = new HashMap<>();
+        for (Reto r : ListaR) {
+            // Supongo que tienes un método que te dice si el reto está aceptado
+            Integer progreso = calcularProgresoReto(r);
+            retosAceptados.put(r, progreso);
+        }
+        return retosAceptados;
+    }
+	
+	private Integer calcularProgresoReto(Reto reto) {
+        // Aquí tendrías que usar la lógica para calcular el progreso, por ejemplo:
+        double progreso = (reto.getDistancia() / (double) reto.getDistancia()) * 100;
+        return (int) progreso;  // Retorna el porcentaje como entero
+    }
 	
 	
 	// Crear Reto
