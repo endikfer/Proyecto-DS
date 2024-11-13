@@ -18,6 +18,7 @@ import es.deusto.sd.auctions.entity.Usuario;
 public class UsuarioService {
 	private final Map<Long, Usuario> usuarios = new HashMap<>();
 	private final AtomicLong idGenerator = new AtomicLong(0);
+	private RetoService retoService;
 
     public UsuarioService() {
         // Inicialización con datos de ejemplo
@@ -37,7 +38,21 @@ public class UsuarioService {
         return obtenerUsuario(usuarioId).map(Usuario::getRetosAceptados2).orElse(new HashSet<>());
     }
     
-    
+    public List<ProgresoRetoDTO> obtenerProgresoRetosAceptados(Long usuarioId) {
+        // Primero, obtiene los retos aceptados por el usuario
+        Usuario usuario = obtenerUsuario(usuarioId); // Método que obtiene el usuario por ID (puede usar un repositorio)
+
+        if (usuario == null) {
+            return Collections.emptyList(); // Si el usuario no existe, retorna una lista vacía
+        }
+
+        Set<Reto> retosAceptados = usuario.getRetosAceptados(); // Lista de retos aceptados por el usuario
+
+        // Para cada reto aceptado, calcular su progreso y devolverlo en una lista de DTOs
+        return retosAceptados.stream()
+                .map(reto -> retoService.calcularProgresoReto(reto)) // Llama al servicio de Reto para calcular el progreso
+                .collect(Collectors.toList()); // Recoge los resultados en una lista
+    }
 
 
 

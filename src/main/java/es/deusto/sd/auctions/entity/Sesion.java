@@ -1,5 +1,6 @@
 package es.deusto.sd.auctions.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Sesion {
@@ -9,11 +10,11 @@ public class Sesion {
     private String titulo; // Título de la sesión
     private String deporte; // Tipo de deporte: "ciclismo" o "running"
     private double distancia; // Distancia en kilómetros
-    private LocalDateTime fechaInicio; // Fecha y hora de inicio
+    private LocalDate fechaInicio; // Fecha y hora de inicio
     private int duracion; // Duración en minutos
 
     // Constructor
-    public void SesionEntrenamiento(Long id, Long usuarioId, String titulo, String deporte, double distancia, LocalDateTime fechaInicio, int duracion) {
+    public void SesionEntrenamiento(Long id, Long usuarioId, String titulo, String deporte, double distancia, DateTime fechaInicio, int duracion) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.titulo = titulo;
@@ -64,11 +65,11 @@ public class Sesion {
         this.distancia = distancia;
     }
 
-    public LocalDateTime getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(LocalDateTime fechaInicio) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
