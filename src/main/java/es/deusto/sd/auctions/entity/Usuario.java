@@ -24,6 +24,10 @@ public class Usuario {
 		retosAceptados2.add(reto);
     }
 	
+    public Set<Reto> getRetosAceptados() {
+        return retosAceptados2;
+    }
+	
 	public void mostrarRetos() {
         if (retosAceptados.isEmpty()) {
             System.out.println("No hay retos aceptados.");

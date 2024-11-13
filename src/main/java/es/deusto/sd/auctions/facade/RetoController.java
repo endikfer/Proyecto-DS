@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,34 +54,39 @@ public class RetoController {
 	
 	// Crear Reto
 		@Operation(
-			summary = "Create reto",
-			description = "Returns a list of all available categories",
-			responses = {
-				@ApiResponse(responseCode = "200", description = "OK: List of categories retrieved successfully"),
-				@ApiResponse(responseCode = "204", description = "No Content: No Categories found"),
-				@ApiResponse(responseCode = "500", description = "Internal server error")
-			}
-		)
+			    summary = "Create reto",
+			    description = "Returns a list of all available retos",
+			    responses = {
+			        @ApiResponse(responseCode = "200", description = "OK: List of retos retrieved successfully"),
+			        @ApiResponse(responseCode = "204", description = "No Content: No retos found"),
+			        @ApiResponse(responseCode = "400", description = "Bad Request: Invalid objective specified"),
+			        @ApiResponse(responseCode = "401", description = "Unauthorized: User not authenticated"),
+			        @ApiResponse(responseCode = "500", description = "Internal server error")
+			    }
+			)
 		@GetMapping("/retos")
 		public ResponseEntity<List<RetoDTO>> crearReto(Usuario usuario) {
-			if (!usuario.estaAutenticado()) {
+		    if (!usuario.estaAutenticado()) {
 		        System.out.println("El usuario no ha iniciado sesión.");
 		        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		    }
-			try {
-				Long id = 0L;
-				LocalDate fecha_ini;
-				LocalDate fecha_f;
+
+		    try {
+		        Long id = 0L;
+		        LocalDate fecha_ini;
+		        LocalDate fecha_f;
 		        Integer distancia = null;
 		        Integer tiempo = null;
+		        
+		        @SuppressWarnings("resource")
 				Scanner scanner = new Scanner(System.in);
 		        System.out.print("Nombre del reto: ");
 		        String nombre = scanner.nextLine();
-		        System.out.print("Deporte a realizar(ciclismo o running): ");
+		        System.out.print("Deporte a realizar (ciclismo o running): ");
 		        String deporte = scanner.nextLine();
-		        System.out.print("Fecha en la que inicia el reto: ");
+		        System.out.print("Fecha en la que inicia el reto (yyyy-MM-dd): ");
 		        String fecha_inicio = scanner.nextLine();
-		        System.out.print("Fecha en la que termina el reto: ");
+		        System.out.print("Fecha en la que termina el reto (yyyy-MM-dd): ");
 		        String fecha_fin = scanner.nextLine();
 		        System.out.print("¿Cuál es el objetivo del reto? (Escriba 'distancia' o 'tiempo'): ");
 		        String objetivo = scanner.nextLine();
@@ -96,26 +102,32 @@ public class RetoController {
 		            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		        }
 		        
-		        try {
-		            fecha_ini = LocalDate.parse(fecha_inicio);
-		            fecha_f = LocalDate.parse(fecha_fin);
-		        } catch (DateTimeParseException e) {
-		            System.out.println("Formato de fecha incorrecto. Asegúrate de usar el formato yyyy-MM-dd.");
-		        }
-				
+		        fecha_ini = LocalDate.parse(fecha_inicio);
+		        fecha_f = LocalDate.parse(fecha_fin);
+		        
 		        id++;
-				Reto r= new Reto(id,nombre,deporte,fecha_ini,fecha_f, distancia,tiempo);
-				usuario.añadirReto(r);
-				System.out.println("Reto añadido correctamente.");
-				usuario.mostrarRetos();
-				
-				if (categories.isEmpty()) {
-					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-				}
-				return new ResponseEntity<>(dtos, HttpStatus.OK);
-			} catch (Exception e) {
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+		        Reto reto = new Reto(id, nombre, deporte, fecha_ini, fecha_f, distancia, tiempo);
+		        usuario.añadirReto(reto);
+		        System.out.println("Reto añadido correctamente.");
+
+		        // Obtener la lista de retos del usuario
+		        Set<Reto> retos = usuario.getRetosAceptados();
+		        
+		        if (retos.isEmpty()) {
+		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		        }
+
+		        // Convertir la lista de Reto a RetoDTO
+		        List<RetoDTO> dtos = new ArrayList<>();
+		        retos.forEach(r -> dtos.add(retoToDTO(r)));
+
+		        return new ResponseEntity<>(dtos, HttpStatus.OK);
+		    } catch (DateTimeParseException e) {
+		        System.out.println("Formato de fecha incorrecto. Asegúrate de usar el formato yyyy-MM-dd.");
+		        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		    } catch (Exception e) {
+		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		    }
 		}
 		
 		private RetoDTO retoToDTO(Reto reto) {
