@@ -46,8 +46,8 @@ public class Usuario {
 	}
 
 
-	public Set<Reto> getRetosAceptados2() {
-		return retosAceptados2;
+	public Set<Long> getRetosAceptados() {
+		return retosAceptados;
 	}
 
 
@@ -69,7 +69,7 @@ public class Usuario {
 		retosAceptados2.add(reto);
     }
 	
-    public Set<Reto> getRetosAceptados() {
+    public Set<Reto> getRetosAceptados2() {
         return retosAceptados2;
     }
 	

@@ -129,6 +129,18 @@ public class RetoController {
 		    }
 		}
 		
+		@Operation(
+			    summary = "Consultar los últimos retos aceptados",
+			    description = "Devuelve los últimos 5 retos aceptados por el usuario en formato DTO",
+			    responses = {
+			        @ApiResponse(responseCode = "200", description = "OK: Lista de los últimos 5 retos devueltos correctamente"),
+			        @ApiResponse(responseCode = "204", description = "No Content: No hay retos aceptados"),
+			        @ApiResponse(responseCode = "400", description = "Bad Request: Formato de fecha incorrecto"),
+			        @ApiResponse(responseCode = "401", description = "Unauthorized: Usuario no autenticado"),
+			        @ApiResponse(responseCode = "500", description = "Internal server error")
+			    }
+			)
+		@GetMapping("/retos")
 		public ResponseEntity<List<RetoDTO>> consultarReto(Usuario usuario) {
 		    if (!usuario.estaAutenticado()) {
 		        System.out.println("El usuario no ha iniciado sesión.");
@@ -137,22 +149,26 @@ public class RetoController {
 
 		    try {
 		        
-		    	
-		    	
-		        Set<Reto> retos = usuario.getRetosAceptados2();
+		    	Set<Reto> retosAceptados = usuario.getRetosAceptados2();
 		        
-		        if (retos.isEmpty()) {
+		        if (retosAceptados.isEmpty()) {
 		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		        } else {
+		            List<Reto> listaRetos = new ArrayList<>(retosAceptados);
+		            
+		            int start = Math.max(listaRetos.size() - 5, 0);
+		            List<Reto> ultimos5Retos = listaRetos.subList(start, listaRetos.size());
+		            
+		            System.out.println("Últimos 5 retos aceptados:");
+		            for (Reto reto : ultimos5Retos) {
+		                System.out.println(reto);
+		            }
 		        }
 
-		        // Convertir la lista de Reto a RetoDTO
 		        List<RetoDTO> dtos = new ArrayList<>();
-		        retos.forEach(r -> dtos.add(retoToDTO(r)));
+		        retosAceptados.forEach(r -> dtos.add(retoToDTO(r)));
 
 		        return new ResponseEntity<>(dtos, HttpStatus.OK);
-		    } catch (DateTimeParseException e) {
-		        System.out.println("Formato de fecha incorrecto. Asegúrate de usar el formato yyyy-MM-dd.");
-		        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		    } catch (Exception e) {
 		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
