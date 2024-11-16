@@ -1,19 +1,17 @@
 package es.deusto.sd.auctions.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import es.deusto.sd.auctions.entity.Reto;
-import es.deusto.sd.auctions.entity.Sesion;
 
 public class RetoService {
 
 	private final Map<Long, Reto> retos = new HashMap<>();
+
 
     public RetoService() {
         // Inicialización con datos de ejemplo
@@ -27,7 +25,5 @@ public class RetoService {
 
     public Collection<Reto> obtenerRetos() {
         return retos.values();
-    }
-    
-   
+    }   
 }

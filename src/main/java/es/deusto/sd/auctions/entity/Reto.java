@@ -7,7 +7,7 @@ public class Reto {
 	
 	public long id;
 	public String nombre;
-	public String deporte;// ciclismo o running
+	public String deporte;  // ciclismo o running
 	public LocalDate fecha_inicio;
 	public LocalDate fecha_fin;
 	public Integer distancia; //en km
@@ -95,7 +95,7 @@ public class Reto {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(deporte, distancia, fecha_fin, fecha_inicio, id, nombre, tiempo);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class Reto {
 		if (getClass() != obj.getClass())
 			return false;
 		Reto other = (Reto) obj;
-		return Objects.equals(id, other.id);
+		return id == other.id;
 	}
 	
 	

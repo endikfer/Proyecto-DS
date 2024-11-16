@@ -13,15 +13,28 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.auctions.entity.Usuario;
+import es.deusto.sd.auctions.service.AuctionsService;
+import es.deusto.sd.auctions.service.RetoService;
+import es.deusto.sd.auctions.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 public class RetoController {
+	
+	private final UsuarioService usuarioService;
+
+	public RetoController(UsuarioService usuarioService) {
+		this.usuarioService = usuarioService;
+	}
 	
 	public void aceptarReto(Reto reto, List<Sesion> sesiones) {
         // Verificar que las fechas de las sesiones son compatibles con las fechas del reto
@@ -95,57 +108,34 @@ public class RetoController {
 			    }
 			)
 		@GetMapping("/retos")
-		public ResponseEntity<List<RetoDTO>> crearReto(Usuario usuario) {
-		    if (!usuario.estaAutenticado()) {
-		        System.out.println("El usuario no ha iniciado sesión.");
-		        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		    }
-
+		public ResponseEntity<List<RetoDTO>> crearReto(
+				@Parameter(name = "id", description = "Identificador del reto", required = true, example = "01")		
+				@PathVariable("id") Long id,
+				@Parameter(name = "nombre", description = "Nombre del reto a crear", required = true, example = "50 flexiones")		
+				@PathVariable("nombre") String nombre,
+				@Parameter(name = "deporte", description = "Nombre del deporte", required = true, example = "running")
+				@RequestParam("deporte") String deporte,
+				@Parameter(name = "fecha_inicio", description = "Fecha de inicio del reto", required = true, example = "2024-11-16")
+				@RequestParam("fecha_inicio") LocalDate fecha_inicio,
+				@Parameter(name = "fecha_fin", description = "Fecha de finalizacion del reto", required = true, example = "2024-11-22")
+				@RequestParam("fecha_fin") LocalDate fecha_fin,
+				@Parameter(name = "objetivo", description = "Objetivo a realizar en el reto", required = true, example = "distancia")
+				@RequestParam("objetivo") String objetivo,
+				@Parameter(name = "distancia", description = "Distancia a realizar", required = false, example = "200")
+				@RequestParam("distancia") Integer distancia,
+				@Parameter(name = "tiempo", description = "Tiempo a completar", required = false, example = "31")
+				@RequestParam("tiempo") Integer tiempo,
+				@Parameter(name = "token", description = "Token de autorizacion", required = true, example = "1727786726773")
+				@RequestBody String token) { 
 		    try {
-		        Long id = 0L;
-		        LocalDate fecha_ini;
-		        LocalDate fecha_f;
-		        Integer distancia = null;
-		        Integer tiempo = null;
-		        
-		        @SuppressWarnings("resource")
-				Scanner scanner = new Scanner(System.in);
-		        System.out.print("Nombre del reto: ");
-		        String nombre = scanner.nextLine();
-		        System.out.print("Deporte a realizar (ciclismo o running): ");
-		        String deporte = scanner.nextLine();
-		        System.out.print("Fecha en la que inicia el reto (yyyy-MM-dd): ");
-		        String fecha_inicio = scanner.nextLine();
-		        System.out.print("Fecha en la que termina el reto (yyyy-MM-dd): ");
-		        String fecha_fin = scanner.nextLine();
-		        System.out.print("¿Cuál es el objetivo del reto? (Escriba 'distancia' o 'tiempo'): ");
-		        String objetivo = scanner.nextLine();
+		    	Usuario user = usuarioService.getUserByToken(token);
+		    	
+		    	if (user == null) {
+		    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		    	}
+		    	
+		        Reto reto = new Reto(id, nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo);
 
-		        if ("distancia".equalsIgnoreCase(objetivo)) {
-		            System.out.print("Distancia (km): ");
-		            distancia = Integer.parseInt(scanner.nextLine());
-		        } else if ("tiempo".equalsIgnoreCase(objetivo)) {
-		            System.out.print("Tiempo (mins): ");
-		            tiempo = Integer.parseInt(scanner.nextLine());
-		        } else {
-		            System.out.println("Objetivo no válido. Debe ser 'distancia' o 'tiempo'.");
-		            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		        }
-		        
-		        fecha_ini = LocalDate.parse(fecha_inicio);
-		        fecha_f = LocalDate.parse(fecha_fin);
-		        
-		        id++;
-		        Reto reto = new Reto(id, nombre, deporte, fecha_ini, fecha_f, distancia, tiempo);
-		        usuario.añadirReto(reto);
-		        System.out.println("Reto añadido correctamente.");
-
-		        // Obtener la lista de retos del usuario
-		        Set<Reto> retos = usuario.getRetosAceptados2();
-		        
-		        if (retos.isEmpty()) {
-		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		        }
 
 		        // Convertir la lista de Reto a RetoDTO
 		        List<RetoDTO> dtos = new ArrayList<>();
@@ -172,7 +162,13 @@ public class RetoController {
 			    }
 			)
 		@GetMapping("/retos")
-		public ResponseEntity<List<RetoDTO>> consultarReto(Usuario usuario, LocalDate fechaFiltro, String deporteFiltro) {
+		public ResponseEntity<List<RetoDTO>> consultarReto(
+				@Parameter(name = "deporte", description = "Deporte", required = false, example = "2024-11-16")
+				@RequestParam("deporte") String deporteFiltro,
+				@Parameter(name = "fecha", description = "Fecha", required = false, example = "2024-11-16")
+				@RequestParam("fecha") LocalDate fechaFiltro,
+				@Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
+	    		@RequestBody String token) {
 		    if (!usuario.estaAutenticado()) {
 		        System.out.println("El usuario no ha iniciado sesión.");
 		        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -213,6 +209,12 @@ public class RetoController {
 		}
 		
 		private RetoDTO retoToDTO(Reto reto) {
-			return new RetoDTO(reto.getNombre());
+			return new RetoDTO( reto.getId(), 
+					reto.getNombre(),
+					reto.getDeporte(),
+					reto.getFecha_inicio(),
+					reto.getFecha_fin(),
+					reto.getDistancia(), 
+					reto.getTiempo());
 		}
 }

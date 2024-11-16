@@ -16,6 +16,7 @@
 	
 	public class UsuarioService {
 		private final Map<Long, Usuario> usuarios = new HashMap<>();
+		private static Map<String, Usuario> tokens = new HashMap<>(); 
 		private final AtomicLong idGenerator = new AtomicLong(0);
 		private RetoService retoService;
 	
@@ -27,6 +28,10 @@
 	
 	    public Optional<Usuario> obtenerUsuario(Long usuarioId) {
 	        return Optional.ofNullable(usuarios.get(usuarioId));
+	    }
+	    
+	    public Usuario getUserByToken(String token) {
+	        return tokens.get(token); 
 	    }
 	
 	}
