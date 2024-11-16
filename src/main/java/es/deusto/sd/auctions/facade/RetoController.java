@@ -31,9 +31,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 public class RetoController {
 	
 	private final UsuarioService usuarioService;
+	private final RetoService retoService;
 
-	public RetoController(UsuarioService usuarioService) {
+	public RetoController(UsuarioService usuarioService, RetoService retoService) {
 		this.usuarioService = usuarioService;
+		this.retoService = retoService;
 	}
 	
 	public void aceptarReto(Reto reto, List<Sesion> sesiones) {
@@ -134,17 +136,9 @@ public class RetoController {
 		    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		    	}
 		    	
-		        Reto reto = new Reto(id, nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo);
-
-
-		        // Convertir la lista de Reto a RetoDTO
-		        List<RetoDTO> dtos = new ArrayList<>();
-		        retos.forEach(r -> dtos.add(retoToDTO(r)));
-
-		        return new ResponseEntity<>(dtos, HttpStatus.OK);
-		    } catch (DateTimeParseException e) {
-		        System.out.println("Formato de fecha incorrecto. Asegúrate de usar el formato yyyy-MM-dd.");
-		        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		        retoService.crearReto(id, nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo);
+		        
+		        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		    } catch (Exception e) {
 		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
@@ -169,12 +163,10 @@ public class RetoController {
 				@RequestParam("fecha") LocalDate fechaFiltro,
 				@Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
 	    		@RequestBody String token) {
-		    if (!usuario.estaAutenticado()) {
-		        System.out.println("El usuario no ha iniciado sesión.");
-		        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		    }
+		    
 
 		    try {
+		    	Usuario user = usuarioService.getUserByToken(token);
 		        
 		    	Set<Reto> retosAceptados = usuario.getRetosAceptados2();
 		    	

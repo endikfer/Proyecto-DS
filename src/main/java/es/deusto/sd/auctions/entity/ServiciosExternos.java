@@ -18,8 +18,4 @@ public class ServiciosExternos {
 	public void setEmails(Map<String,  ArrayList<String>> emails) {
 		this.emails = emails;
 	}
-
-	
-	
-	
 }

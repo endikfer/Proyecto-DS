@@ -11,6 +11,7 @@ import es.deusto.sd.auctions.entity.Reto;
 public class RetoService {
 
 	private final Map<Long, Reto> retos = new HashMap<>();
+	private long clave = 3L;
 
 
     public RetoService() {
@@ -25,5 +26,13 @@ public class RetoService {
 
     public Collection<Reto> obtenerRetos() {
         return retos.values();
-    }   
+    }
+    
+    public void crearReto(long id, String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
+			Integer tiempo) {		
+		// Create a new bid and associate it with the article
+		Reto reto = new Reto(id, nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo);
+		retos.put(clave, reto);
+		clave++;
+	}
 }
