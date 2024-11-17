@@ -8,7 +8,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 	import java.util.Arrays;
 	import java.util.HashMap;
-	import java.util.Map;
+import java.util.List;
+import java.util.Map;
 	import java.util.Optional;
 	import java.util.concurrent.atomic.AtomicLong;
 	import es.deusto.sd.auctions.entity.Usuario;
@@ -56,6 +57,14 @@ public class UsuarioService {
     
     public Usuario getUserByToken(String token) {
         return tokens.get(token); 
+    }
+    
+    public List<Usuario> getUsuarios() {
+        return new ArrayList<>(usuarios.values());
+    }
+    
+    public void eliminarUsuario(Long id) {
+        usuarios.remove(id);
     }
     
 	public Usuario registro(String nombre, String email, Date fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
