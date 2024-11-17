@@ -23,10 +23,11 @@ public class UsuarioService {
     public UsuarioService() {
         // Inicialización con datos de ejemplo
     	// Crear fechas usando LocalDate y convertirlas a Date
-        Date fecha1 = (Date) Date.from(LocalDate.of(1990, 1, 15).atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date fecha2 = (Date) Date.from(LocalDate.of(1988, 6, 22).atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date fecha3 = (Date) Date.from(LocalDate.of(1992, 3, 5).atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date fecha4 = (Date) Date.from(LocalDate.of(1985, 12, 30).atStartOfDay(ZoneId.systemDefault()).toInstant());
+    	Date fecha1 = Date.valueOf(LocalDate.of(1990, 1, 15));
+        Date fecha2 = Date.valueOf(LocalDate.of(1988, 6, 22));
+        Date fecha3 = Date.valueOf(LocalDate.of(1992, 3, 5));
+        Date fecha4 = Date.valueOf(LocalDate.of(1985, 12, 30));
+
         // Crear usuarios
         Usuario user1 = new Usuario("Juan Pérez", "info@google.com", fecha1, 70.5f, 175, 190, 60);
         Usuario user2 = new Usuario("Ana López", "contact@meta.com", fecha2, 62.0f, 165, 180, 55);
