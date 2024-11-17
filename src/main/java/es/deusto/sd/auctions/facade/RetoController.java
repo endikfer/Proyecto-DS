@@ -1,13 +1,11 @@
 package es.deusto.sd.auctions.facade;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,6 @@ import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.auctions.entity.Usuario;
-import es.deusto.sd.auctions.service.AuctionsService;
 import es.deusto.sd.auctions.service.RetoService;
 import es.deusto.sd.auctions.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -167,32 +164,56 @@ public class RetoController {
 
 		    try {
 		    	Usuario user = usuarioService.getUserByToken(token);
-		        
-		    	Set<Reto> retosAceptados = usuario.getRetosAceptados2();
 		    	
-		    	if (fechaFiltro != null) { 
-		    		retosAceptados = retosAceptados.stream() .filter(reto -> reto.getFecha_inicio().equals(fechaFiltro)) .collect(Collectors.toSet()); 
-		    		} 
-		    	if (deporteFiltro != null && !deporteFiltro.isEmpty()) { 
-		    		retosAceptados = retosAceptados.stream() .filter(reto -> reto.getDeporte().equalsIgnoreCase(deporteFiltro)) .collect(Collectors.toSet()); 
-		    		}
-		        
-		        if (retosAceptados.isEmpty()) {
+		    	if (user == null) {
+		    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		    	}
+		    	
+		    	Collection<Reto> retos = retoService.obtenerRetos();
+		    	
+		    	LocalDate fechaBusqueda = (fechaFiltro != null) ? fechaFiltro : LocalDate.now();
+
+		    	List<Reto> retosFiltradosPorFecha = new ArrayList<>();
+		    	List<Reto> retosFiltradosPorDeporte = new ArrayList<>();
+
+		    	for (Reto reto : retos) {
+		    	    if (reto.getFecha_fin().isAfter(fechaBusqueda)) {
+		    	        retosFiltradosPorFecha.add(reto);
+		    	    }
+		    	}
+
+		    	if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
+		    	    for (Reto reto : retos) {
+		    	        if (reto.getDeporte().equalsIgnoreCase(deporteFiltro)) {
+		    	            retosFiltradosPorDeporte.add(reto);
+		    	        }
+		    	    }
+		    	}
+
+		    	List<Reto> resultadosFinales;
+		    	if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
+		    	    resultadosFinales = retosFiltradosPorDeporte;
+		    	} else {
+		    	    resultadosFinales = retosFiltradosPorFecha;
+		    	}
+
+		        if (resultadosFinales.isEmpty()) {
 		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		        } else {
-		            List<Reto> listaRetos = new ArrayList<>(retosAceptados);
-		            
-		            int start = Math.max(listaRetos.size() - 5, 0);
-		            List<Reto> ultimos5Retos = listaRetos.subList(start, listaRetos.size());
-		            
-		            System.out.println("Últimos 5 retos aceptados:");
-		            for (Reto reto : ultimos5Retos) {
-		                System.out.println(reto);
-		            }
 		        }
 
+		        List<Reto> retosOrdenados = new ArrayList<>(resultadosFinales);
+
+			    retosOrdenados.sort((r1, r2) -> r2.getFecha_inicio().compareTo(r1.getFecha_inicio()));
+	
+			    List<Reto> ultimos5Retos = new ArrayList<>();
+			    for (int i = 0; i < retosOrdenados.size() && i < 5; i++) {
+			        ultimos5Retos.add(retosOrdenados.get(i));
+			    }
+		        
 		        List<RetoDTO> dtos = new ArrayList<>();
-		        retosAceptados.forEach(r -> dtos.add(retoToDTO(r)));
+		        for (Reto reto : ultimos5Retos) {
+		            dtos.add(retoToDTO(reto));
+		        }
 
 		        return new ResponseEntity<>(dtos, HttpStatus.OK);
 		    } catch (Exception e) {
