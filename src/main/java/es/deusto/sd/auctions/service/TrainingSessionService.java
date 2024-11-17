@@ -3,12 +3,9 @@ package es.deusto.sd.auctions.service;
 import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.auctions.dto.SesionDTO;
 import es.deusto.sd.auctions.entity.Deporte;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TrainingSessionService {
 
