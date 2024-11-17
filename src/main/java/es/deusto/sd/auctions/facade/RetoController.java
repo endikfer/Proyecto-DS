@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.deusto.sd.auctions.dto.RetoDTO;
@@ -34,64 +36,6 @@ public class RetoController {
 		this.usuarioService = usuarioService;
 		this.retoService = retoService;
 	}
-	
-	public void aceptarReto(Reto reto, List<Sesion> sesiones) {
-        // Verificar que las fechas de las sesiones son compatibles con las fechas del reto
-        for (Sesion sesion : sesiones) {
-            if (sesion.getFechaInicio().isBefore(reto.getFecha_inicio()) || sesion.getFechaInicio().isAfter(reto.getFecha_fin())) {
-                throw new IllegalArgumentException("La sesión no se encuentra dentro del rango de fechas del reto.");
-            }
-        }
-        // Si todas las fechas son válidas, aceptar el reto
-        System.out.println("Reto aceptado: " + reto.getNombre());
-    }
-	
-	public boolean retoSuperado(Reto reto, List<Sesion> sesiones) {
-	    // Variables para almacenar el total de distancia o tiempo
-	    double totalDistancia = 0;
-	    double totalTiempo = 0;
-
-	    // Filtrar las sesiones que están dentro del rango del reto
-	    for (Sesion sesion : sesiones) {
-	        if (!sesion.getFechaInicio().isBefore(reto.getFecha_inicio()) && !sesion.getFechaInicio().isAfter(reto.getFecha_fin())) {
-	            // Si la sesión está dentro del rango, sumar su distancia o tiempo
-	            if (reto.getDistancia() != 0) {
-	                totalDistancia += sesion.getDistancia(); // Sumar distancia si el reto es de distancia
-	            }
-	            if (reto.getTiempo() != 0) {
-	                totalTiempo += sesion.getTiempo(); // Sumar tiempo si el reto es de tiempo
-	            }
-	        }
-	    }
-
-	    // Verificar si se ha superado el reto (comparing with target values)
-	    boolean retoSuperado = false;
-
-	    if (reto.getDistancia() != 0 && totalDistancia >= reto.getDistancia()) {
-	        retoSuperado = true;  // Si se ha superado la distancia
-	    } else if (reto.getTiempo() != 0 && totalTiempo >= reto.getTiempo()) {
-	        retoSuperado = true;  // Si se ha superado el tiempo
-	    }
-
-	    return retoSuperado;
-	}
-
-	
-	public Map<Reto, Integer> RetosAceptados(List<Reto> ListaR) {
-        Map<Reto, Integer> retosAceptados = new HashMap<>();
-        for (Reto r : ListaR) {
-            // Supongo que tienes un método que te dice si el reto está aceptado
-            Integer progreso = calcularProgresoReto(r);
-            retosAceptados.put(r, progreso);
-        }
-        return retosAceptados;
-    }
-	
-	private Integer calcularProgresoReto(Reto reto) {
-        // Aquí tendrías que usar la lógica para calcular el progreso, por ejemplo:
-        double progreso = (reto.getDistancia() / (double) reto.getDistancia()) * 100;
-        return (int) progreso;  // Retorna el porcentaje como entero
-    }
 	
 	
 	// Crear Reto
@@ -220,6 +164,82 @@ public class RetoController {
 		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
 		}
+		
+		
+		@Operation(
+			    summary = "Aceptar un reto",
+			    description = "Permite a un usuario aceptar un reto existente",
+			    responses = {
+			        @ApiResponse(responseCode = "200", description = "OK: Reto aceptado correctamente"),
+			        @ApiResponse(responseCode = "401", description = "Unauthorized: Usuario no autenticado"),
+			        @ApiResponse(responseCode = "409", description = "Conflict: El reto ya fue aceptado previamente"),
+			        @ApiResponse(responseCode = "500", description = "Internal server error")
+			    }
+			)
+			@PostMapping("/retos")
+			public ResponseEntity<Void> aceptarReto(
+			        @Parameter(name = "retoId", description = "ID del reto a aceptar", required = true)
+			        @PathVariable Long retoId,
+			        @Parameter(name = "token", description = "Authorization token", required = true)
+			        @RequestHeader("token") String token) {
+
+			    try {
+			        Usuario usuario = usuarioService.getUserByToken(token);
+			        if (usuario == null) {
+			            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			        }
+
+			        boolean retoAceptado = retoService.aceptarReto(retoId, usuario);
+			        if (!retoAceptado) {
+			            return new ResponseEntity<>(HttpStatus.CONFLICT);
+			        }
+
+			        return new ResponseEntity<>(HttpStatus.OK);
+			    } catch (Exception e) {
+			        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			    }
+			}
+		
+		
+		@Operation(
+			    summary = "Consultar retos aceptados",
+			    description = "Devuelve los retos aceptados por el usuario",
+			    responses = {
+			        @ApiResponse(responseCode = "200", description = "OK: Lista de retos aceptados devuelta correctamente"),
+			        @ApiResponse(responseCode = "401", description = "Unauthorized: Usuario no autenticado"),
+			        @ApiResponse(responseCode = "204", description = "No Content: No hay retos aceptados"),
+			        @ApiResponse(responseCode = "500", description = "Internal server error")
+			    }
+			)
+			@GetMapping("/retos")
+			public ResponseEntity<List<RetoDTO>> consultarRetosAceptados(
+			        @Parameter(name = "token", description = "Authorization token", required = true)
+			        @RequestHeader("token") String token) {
+
+			    try {
+			        Usuario usuario = usuarioService.getUserByToken(token);
+			        if (usuario == null) {
+			            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			        }
+
+			        List<Reto> retosAceptados = retoService.getRetosAceptados(usuario);
+			        if (retosAceptados.isEmpty()) {
+			            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			        }
+
+			        List<RetoDTO> dtos = new ArrayList<RetoDTO>();
+			        for(Reto r:retosAceptados) {
+			        	dtos.add(retoToDTO(r));
+			        }
+			        return new ResponseEntity<>(dtos, HttpStatus.OK);
+			    } catch (Exception e) {
+			        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			    }
+			}
+
+
+		
+		
 		
 		private RetoDTO retoToDTO(Reto reto) {
 			return new RetoDTO( reto.getId(), 

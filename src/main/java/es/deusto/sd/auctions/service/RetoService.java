@@ -1,16 +1,20 @@
 package es.deusto.sd.auctions.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import es.deusto.sd.auctions.entity.Reto;
+import es.deusto.sd.auctions.entity.Usuario;
 
 public class RetoService {
 
 	private final Map<Long, Reto> retos = new HashMap<>();
+	private final Map<Long, List<Long>> retosAceptados = new HashMap<>();
 	private long clave = 8L;
 
 
@@ -25,8 +29,8 @@ public class RetoService {
         retos.put(7L, new Reto(7L, "Reto 20K Running", "running", LocalDate.now(), LocalDate.now().plusDays(15), 20, 0));
     }
 
-    public Optional<Reto> obtenerReto(Long retoId) {
-        return Optional.ofNullable(retos.get(retoId));
+    public Reto obtenerReto(Long retoId) {
+        return retos.get(retoId);
     }
 
     public Collection<Reto> obtenerRetos() {
@@ -40,4 +44,34 @@ public class RetoService {
 		retos.put(clave, reto);
 		clave++;
 	}
+    
+    public boolean aceptarReto(Long retoId, Usuario usuario) {
+        boolean acptado = false;
+        
+        if (!retosAceptados.containsKey(usuario.getId())) {
+            retosAceptados.put(usuario.getId(), new ArrayList<>());
+        }
+
+        List<Long> retoIds = retosAceptados.get(usuario.getId());
+        
+        if (!retoIds.contains(retoId)) {
+            retosAceptados.get(usuario.getId()).add(retoId);
+            acptado = true;
+        }
+        
+    	return acptado;
+    }
+    
+    
+    public List<Reto> getRetosAceptados(Usuario usuario){
+    	List<Reto> lista = new ArrayList<Reto>();    	
+    	List <Long> Ids = retosAceptados.get(usuario.getId());
+    	
+    	for(Long idr :Ids) {
+    		lista.add(obtenerReto(idr));
+    	}
+    	
+    	return lista;
+    }
+    
 }
