@@ -33,20 +33,33 @@ public class TrainingSessionService {
 
     // Obtener las 5 últimas sesiones
     public List<SesionDTO> getRecentSessions() {
-        return sesiones.stream()
-                .sorted(Comparator.comparing(Sesion::getFechaInicio).reversed()) 
-                .limit(5) 
-                .map(this::toDTO) 
-                .collect(Collectors.toList());
+        List<SesionDTO> recentSessions = new ArrayList<>();
+
+        int totalSessions = sesiones.size();
+        int limit = totalSessions > 5 ? 5 : totalSessions; 
+
+        for (int i = totalSessions - limit; i < totalSessions; i++) {
+            Sesion sesion = sesiones.get(i); 
+            recentSessions.add(toDTO(sesion));
+        }
+
+        return recentSessions;
     }
+
 
     // Obtener sesiones entre fechas
     public List<SesionDTO> getSessionsByDateRange(LocalDate startDate, LocalDate endDate) {
-        return sesiones.stream()
-                .filter(s -> !s.getFechaInicio().isBefore(startDate) && !s.getFechaInicio().isAfter(endDate)) // Filtrar por fecha
-                .map(this::toDTO) 
-                .collect(Collectors.toList());
+        List<SesionDTO> filteredSessions = new ArrayList<>();
+
+        for (Sesion sesion : sesiones) {
+            if (!sesion.getFechaInicio().isBefore(startDate) && !sesion.getFechaInicio().isAfter(endDate)) {
+                filteredSessions.add(toDTO(sesion));
+            }
+        }
+
+        return filteredSessions;
     }
+
 
     // Método para convertir Sesion a SesionDTO
     private SesionDTO toDTO(Sesion sesion) {
