@@ -7,7 +7,7 @@ public class Sesion {
 	private Long id; // ID único de la sesión
     private Long usuarioId; // ID del usuario que realizó la sesión
     private String titulo; // Título de la sesión
-    private String deporte; // Tipo de deporte: "ciclismo" o "running"
+    private Deporte deporte; // Tipo de deporte: "ciclismo" o "running"
     private double distancia; // Distancia en kilómetros
     private LocalDate fechaInicio; // Fecha y hora de inicio
     private int duracion; // Duración en minutos
@@ -22,7 +22,7 @@ public class Sesion {
 	}
 
 	// Constructor
-    public void SesionEntrenamiento(Long id, Long usuarioId, String titulo, String deporte, double distancia, LocalDate fechaInicio, int duracion) {
+    public void SesionEntrenamiento(Long id, Long usuarioId, String titulo, Deporte deporte, double distancia, LocalDate fechaInicio, int duracion) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.titulo = titulo;
@@ -57,11 +57,11 @@ public class Sesion {
         this.titulo = titulo;
     }
 
-    public String getDeporte() {
+    public Deporte getDeporte() {
         return deporte;
     }
 
-    public void setDeporte(String deporte) {
+    public void setDeporte(Deporte deporte) {
         this.deporte = deporte;
     }
 
