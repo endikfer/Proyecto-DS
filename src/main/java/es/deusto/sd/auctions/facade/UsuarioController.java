@@ -16,11 +16,11 @@ import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.service.RetoService;
 import es.deusto.sd.auctions.service.UsuarioService;
 
-public class UsuarioConroller {
+public class UsuarioController {
 	
 	UsuarioService US;
 
-	public UsuarioConroller(UsuarioService US) {
+	public UsuarioController(UsuarioService US) {
 		this.US = US;
 	}
 

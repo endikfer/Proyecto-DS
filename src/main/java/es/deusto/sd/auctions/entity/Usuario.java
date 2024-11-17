@@ -21,9 +21,9 @@ public class Usuario {
     public Set<Reto> retosAceptados2 = new HashSet<>();
     private Set<Long> retosAceptados = new HashSet<>();
     
-	public Usuario(Long id, String nombre, String email, Date fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+    //para crearlos a mano
+	public Usuario(String nombre, String email, Date fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();
-		this.id = id;
 		this.nombre = nombre;
 		this.email = email;
 		this.fecha_nac = fecha_nac;
@@ -32,21 +32,26 @@ public class Usuario {
 		this.frec_car_max = frec_car_max;
 		this.frec_car_rep = frec_car_rep;
 	}
-	
+	//para registro
+	public Usuario(Long id, String nombre, String email, Date fecha_nac) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.email = email;
+		this.fecha_nac = fecha_nac;
+	}
+
 	public Long getId() {
 		return id;
 	}
-
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
 	public String getNombre() {
 		return nombre;
 	}
-
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
@@ -103,51 +108,10 @@ public class Usuario {
 	public Set<Long> getRetosAceptados() {
 		return retosAceptados;
 	}
-	public Usuario() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Usuario registro(String nombre, String email, Date fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
-		AtomicLong idGenerator = new AtomicLong(0);
-   	Usuario u = new Usuario(idGenerator.incrementAndGet(), nombre, email, fecha_nac, peso, altura, frec_car_max, frec_car_rep);
-   	boolean enc = false;
-   	for (String se: ServiciosExternos.getEmails().keySet()) {
-			for (String e: ServiciosExternos.getEmails().get(se)) {
-				if (e.equals(email)) {
-					enc = true;
-				}
-			}
-			
-		}
-   		
-   	if (enc) {
-   		return u;
-		}
-   	else return new Usuario();
-   }
-	public void LogIn(String email, String contrasenia) {
-		//enviar datos a Meta o Google
-		String servicioexterno;
-		for (String se: ServiciosExternos.getEmails().keySet()) {
-			for (String e: ServiciosExternos.getEmails().get(se)) {
-				if (e.equals(email)) {
-					servicioexterno = se;
-				}
-			}
-			
-		}
-		token = Timestamp.from(Instant.now());
-	}
-	public void LogOut() {
-		token = null;
-	}
-
 
 	public void setRetosAceptados2(Set<Reto> retosAceptados2) {
 		this.retosAceptados2 = retosAceptados2;
 	}
-
 
 	public void setRetosAceptados(Set<Long> retosAceptados) {
 		this.retosAceptados = retosAceptados;
