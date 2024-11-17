@@ -1,8 +1,10 @@
+package es.deusto.sd.auctions.controller;
+
+import es.deusto.sd.auctions.dto.CrearSesionDTO;
+import es.deusto.sd.auctions.dto.SesionDTO;
+import es.deusto.sd.auctions.service.TrainingSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import es.deusto.sd.auctions.entity.Sesion;
-import es.deusto.sd.auctions.service.TrainingSessionService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,25 +20,20 @@ public class TrainingSessionController {
         this.trainingSessionService = trainingSessionService;
     }
 
-    // Endpoint para crear una nueva sesión
     @PostMapping("/create")
-    public Sesion createSession(@RequestBody Sesion sesion) {
-        return trainingSessionService.createSession(sesion);
+    public SesionDTO createSession(@RequestBody CrearSesionDTO createSesionDTO) {
+        return trainingSessionService.createSession(createSesionDTO);
     }
 
-    // Endpoint para obtener las últimas 5 sesiones
     @GetMapping("/recent")
-    public List<Sesion> getRecentSessions() {
+    public List<SesionDTO> getRecentSessions() {
         return trainingSessionService.getRecentSessions();
     }
 
-    // Endpoint para obtener sesiones en un rango de fechas
     @GetMapping("/range")
-    public List<Sesion> getSessionsByDateRange(
-            @RequestParam String startDate,
-            @RequestParam String endDate) {
-        LocalDate start = LocalDate.parse(startDate);
-        LocalDate end = LocalDate.parse(endDate);
-        return trainingSessionService.getSessionsByDateRange(start, end);
+    public List<SesionDTO> getSessionsByDateRange(
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate) {
+        return trainingSessionService.getSessionsByDateRange(startDate, endDate);
     }
 }
