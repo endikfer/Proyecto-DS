@@ -2,16 +2,47 @@ package es.deusto.sd.auctions.dto;
 
 import java.time.LocalDate;
 
-//Usada para devolver información al cliente.
 public class SesionDTO {
+
+    private Long id; // Solo necesario cuando se devuelve la sesión
     private String titulo;
-    private String deporte;
+    private String deporte;  // Tipo de deporte como String (se usa un enum en el backend)
     private double distancia; 
     private LocalDate fechaInicio;
-    private LocalDate horaInicio; 
-    private int duracion; 
+    private int duracion;
 
-    // Getters y Setters
+    // Constructor para la creación de sesiones
+    public SesionDTO(String titulo, String deporte, double distancia, LocalDate fechaInicio, int duracion) {
+        this.titulo = titulo;
+        this.deporte = deporte;
+        this.distancia = distancia;
+        this.fechaInicio = fechaInicio;
+        this.duracion = duracion;
+    }
+
+    // Constructor para cuando ya existe una sesión (con ID)
+    public SesionDTO(Long id, String titulo, String deporte, double distancia, LocalDate fechaInicio, int duracion) {
+        this.id = id;
+        this.titulo = titulo;
+        this.deporte = deporte;
+        this.distancia = distancia;
+        this.fechaInicio = fechaInicio;
+        this.duracion = duracion;
+    }
+
+    public SesionDTO() {
+    	
+    }
+
+	// Getters y Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitulo() {
         return titulo;
     }
@@ -42,14 +73,6 @@ public class SesionDTO {
 
     public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
-    }
-
-    public LocalDate getHoraInicio() {
-        return horaInicio;
-    }
-
-    public void setHoraInicio(LocalDate horaInicio) {
-        this.horaInicio = horaInicio;
     }
 
     public int getDuracion() {
