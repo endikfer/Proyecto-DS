@@ -2,10 +2,8 @@ package es.deusto.sd.auctions.entity;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Usuario {
 	private Long id;
