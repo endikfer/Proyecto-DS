@@ -7,14 +7,14 @@ public class Reto {
 	
 	public long id;
 	public String nombre;
-	public String deporte;  // ciclismo o running
+	public Deporte deporte;  // ciclismo o running
 	public LocalDate fecha_inicio;
 	public LocalDate fecha_fin;
 	public Integer distancia; //en km
 	public Integer tiempo; // en minutos
 	
 	
-	public Reto(long id, String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
+	public Reto(long id, String nombre, Deporte deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
 			Integer tiempo) {
 		super();
 		this.id = id;
@@ -47,11 +47,11 @@ public class Reto {
 		this.nombre = nombre;
 	}
 	
-	public String getDeporte() {
+	public Deporte getDeporte() {
 		return deporte;
 	}
 	
-	public void setDeporte(String deporte) {
+	public void setDeporte(Deporte deporte) {
 		this.deporte = deporte;
 	}
 	

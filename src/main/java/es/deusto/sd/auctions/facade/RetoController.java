@@ -3,10 +3,7 @@ package es.deusto.sd.auctions.facade;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
-import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.service.RetoService;
 import es.deusto.sd.auctions.service.UsuarioService;
@@ -128,7 +124,7 @@ public class RetoController {
 
 		    	if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
 		    	    for (Reto reto : retos) {
-		    	        if (reto.getDeporte().equalsIgnoreCase(deporteFiltro)) {
+		    	        if (reto.getDeporte().name().equalsIgnoreCase(deporteFiltro)) {
 		    	            retosFiltradosPorDeporte.add(reto);
 		    	        }
 		    	    }
@@ -244,7 +240,7 @@ public class RetoController {
 		private RetoDTO retoToDTO(Reto reto) {
 			return new RetoDTO( reto.getId(), 
 					reto.getNombre(),
-					reto.getDeporte(),
+					reto.getDeporte().name().toLowerCase(),
 					reto.getFecha_inicio(),
 					reto.getFecha_fin(),
 					reto.getDistancia(), 
