@@ -5,6 +5,7 @@
  */
 package es.deusto.sd.auctions;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -14,8 +15,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import es.deusto.sd.auctions.entity.Deporte;
+import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.service.AuctionsService;
 import es.deusto.sd.auctions.service.AuthService;
+import es.deusto.sd.auctions.service.RetoService;
 
 @Configuration
 public class DataInitializer {
@@ -23,7 +27,7 @@ public class DataInitializer {
 	private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 	
     @Bean
-    CommandLineRunner initData(AuctionsService auctionsService, AuthService authService) {
+    CommandLineRunner initData(AuctionsService auctionsService, AuthService authService, RetoService retoservice) {
 		return args -> {			
 			// Create some users
 			User batman = new User("BruceWayne", "batman@dc.com", "Batm@n123!");
@@ -57,6 +61,16 @@ public class DataInitializer {
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(2024, Calendar.DECEMBER, 31);
 			Date auctionEndDate = calendar.getTime();
+			
+			
+			//Inicializacion de retos
+			retoservice.crearReto(1L, "Reto 10K Running", "running", LocalDate.now().minusDays(5), LocalDate.now().plusDays(10), 10, 0);
+			retoservice.crearReto(2L, "Reto 50K Ciclismo", "ciclismo", LocalDate.now(), LocalDate.now().plusDays(20), 50, 0);
+			retoservice.crearReto(3L, "Reto Maratón Running", "running", LocalDate.now().minusDays(3), LocalDate.now().plusDays(15), 42, 0);
+			retoservice.crearReto(4L, "Reto 2 Horas Ciclismo", "ciclismo", LocalDate.now().minusDays(10), LocalDate.now().plusDays(5), 0, 120);
+			retoservice.crearReto(5L, "Reto 30K Ciclismo", "ciclismo", LocalDate.now().minusDays(7), LocalDate.now().plusDays(25), 30, 0);
+			retoservice.crearReto(6L, "Reto 1 Hora Running", "running", LocalDate.now().minusDays(1), LocalDate.now().plusDays(30), 0, 60);
+			retoservice.crearReto(7L, "Reto 20K Running", "running", LocalDate.now(), LocalDate.now().plusDays(15), 20, 0);
 			
 			// Articles of Electronics category
             Article iphone = new Article(0, "Apple iPhone 14 Pro", 999.99f, auctionEndDate, electronics, batman);

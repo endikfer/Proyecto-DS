@@ -16,20 +16,7 @@ public class RetoService {
 
 	private final Map<Long, Reto> retos = new HashMap<>();
 	private final Map<Long, List<Long>> retosAceptados = new HashMap<>();
-	private long clave = 8L;
-
-
-	public RetoService() {
-	    // Inicialización con datos de ejemplo usando el enumerador Deporte
-	    retos.put(1L, new Reto(1L, "Reto 10K Running", Deporte.RUNNING, LocalDate.now().minusDays(5), LocalDate.now().plusDays(10), 10, 0));
-	    retos.put(2L, new Reto(2L, "Reto 50K Ciclismo", Deporte.CICLISMO, LocalDate.now(), LocalDate.now().plusDays(20), 50, 0));
-	    retos.put(3L, new Reto(3L, "Reto Maratón Running", Deporte.RUNNING, LocalDate.now().minusDays(3), LocalDate.now().plusDays(15), 42, 0));
-	    retos.put(4L, new Reto(4L, "Reto 2 Horas Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(10), LocalDate.now().plusDays(5), 0, 120));
-	    retos.put(5L, new Reto(5L, "Reto 30K Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(7), LocalDate.now().plusDays(25), 30, 0));
-	    retos.put(6L, new Reto(6L, "Reto 1 Hora Running", Deporte.RUNNING, LocalDate.now().minusDays(1), LocalDate.now().plusDays(30), 0, 60));
-	    retos.put(7L, new Reto(7L, "Reto 20K Running", Deporte.RUNNING, LocalDate.now(), LocalDate.now().plusDays(15), 20, 0));
-	}
-
+	private long clave = 1L;
 
     public Reto obtenerReto(Long retoId) {
         return retos.get(retoId);
