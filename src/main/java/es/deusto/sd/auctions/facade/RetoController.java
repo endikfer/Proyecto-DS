@@ -1,6 +1,7 @@
 package es.deusto.sd.auctions.facade;
 
 import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
@@ -22,7 +25,11 @@ import es.deusto.sd.auctions.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@RestController
+@RequestMapping("/acciones")
+@Tag(name = "Retos Controller", description = "Operaciones relacionadas con los retos")
 public class RetoController {
 	
 	private final UsuarioService usuarioService;
@@ -36,20 +43,18 @@ public class RetoController {
 	
 	// Crear Reto
 		@Operation(
-			    summary = "Create reto",
-			    description = "Returns a list of all available retos",
+			    summary = "Crear reto",
+			    description = "Crea un reto",
 			    responses = {
-			        @ApiResponse(responseCode = "200", description = "OK: List of retos retrieved successfully"),
-			        @ApiResponse(responseCode = "204", description = "No Content: No retos found"),
-			        @ApiResponse(responseCode = "400", description = "Bad Request: Invalid objective specified"),
-			        @ApiResponse(responseCode = "401", description = "Unauthorized: User not authenticated"),
+			        @ApiResponse(responseCode = "200", description = "OK: Reto creado correctamente"),
+			        @ApiResponse(responseCode = "401", description = "Unauthorized: Usuario no autenticado"),
 			        @ApiResponse(responseCode = "500", description = "Internal server error")
 			    }
 			)
-		@GetMapping("/retos")
+		@PostMapping("/retos/crear")
 		public ResponseEntity<List<RetoDTO>> crearReto(
-				@Parameter(name = "id", description = "Identificador del reto", required = true, example = "01")		
-				@PathVariable("id") Long id,
+				@Parameter(name = "retoId", description = "Identificador del reto", required = true, example = "01")		
+				@PathVariable("retoId") Long id,
 				@Parameter(name = "nombre", description = "Nombre del reto a crear", required = true, example = "50 flexiones")		
 				@PathVariable("nombre") String nombre,
 				@Parameter(name = "deporte", description = "Nombre del deporte", required = true, example = "running")
@@ -75,7 +80,7 @@ public class RetoController {
 		    	
 		        retoService.crearReto(id, nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo);
 		        
-		        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		        return new ResponseEntity<>(HttpStatus.OK);
 		    } catch (Exception e) {
 		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
@@ -87,7 +92,6 @@ public class RetoController {
 			    responses = {
 			        @ApiResponse(responseCode = "200", description = "OK: Lista de los últimos 5 retos devueltos correctamente"),
 			        @ApiResponse(responseCode = "204", description = "No Content: No hay retos aceptados"),
-			        @ApiResponse(responseCode = "400", description = "Bad Request: Formato de fecha incorrecto"),
 			        @ApiResponse(responseCode = "401", description = "Unauthorized: Usuario no autenticado"),
 			        @ApiResponse(responseCode = "500", description = "Internal server error")
 			    }
@@ -172,7 +176,7 @@ public class RetoController {
 			        @ApiResponse(responseCode = "500", description = "Internal server error")
 			    }
 			)
-			@PostMapping("/retos")
+			@PostMapping("/retos/{retoId}/aceptar")
 			public ResponseEntity<Void> aceptarReto(
 			        @Parameter(name = "retoId", description = "ID del reto a aceptar", required = true)
 			        @PathVariable Long retoId,
@@ -207,7 +211,7 @@ public class RetoController {
 			        @ApiResponse(responseCode = "500", description = "Internal server error")
 			    }
 			)
-			@GetMapping("/retos")
+			@GetMapping("/retos/aceptados")
 			public ResponseEntity<List<RetoDTO>> consultarRetosAceptados(
 			        @Parameter(name = "token", description = "Authorization token", required = true)
 			        @RequestHeader("token") String token) {
