@@ -1,28 +1,28 @@
 package es.deusto.sd.auctions.dto;
 
-import java.sql.Date;
-
 public class UsuarioDTO {
     private Long id;
     private String nombre;
     private String email;
-    private Date fecha_nac;
+    private String fecha_nac;  // Cambiado a String
     private float peso;
     private int altura;
     private int frec_car_max;
     private int frec_car_rep;
 
-    public UsuarioDTO(Long id, String nombre, String email, Date fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
-        this.id = id;
+    // Constructor
+    public UsuarioDTO(String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+
         this.nombre = nombre;
         this.email = email;
-        this.fecha_nac = fecha_nac;
+        this.fecha_nac = fecha_nac;  // Cambio aquí
         this.peso = peso;
         this.altura = altura;
         this.frec_car_max = frec_car_max;
         this.frec_car_rep = frec_car_rep;
     }
 
+    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -47,11 +47,11 @@ public class UsuarioDTO {
         this.email = email;
     }
 
-    public Date getFecha_nac() {
+    public String getFecha_nac() {
         return fecha_nac;
     }
 
-    public void setFecha_nac(Date fecha_nac) {
+    public void setFecha_nac(String fecha_nac) {
         this.fecha_nac = fecha_nac;
     }
 

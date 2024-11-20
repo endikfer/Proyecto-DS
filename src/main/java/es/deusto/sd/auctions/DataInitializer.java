@@ -6,13 +6,6 @@
 package es.deusto.sd.auctions;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -31,37 +24,12 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initData(UsuarioService usuarioservice, RetoService retoservice, TrainingSessionService sesionservice) {
 		return args -> {
-			// Servicios externos
-			 Map<String, ArrayList<String>> se = new HashMap<String, ArrayList<String>>();
-			 se.put("Google", new ArrayList<>(Arrays.asList("support@google.com", "info@google.com")));
-			 se.put("Meta", new ArrayList<>(Arrays.asList("help@meta.com", "contact@meta.com")));			
-	        usuarioservice.setServiciosExternos(se);
-	        
-			// Crear fechas usando LocalDate y convertirlas a java.sql.Date
-			java.util.Date fecha1Util = Date.from(LocalDate.of(1990, 1, 15)
-			        .atStartOfDay(ZoneId.systemDefault())
-			        .toInstant());
-			java.util.Date fecha2Util = Date.from(LocalDate.of(1988, 6, 22)
-			        .atStartOfDay(ZoneId.systemDefault())
-			        .toInstant());
-			java.util.Date fecha3Util = Date.from(LocalDate.of(1992, 3, 5)
-			        .atStartOfDay(ZoneId.systemDefault())
-			        .toInstant());
-			java.util.Date fecha4Util = Date.from(LocalDate.of(1985, 12, 30)
-			        .atStartOfDay(ZoneId.systemDefault())
-			        .toInstant());
-
-			// Convertir java.util.Date a java.sql.Date
-			java.sql.Date fecha1 = new java.sql.Date(fecha1Util.getTime());
-			java.sql.Date fecha2 = new java.sql.Date(fecha2Util.getTime());
-			java.sql.Date fecha3 = new java.sql.Date(fecha3Util.getTime());
-			java.sql.Date fecha4 = new java.sql.Date(fecha4Util.getTime());
 
 			// Crear usuarios
-			usuarioservice.registro("Juan Pérez", "info@google.com", fecha1, 70.5f, 175, 190, 60);
-			usuarioservice.registro("Ana López", "contact@meta.com", fecha2, 62.0f, 165, 180, 55);
-			usuarioservice.registro("Carlos Díaz", "support@google.com", fecha3, 80.0f, 180, 195, 65);
-			usuarioservice.registro("María Gómez", "help@meta.com", fecha4, 68.0f, 170, 185, 58);
+			usuarioservice.registro("Juan Pérez", "info@google.com", "1985-07-25", 70.5f, 175, 190, 60);
+			usuarioservice.registro("Ana López", "contact@meta.com", "2000-12-01", 62.0f, 165, 180, 55);
+			usuarioservice.registro("Carlos Díaz", "support@google.com", "1990-05-15", 80.0f, 180, 195, 65);
+			usuarioservice.registro("María Gómez", "help@meta.com", "1993-10-10", 68.0f, 170, 185, 58);
 			
 			usuarioservice.LogIn("info@google.com", null);
 			usuarioservice.LogIn("contact@meta.com", null);

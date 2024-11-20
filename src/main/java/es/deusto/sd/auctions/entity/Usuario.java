@@ -1,7 +1,5 @@
 package es.deusto.sd.auctions.entity;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +7,7 @@ public class Usuario {
 	private Long id;
     private String nombre;
     private String email;
-    private Date fecha_nac;
+    private String fecha_nac;
     private float peso; //kilogramos
     private int altura; //centímetros
     private int frec_car_max; //en número de pulsaciones por minuto
@@ -17,9 +15,8 @@ public class Usuario {
 
     public Set<Reto> retosAceptados2 = new HashSet<>();
     private Set<Long> retosAceptados = new HashSet<>();
-    
     //para crearlos a mano
-	public Usuario(String nombre, String email, Date fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+	public Usuario(String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();
 		this.nombre = nombre;
 		this.email = email;
@@ -30,7 +27,7 @@ public class Usuario {
 		this.frec_car_rep = frec_car_rep;
 	}
 	//para registro
-	public Usuario(Long id, String nombre, String email, Date fecha_nac) {
+	public Usuario(Long id, String nombre, String email, String fecha_nac) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -62,11 +59,11 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public Date getFecha_nac() {
+	public String getFecha_nac() {
 		return fecha_nac;
 	}
 
-	public void setFecha_nac(Date fecha_nac) {
+	public void setFecha_nac(String fecha_nac) {
 		this.fecha_nac = fecha_nac;
 	}
 

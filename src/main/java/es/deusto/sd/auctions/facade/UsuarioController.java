@@ -26,6 +26,7 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
+    // Obtener todos los usuarios
     @Operation(
             summary = "Obtener todos los usuarios",
             description = "Devuelve una lista con todos los usuarios registrados.",
@@ -51,30 +52,7 @@ public class UsuarioController {
         }
     }
 
-    @Operation(
-            summary = "Obtener un usuario por ID",
-            description = "Devuelve los datos del usuario correspondiente al ID proporcionado.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK: Usuario encontrado"),
-                    @ApiResponse(responseCode = "404", description = "Not Found: Usuario no encontrado"),
-                    @ApiResponse(responseCode = "500", description = "Internal server error")
-            }
-    )
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> obtenerUsuarioPorId(
-            @Parameter(name = "id", description = "ID del usuario", required = true, example = "1")
-            @PathVariable Long id) {
-        try {
-            Optional<Usuario> usuario = usuarioService.obtenerUsuario(id);
-            if (usuario.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(convertirUsuarioADTO(usuario.get()), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
+    // Registrar un nuevo usuario
     @Operation(
             summary = "Registrar un nuevo usuario",
             description = "Registra un nuevo usuario con los datos proporcionados.",
@@ -84,61 +62,39 @@ public class UsuarioController {
                     @ApiResponse(responseCode = "500", description = "Internal server error")
             }
     )
-    @PostMapping
-    public ResponseEntity<Void> registrarUsuario(
-            @Parameter(name = "usuarioDTO", description = "Datos del usuario a registrar", required = true)
-            @RequestBody UsuarioDTO usuarioDTO) {
+    @PostMapping("/registro")
+    public ResponseEntity<UsuarioDTO> registrarUsuario(
+        @RequestParam("nombre") String nombre,
+        @RequestParam("email") String email,
+        @RequestParam("fecha_nac") String fecha_nac,
+        @RequestParam("peso") float peso,
+        @RequestParam("altura") int altura,
+        @RequestParam("frec_car_max") int frec_car_max,
+        @RequestParam("frec_car_rep") int frec_car_rep
+    ) {
         try {
-            usuarioService.registro(
-                    usuarioDTO.getNombre(),
-                    usuarioDTO.getEmail(),
-                    usuarioDTO.getFecha_nac(),
-                    usuarioDTO.getPeso(),
-                    usuarioDTO.getAltura(),
-                    usuarioDTO.getFrec_car_max(),
-                    usuarioDTO.getFrec_car_rep()
-            );
+            usuarioService.registro(nombre,email,fecha_nac,peso,altura,frec_car_max,frec_car_rep);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);  // Error de solicitud mal formada
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            // Loguea el error y proporciona un mensaje genérico
+            e.printStackTrace();  // O usa un logger
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);  // Error de servidor interno
         }
     }
 
+    
+    // Iniciar sesión
     @Operation(
-            summary = "Eliminar un usuario por ID",
-            description = "Elimina el usuario correspondiente al ID proporcionado.",
+            summary = "Iniciar sesión",
+            description = "Permite a un usuario iniciar sesión con su email y contraseña.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "OK: Usuario eliminado"),
-                    @ApiResponse(responseCode = "404", description = "Not Found: Usuario no encontrado"),
-                    @ApiResponse(responseCode = "500", description = "Internal server error")
+                    @ApiResponse(responseCode = "200", description = "OK: Inicio de sesión exitoso, se devuelve el token de autorización."),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized: Credenciales incorrectas."),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
             }
     )
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarUsuario(
-            @Parameter(name = "id", description = "ID del usuario a eliminar", required = true, example = "1")
-            @PathVariable Long id) {
-        try {
-            if (usuarioService.obtenerUsuario(id).isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            usuarioService.eliminarUsuario(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Operation(
-    	    summary = "Iniciar sesión",
-    	    description = "Permite a un usuario iniciar sesión con su email y contraseña.",
-    	    responses = {
-    	        @ApiResponse(responseCode = "200", description = "OK: Inicio de sesión exitoso, se devuelve el token de autorización."),
-    	        @ApiResponse(responseCode = "401", description = "Unauthorized: Credenciales incorrectas."),
-    	        @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
-    	    }
-    	)
     @PostMapping("/login")
     public ResponseEntity<String> iniciarSesion(
             @Parameter(name = "email", description = "Correo electrónico del usuario", required = true)
@@ -163,25 +119,46 @@ public class UsuarioController {
             // Devolver el token generado
             return ResponseEntity.ok(tokenOpt.get());
         } catch (IllegalArgumentException e) {
-            // Manejar usuario no encontrado o errores de lógica
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(e.getMessage());
         } catch (Exception e) {
-            // Manejar cualquier otro error interno
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error interno al iniciar sesión");
         }
     }
 
-    /**
-     * Convierte un Usuario en UsuarioDTO.
-     *
-     * @param usuario Usuario a convertir
-     * @return UsuarioDTO convertido
-     */
+    // Cerrar sesión
+    @Operation(
+            summary = "Cerrar sesión",
+            description = "Permite a un usuario cerrar sesión proporcionando su token.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK: Sesión cerrada correctamente."),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized: Token no válido o expirado."),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
+    @PostMapping("/logout")
+    public ResponseEntity<String> cerrarSesion(
+            @Parameter(name = "token", description = "Token de sesión del usuario", required = true)
+            @RequestParam String token) {
+        try {
+            Usuario usuario = usuarioService.getUserByToken(token);
+            if (usuario == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Token no válido o expirado.");
+            }
+
+            usuarioService.LogOut(usuario);
+            return ResponseEntity.ok("Sesión cerrada correctamente.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno al cerrar sesión.");
+        }
+    }
+
+    // Convertir un Usuario a UsuarioDTO
     private UsuarioDTO convertirUsuarioADTO(Usuario usuario) {
         return new UsuarioDTO(
-                usuario.getId(),
                 usuario.getNombre(),
                 usuario.getEmail(),
                 usuario.getFecha_nac(),
