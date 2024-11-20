@@ -1,11 +1,9 @@
 package es.deusto.sd.auctions.facade;
 
 import java.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import es.deusto.sd.auctions.dto.RetoAcptadoDTO;
 import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
@@ -233,10 +230,6 @@ public class RetoController {
 			    }
 			}
 
-
-		
-		
-		
 		private RetoDTO retoToDTO(Reto reto) {
 			return new RetoDTO( reto.getId(), 
 					reto.getNombre(),

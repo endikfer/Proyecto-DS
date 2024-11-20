@@ -1,16 +1,24 @@
-
 package es.deusto.sd.auctions.facade;
 
 import es.deusto.sd.auctions.dto.UsuarioDTO;
 import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/usuarios")
+@Tag(name = "Usuarios Controller", description = "Endpoints para gestionar los usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -19,118 +27,168 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // GET all users
+    @Operation(
+            summary = "Obtener todos los usuarios",
+            description = "Devuelve una lista con todos los usuarios registrados.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK: Lista de usuarios devuelta exitosamente"),
+                    @ApiResponse(responseCode = "204", description = "No Content: No hay usuarios registrados"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     @GetMapping
-    public ResponseEntity<?> getAllUsuarios() {
-        return new ResponseEntity<>(usuarioService.getUsuarios(), HttpStatus.OK);
+    public ResponseEntity<List<UsuarioDTO>> obtenerTodosLosUsuarios() {
+        try {
+            List<Usuario> usuarios = usuarioService.getUsuarios();
+            if (usuarios.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            List<UsuarioDTO> usuariosDTO = usuarios.stream()
+                    .map(this::convertirUsuarioADTO)
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(usuariosDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // GET a user by ID
+    @Operation(
+            summary = "Obtener un usuario por ID",
+            description = "Devuelve los datos del usuario correspondiente al ID proporcionado.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK: Usuario encontrado"),
+                    @ApiResponse(responseCode = "404", description = "Not Found: Usuario no encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUsuarioById(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioService.obtenerUsuario(id);
-        if (usuario.isPresent()) {
-            UsuarioDTO usuarioDTO = new UsuarioDTO(usuario.get().getId(),
-                                                    usuario.get().getNombre(),
-                                                    usuario.get().getEmail(),
-                                                    usuario.get().getFecha_nac(),
-                                                    usuario.get().getPeso(),
-                                                    usuario.get().getAltura(),
-                                                    usuario.get().getFrec_car_max(),
-                                                    usuario.get().getFrec_car_rep());
-            return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+    public ResponseEntity<UsuarioDTO> obtenerUsuarioPorId(
+            @Parameter(name = "id", description = "ID del usuario", required = true, example = "1")
+            @PathVariable Long id) {
+        try {
+            Optional<Usuario> usuario = usuarioService.obtenerUsuario(id);
+            if (usuario.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(convertirUsuarioADTO(usuario.get()), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // POST to register a new user
-    @PostMapping("/registro")
-    public ResponseEntity<?> createUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        // Llamar al método de registro en UsuarioService
-        Usuario usuario = usuarioService.registro(
-                usuarioDTO.getNombre(),
-                usuarioDTO.getEmail(),
-                usuarioDTO.getFecha_nac(),
-                usuarioDTO.getPeso(),
-                usuarioDTO.getAltura(),
-                usuarioDTO.getFrec_car_max(),
-                usuarioDTO.getFrec_car_rep()
-        );
-
-        if (usuario != null) {
-            // Si el usuario se registra correctamente
-            return new ResponseEntity<>("Usuario creado con éxito", HttpStatus.CREATED);
-        } else {
-            // Si el registro no es válido
-            return new ResponseEntity<>("No se pudo crear el usuario", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    // PUT to update an existing user (using 'registro' method for validation)
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
-        Optional<Usuario> usuarioOptional = usuarioService.obtenerUsuario(id);
-        if (usuarioOptional.isPresent()) {
-            // Actualización de un usuario existente con el mismo método de 'registro'
-            Usuario usuarioExistente = usuarioOptional.get();
-            usuarioExistente.setNombre(usuarioDTO.getNombre());
-            usuarioExistente.setEmail(usuarioDTO.getEmail());
-            usuarioExistente.setFecha_nac(usuarioDTO.getFecha_nac());
-            usuarioExistente.setPeso(usuarioDTO.getPeso());
-            usuarioExistente.setAltura(usuarioDTO.getAltura());
-            usuarioExistente.setFrec_car_max(usuarioDTO.getFrec_car_max());
-            usuarioExistente.setFrec_car_rep(usuarioDTO.getFrec_car_rep());
-
-            // No existe un método 'update' explícito, por lo que se puede considerar 'registro' como una forma de validación
+    @Operation(
+            summary = "Registrar un nuevo usuario",
+            description = "Registra un nuevo usuario con los datos proporcionados.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Created: Usuario registrado exitosamente"),
+                    @ApiResponse(responseCode = "400", description = "Bad Request: Datos inválidos o incompletos"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
+    @PostMapping
+    public ResponseEntity<Void> registrarUsuario(
+            @Parameter(name = "usuarioDTO", description = "Datos del usuario a registrar", required = true)
+            @RequestBody UsuarioDTO usuarioDTO) {
+        try {
             usuarioService.registro(
-                    usuarioExistente.getNombre(),
-                    usuarioExistente.getEmail(),
-                    usuarioExistente.getFecha_nac(),
-                    usuarioExistente.getPeso(),
-                    usuarioExistente.getAltura(),
-                    usuarioExistente.getFrec_car_max(),
-                    usuarioExistente.getFrec_car_rep()
+                    usuarioDTO.getNombre(),
+                    usuarioDTO.getEmail(),
+                    usuarioDTO.getFecha_nac(),
+                    usuarioDTO.getPeso(),
+                    usuarioDTO.getAltura(),
+                    usuarioDTO.getFrec_car_max(),
+                    usuarioDTO.getFrec_car_rep()
             );
-            return new ResponseEntity<>("Usuario actualizado con éxito", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // DELETE a user by ID
+    @Operation(
+            summary = "Eliminar un usuario por ID",
+            description = "Elimina el usuario correspondiente al ID proporcionado.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK: Usuario eliminado"),
+                    @ApiResponse(responseCode = "404", description = "Not Found: Usuario no encontrado"),
+                    @ApiResponse(responseCode = "500", description = "Internal server error")
+            }
+    )
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUsuario(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioService.obtenerUsuario(id);
-        if (usuario.isPresent()) {
-            // Para eliminar, podrías agregar un método de eliminación en UsuarioService.
+    public ResponseEntity<Void> eliminarUsuario(
+            @Parameter(name = "id", description = "ID del usuario a eliminar", required = true, example = "1")
+            @PathVariable Long id) {
+        try {
+            if (usuarioService.obtenerUsuario(id).isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             usuarioService.eliminarUsuario(id);
-            return new ResponseEntity<>("Usuario eliminado con éxito", HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // POST to log in a user (creating token)
-    @PostMapping("/login")
-    public ResponseEntity<?> logIn(@RequestBody UsuarioDTO usuarioDTO) {
-        String token = usuarioService.LogIn(usuarioDTO.getEmail(), usuarioDTO.getNombre());
-        if (token != null) {
-            return new ResponseEntity<>("Login exitoso, token: " + token, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Email o contraseña incorrectos", HttpStatus.UNAUTHORIZED);
-        }
-    }
+    @Operation(
+    	    summary = "Iniciar sesión",
+    	    description = "Permite a un usuario iniciar sesión con su email y contraseña.",
+    	    responses = {
+    	        @ApiResponse(responseCode = "200", description = "OK: Inicio de sesión exitoso, se devuelve el token de autorización."),
+    	        @ApiResponse(responseCode = "401", description = "Unauthorized: Credenciales incorrectas."),
+    	        @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
+    	    }
+    	)
+    	@PostMapping("/login")
+    	public ResponseEntity<String> iniciarSesion(
+    	        @Parameter(name = "email", description = "Correo electrónico del usuario", required = true)
+    	        @RequestParam String email,
+    	        @Parameter(name = "contraseña", description = "Contraseña del usuario", required = true)
+    	        @RequestParam String contraseña) {
+    	    try {
+    	        // Intentar iniciar sesión usando el servicio
+    	        usuarioService.LogIn(email, contraseña);
 
-    // POST to log out a user
-    @PostMapping("/logout")
-    public ResponseEntity<?> logOut(@RequestBody UsuarioDTO usuarioDTO) {
-        Optional<Usuario> usuario = usuarioService.obtenerUsuario(usuarioDTO.getId());
-        if (usuario.isPresent()) {
-            usuarioService.LogOut(usuario.get());
-            return new ResponseEntity<>("Logout exitoso", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
-        }
+    	        // Buscar el token generado para este usuario
+    	        Usuario usuario = usuarioService.getUsuarios().stream()
+    	                .filter(u -> u.getEmail().equals(email))
+    	                .findFirst()
+    	                .orElse(null);
+
+    	        if (usuario == null) {
+    	            return new ResponseEntity<>("Credenciales incorrectas", HttpStatus.UNAUTHORIZED);
+    	        }
+
+    	        String tokenGenerado = UsuarioService.tokens.entrySet().stream()
+    	                .filter(entry -> entry.getValue().equals(usuario))
+    	                .map(Map.Entry::getKey)
+    	                .findFirst()
+    	                .orElseThrow(() -> new Exception("No se pudo generar el token."));
+
+    	        return new ResponseEntity<>(tokenGenerado, HttpStatus.OK);
+    	    } catch (Exception e) {
+    	        return new ResponseEntity<>("Error interno al iniciar sesión", HttpStatus.INTERNAL_SERVER_ERROR);
+    	    }
+    	}
+
+
+    /**
+     * Convierte un Usuario en UsuarioDTO.
+     *
+     * @param usuario Usuario a convertir
+     * @return UsuarioDTO convertido
+     */
+    private UsuarioDTO convertirUsuarioADTO(Usuario usuario) {
+        return new UsuarioDTO(
+                usuario.getId(),
+                usuario.getNombre(),
+                usuario.getEmail(),
+                usuario.getFecha_nac(),
+                usuario.getPeso(),
+                usuario.getAltura(),
+                usuario.getFrec_car_max(),
+                usuario.getFrec_car_rep()
+        );
     }
 }

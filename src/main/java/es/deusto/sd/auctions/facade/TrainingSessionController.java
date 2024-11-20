@@ -2,7 +2,6 @@ package es.deusto.sd.auctions.facade;
 
 import es.deusto.sd.auctions.dto.SesionDTO;
 import es.deusto.sd.auctions.service.TrainingSessionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -14,7 +13,6 @@ public class TrainingSessionController {
 
     private final TrainingSessionService trainingSessionService;
 
-    @Autowired
     public TrainingSessionController(TrainingSessionService trainingSessionService) {
         this.trainingSessionService = trainingSessionService;
     }

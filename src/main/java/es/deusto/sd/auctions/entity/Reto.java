@@ -23,7 +23,7 @@ public class Reto {
 		this.fecha_inicio = fecha_inicio;
 		this.fecha_fin = fecha_fin;
 		
-		if ((distancia == null && tiempo == null) || (distancia != null && tiempo != null)) {
+		if ((distancia == 0 && tiempo == 0) || (distancia != 0 && tiempo != 0)) {
             throw new IllegalArgumentException("El reto debe tener un objetivo de distancia o de tiempo, pero no ambos.");
         }
 		

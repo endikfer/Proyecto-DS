@@ -8,12 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import es.deusto.sd.auctions.dto.RetoAcptadoDTO;
 import es.deusto.sd.auctions.dto.SesionDTO;
 import es.deusto.sd.auctions.entity.Deporte;
 import es.deusto.sd.auctions.entity.Reto;
-import es.deusto.sd.auctions.entity.Usuario;
 
+@Service
 public class RetoService {
 
 	private final Map<Long, Reto> retos = new HashMap<>();
