@@ -28,6 +28,10 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initData(UsuarioService usuarioservice, RetoService retoservice, TrainingSessionService sesionservice) {
 		return args -> {
+			// Servicios externos
+	        UsuarioService.serviciosExternos.put("Google", new ArrayList<>(Arrays.asList("support@google.com", "info@google.com")));
+	        UsuarioService.serviciosExternos.put("Meta", new ArrayList<>(Arrays.asList("help@meta.com", "contact@meta.com")));			
+	        
 			// Crear fechas usando LocalDate y convertirlas a java.sql.Date
 			java.util.Date fecha1Util = Date.from(LocalDate.of(1990, 1, 15)
 			        .atStartOfDay(ZoneId.systemDefault())
@@ -53,11 +57,12 @@ public class DataInitializer {
 			usuarioservice.registro("Ana López", "contact@meta.com", fecha2, 62.0f, 165, 180, 55);
 			usuarioservice.registro("Carlos Díaz", "support@google.com", fecha3, 80.0f, 180, 195, 65);
 			usuarioservice.registro("María Gómez", "help@meta.com", fecha4, 68.0f, 170, 185, 58);
-
-	        // Servicios externos
-	        UsuarioService.serviciosExternos.put("Google", new ArrayList<>(Arrays.asList("support@google.com", "info@google.com")));
-	        UsuarioService.serviciosExternos.put("Meta", new ArrayList<>(Arrays.asList("help@meta.com", "contact@meta.com")));			
 			
+			usuarioservice.LogIn("info@google.com", null);
+			usuarioservice.LogIn("contact@meta.com", null);
+			usuarioservice.LogIn("support@google.com", null);
+			usuarioservice.LogIn("help@meta.com", null);
+	       
 			logger.info("Users saved!");			
 			
 			//Inicializacion de retos
