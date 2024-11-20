@@ -139,38 +139,39 @@ public class UsuarioController {
     	        @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
     	    }
     	)
-    	@PostMapping("/login")
-    	public ResponseEntity<String> iniciarSesion(
-    	        @Parameter(name = "email", description = "Correo electrónico del usuario", required = true)
-    	        @RequestParam String email,
-    	        @Parameter(name = "contraseña", description = "Contraseña del usuario", required = true)
-    	        @RequestParam String contraseña) {
-    	    try {
-    	        // Intentar iniciar sesión usando el servicio
-    	        usuarioService.LogIn(email, contraseña);
+    @PostMapping("/login")
+    public ResponseEntity<String> iniciarSesion(
+            @Parameter(name = "email", description = "Correo electrónico del usuario", required = true)
+            @RequestParam String email,
+            @Parameter(name = "contraseña", description = "Contraseña del usuario", required = true)
+            @RequestParam String contraseña) {
+        try {
+            // Intentar iniciar sesión usando el servicio
+            usuarioService.LogIn(email, contraseña);
 
-    	        // Buscar el token generado para este usuario
-    	        Usuario usuario = usuarioService.getUsuarios().stream()
-    	                .filter(u -> u.getEmail().equals(email))
-    	                .findFirst()
-    	                .orElse(null);
+            // Obtener el token generado para este usuario directamente del servicio
+            Optional<String> tokenOpt = UsuarioService.getTokens().entrySet().stream()
+                    .filter(entry -> entry.getValue().getEmail().equals(email))
+                    .map(Map.Entry::getKey)
+                    .findFirst();
 
-    	        if (usuario == null) {
-    	            return new ResponseEntity<>("Credenciales incorrectas", HttpStatus.UNAUTHORIZED);
-    	        }
+            if (tokenOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Credenciales incorrectas o token no generado");
+            }
 
-    	        String tokenGenerado = UsuarioService.tokens.entrySet().stream()
-    	                .filter(entry -> entry.getValue().equals(usuario))
-    	                .map(Map.Entry::getKey)
-    	                .findFirst()
-    	                .orElseThrow(() -> new Exception("No se pudo generar el token."));
-
-    	        return new ResponseEntity<>(tokenGenerado, HttpStatus.OK);
-    	    } catch (Exception e) {
-    	        return new ResponseEntity<>("Error interno al iniciar sesión", HttpStatus.INTERNAL_SERVER_ERROR);
-    	    }
-    	}
-
+            // Devolver el token generado
+            return ResponseEntity.ok(tokenOpt.get());
+        } catch (IllegalArgumentException e) {
+            // Manejar usuario no encontrado o errores de lógica
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            // Manejar cualquier otro error interno
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno al iniciar sesión");
+        }
+    }
 
     /**
      * Convierte un Usuario en UsuarioDTO.

@@ -8,7 +8,6 @@ import java.util.Set;
 public class Usuario {
 	private Long id;
     private String nombre;
-    private Timestamp token;
     private String email;
     private Date fecha_nac;
     private float peso; //kilogramos
@@ -138,9 +137,13 @@ public class Usuario {
             }
         }
     }
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", email=" + email + ", fecha_nac="
+				+ fecha_nac + ", peso=" + peso + ", altura=" + altura + ", frec_car_max=" + frec_car_max
+				+ ", frec_car_rep=" + frec_car_rep + ", retosAceptados2=" + retosAceptados2 + ", retosAceptados="
+				+ retosAceptados + "]";
+	}
 	
-	public boolean estaAutenticado() {
-        return token != null;
-    }
 	
 }

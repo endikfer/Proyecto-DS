@@ -10,6 +10,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -29,8 +32,10 @@ public class DataInitializer {
     CommandLineRunner initData(UsuarioService usuarioservice, RetoService retoservice, TrainingSessionService sesionservice) {
 		return args -> {
 			// Servicios externos
-	        UsuarioService.serviciosExternos.put("Google", new ArrayList<>(Arrays.asList("support@google.com", "info@google.com")));
-	        UsuarioService.serviciosExternos.put("Meta", new ArrayList<>(Arrays.asList("help@meta.com", "contact@meta.com")));			
+			 Map<String, ArrayList<String>> se = new HashMap<String, ArrayList<String>>();
+			 se.put("Google", new ArrayList<>(Arrays.asList("support@google.com", "info@google.com")));
+			 se.put("Meta", new ArrayList<>(Arrays.asList("help@meta.com", "contact@meta.com")));			
+	        usuarioservice.setServiciosExternos(se);
 	        
 			// Crear fechas usando LocalDate y convertirlas a java.sql.Date
 			java.util.Date fecha1Util = Date.from(LocalDate.of(1990, 1, 15)
@@ -84,6 +89,8 @@ public class DataInitializer {
 			sesionservice.crearSesion(new SesionDTO("Weekend Walk", "running", 3.5, LocalDate.now().minusDays(7), 30));
 
             logger.info("Training sessions saved!");
+            System.out.println(usuarioservice.getUsuarios());
+            System.out.println(usuarioservice.obtenerTokens());
             	
 		};
 	}
