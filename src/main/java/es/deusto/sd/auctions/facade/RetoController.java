@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.deusto.sd.auctions.dto.RetoAcptadoDTO;
 import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Usuario;
@@ -189,7 +190,7 @@ public class RetoController {
 			            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			        }
 
-			        boolean retoAceptado = retoService.aceptarReto(retoId, usuario);
+			        boolean retoAceptado = retoService.aceptarReto(retoId, usuario.getId());
 			        if (!retoAceptado) {
 			            return new ResponseEntity<>(HttpStatus.CONFLICT);
 			        }
@@ -212,7 +213,7 @@ public class RetoController {
 			    }
 			)
 			@GetMapping("/retos/aceptados")
-			public ResponseEntity<List<RetoDTO>> consultarRetosAceptados(
+			public ResponseEntity<List<RetoAcptadoDTO>> consultarRetosAceptados(
 			        @Parameter(name = "token", description = "Authorization token", required = true)
 			        @RequestHeader("token") String token) {
 
@@ -222,16 +223,11 @@ public class RetoController {
 			            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			        }
 
-			        List<Reto> retosAceptados = retoService.getRetosAceptados(usuario);
+			        List<RetoAcptadoDTO> retosAceptados = retoService.getRetosAceptados(usuario.getId());
 			        if (retosAceptados.isEmpty()) {
 			            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			        }
-
-			        List<RetoDTO> dtos = new ArrayList<RetoDTO>();
-			        for(Reto r:retosAceptados) {
-			        	dtos.add(retoToDTO(r));
-			        }
-			        return new ResponseEntity<>(dtos, HttpStatus.OK);
+			        return new ResponseEntity<>(retosAceptados, HttpStatus.OK);
 			    } catch (Exception e) {
 			        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			    }
