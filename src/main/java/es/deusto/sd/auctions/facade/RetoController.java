@@ -1,6 +1,7 @@
 package es.deusto.sd.auctions.facade;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -96,68 +97,54 @@ public class RetoController {
 			)
 		@GetMapping("/retos")
 		public ResponseEntity<List<RetoDTO>> consultarReto(
-				@Parameter(name = "deporte", description = "Deporte", required = false, example = "2024-11-16")
-				@RequestParam("deporte") String deporteFiltro,
-				@Parameter(name = "fecha", description = "Fecha", required = false, example = "2024-11-16")
-				@RequestParam("fecha") LocalDate fechaFiltro,
-				@Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
-	    		@RequestBody String token) {
+		    @Parameter(name = "deporte", description = "Deporte", required = false, example = "running")
+		    @RequestParam(value = "deporte", required = false) String deporteFiltro,
 		    
+		    @Parameter(name = "fecha", description = "Fecha", required = false, example = "2024-11-16")
+		    @RequestParam(value = "fecha", required = false) String fechaFiltro,
+		    
+		    @Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
+		    @RequestHeader(value = "Authorization") String token) {
 
 		    try {
-		    	Usuario user = usuarioService.getUserByToken(token);
-		    	
-		    	if (user == null) {
-		    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		    	}
-		    	
-		    	Collection<Reto> retos = retoService.obtenerRetos();
-		    	
-		    	LocalDate fechaBusqueda = (fechaFiltro != null) ? fechaFiltro : LocalDate.now();
+		        Usuario user = usuarioService.getUserByToken(token);
+		        if (user == null) {
+		            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		        }
 
-		    	List<Reto> retosFiltradosPorFecha = new ArrayList<>();
-		    	List<Reto> retosFiltradosPorDeporte = new ArrayList<>();
+		        Collection<Reto> retos = retoService.obtenerRetos();
 
-		    	for (Reto reto : retos) {
-		    	    if (reto.getFecha_fin().isAfter(fechaBusqueda)) {
-		    	        retosFiltradosPorFecha.add(reto);
-		    	    }
-		    	}
+		        // Convertir fechaFiltro a LocalDate si está presente
+		        LocalDate fechaBusqueda = (fechaFiltro != null && !fechaFiltro.isEmpty())
+		            ? LocalDate.parse(fechaFiltro) 
+		            : LocalDate.now();
 
-		    	if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
-		    	    for (Reto reto : retos) {
-		    	        if (reto.getDeporte().name().equalsIgnoreCase(deporteFiltro)) {
-		    	            retosFiltradosPorDeporte.add(reto);
-		    	        }
-		    	    }
-		    	}
+		        List<Reto> retosFiltradosPorFecha = retos.stream()
+		            .filter(reto -> reto.getFecha_fin().isAfter(fechaBusqueda))
+		            .toList();
 
-		    	List<Reto> resultadosFinales;
-		    	if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
-		    	    resultadosFinales = retosFiltradosPorDeporte;
-		    	} else {
-		    	    resultadosFinales = retosFiltradosPorFecha;
-		    	}
+		        List<Reto> retosFiltradosPorDeporte = (deporteFiltro != null && !deporteFiltro.isEmpty())
+		            ? retos.stream()
+		                   .filter(reto -> reto.getDeporte().name().equalsIgnoreCase(deporteFiltro))
+		                   .toList()
+		            : retosFiltradosPorFecha;
 
-		        if (resultadosFinales.isEmpty()) {
+		        if (retosFiltradosPorDeporte.isEmpty()) {
 		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		        }
 
-		        List<Reto> retosOrdenados = new ArrayList<>(resultadosFinales);
+		        List<Reto> retosOrdenados = retosFiltradosPorDeporte.stream()
+		            .sorted((r1, r2) -> r2.getFecha_inicio().compareTo(r1.getFecha_inicio()))
+		            .limit(5)
+		            .toList();
 
-			    retosOrdenados.sort((r1, r2) -> r2.getFecha_inicio().compareTo(r1.getFecha_inicio()));
-	
-			    List<Reto> ultimos5Retos = new ArrayList<>();
-			    for (int i = 0; i < retosOrdenados.size() && i < 5; i++) {
-			        ultimos5Retos.add(retosOrdenados.get(i));
-			    }
-		        
-		        List<RetoDTO> dtos = new ArrayList<>();
-		        for (Reto reto : ultimos5Retos) {
-		            dtos.add(retoToDTO(reto));
-		        }
+		        List<RetoDTO> dtos = retosOrdenados.stream()
+		            .map(this::retoToDTO)
+		            .toList();
 
 		        return new ResponseEntity<>(dtos, HttpStatus.OK);
+		    } catch (DateTimeParseException e) {
+		        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		    } catch (Exception e) {
 		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
