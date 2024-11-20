@@ -51,24 +51,16 @@ public class RetoController {
 			)
 		@PostMapping("/retos/crear")
 		public ResponseEntity<List<RetoDTO>> crearReto(
-				@Parameter(name = "retoId", description = "Identificador del reto", required = true, example = "01")		
-				@PathVariable("retoId") Long id,
-				@Parameter(name = "nombre", description = "Nombre del reto a crear", required = true, example = "50 flexiones")		
-				@PathVariable("nombre") String nombre,
-				@Parameter(name = "deporte", description = "Nombre del deporte", required = true, example = "running")
-				@RequestParam("deporte") String deporte,
-				@Parameter(name = "fecha_inicio", description = "Fecha de inicio del reto", required = true, example = "2024-11-16")
-				@RequestParam("fecha_inicio") LocalDate fecha_inicio,
-				@Parameter(name = "fecha_fin", description = "Fecha de finalizacion del reto", required = true, example = "2024-11-22")
-				@RequestParam("fecha_fin") LocalDate fecha_fin,
-				@Parameter(name = "objetivo", description = "Objetivo a realizar en el reto", required = true, example = "distancia")
-				@RequestParam("objetivo") String objetivo,
-				@Parameter(name = "distancia", description = "Distancia a realizar", required = false, example = "200")
-				@RequestParam("distancia") Integer distancia,
-				@Parameter(name = "tiempo", description = "Tiempo a completar", required = false, example = "31")
-				@RequestParam("tiempo") Integer tiempo,
-				@Parameter(name = "token", description = "Token de autorizacion", required = true, example = "1727786726773")
-				@RequestBody String token) { 
+		    @RequestParam("retoId") Long id,
+		    @RequestParam("nombre") String nombre,
+		    @RequestParam("deporte") String deporte,
+		    @RequestParam("fecha_inicio") LocalDate fecha_inicio,
+		    @RequestParam("fecha_fin") LocalDate fecha_fin,
+		    @RequestParam("objetivo") String objetivo,
+		    @RequestParam("distancia") Integer distancia,
+		    @RequestParam("tiempo") Integer tiempo,
+		    @RequestHeader(value = "Authorization") String token
+		){
 		    try {
 		    	Usuario user = usuarioService.getUserByToken(token);
 		    	
@@ -96,64 +88,61 @@ public class RetoController {
 			)
 		@GetMapping("/retos")
 		public ResponseEntity<List<RetoDTO>> consultarReto(
-				@Parameter(name = "deporte", description = "Deporte", required = false, example = "2024-11-16")
-				@RequestParam("deporte") String deporteFiltro,
-				@Parameter(name = "fecha", description = "Fecha", required = false, example = "2024-11-16")
-				@RequestParam("fecha") LocalDate fechaFiltro,
-				@Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
-	    		@RequestBody String token) {
+		    @Parameter(name = "deporte", description = "Deporte", required = false, example = "running")
+		    @RequestParam(value = "deporte", required = false) String deporteFiltro,
+
+		    @Parameter(name = "fecha", description = "Fecha", required = false, example = "2024-11-16")
+		    @RequestParam(value = "fecha", required = false) String fechaFiltroStr,
+
+		    @Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
+		    @RequestHeader(value = "Authorization") String token) {
 		    
-
 		    try {
-		    	Usuario user = usuarioService.getUserByToken(token);
-		    	
-		    	if (user == null) {
-		    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		    	}
-		    	
-		    	Collection<Reto> retos = retoService.obtenerRetos();
-		    	
-		    	LocalDate fechaBusqueda = (fechaFiltro != null) ? fechaFiltro : LocalDate.now();
+		        // Verifica si el usuario está autorizado
+		        Usuario user = usuarioService.getUserByToken(token);
+		        if (user == null) {
+		            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		        }
 
-		    	List<Reto> retosFiltradosPorFecha = new ArrayList<>();
-		    	List<Reto> retosFiltradosPorDeporte = new ArrayList<>();
+		        // Obtiene la lista de retos
+		        Collection<Reto> retos = retoService.obtenerRetos();
 
-		    	for (Reto reto : retos) {
-		    	    if (reto.getFecha_fin().isAfter(fechaBusqueda)) {
-		    	        retosFiltradosPorFecha.add(reto);
-		    	    }
-		    	}
+		        // Convierte la fecha desde el parámetro si se pasa, sino usa la fecha actual
+		        LocalDate fechaBusqueda = (fechaFiltroStr != null && !fechaFiltroStr.isEmpty()) ? LocalDate.parse(fechaFiltroStr) : LocalDate.now();
 
-		    	if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
-		    	    for (Reto reto : retos) {
-		    	        if (reto.getDeporte().name().equalsIgnoreCase(deporteFiltro)) {
-		    	            retosFiltradosPorDeporte.add(reto);
-		    	        }
-		    	    }
-		    	}
+		        // Filtra los retos por fecha
+		        List<Reto> retosFiltradosPorFecha = new ArrayList<>();
+		        for (Reto reto : retos) {
+		            if (reto.getFecha_fin().isAfter(fechaBusqueda)) {
+		                retosFiltradosPorFecha.add(reto);
+		            }
+		        }
 
-		    	List<Reto> resultadosFinales;
-		    	if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
-		    	    resultadosFinales = retosFiltradosPorDeporte;
-		    	} else {
-		    	    resultadosFinales = retosFiltradosPorFecha;
-		    	}
+		        // Filtra los retos por deporte si se proporciona
+		        List<Reto> retosFiltradosPorDeporte = new ArrayList<>();
+		        if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
+		            for (Reto reto : retosFiltradosPorFecha) {
+		                if (reto.getDeporte().name().equalsIgnoreCase(deporteFiltro)) {
+		                    retosFiltradosPorDeporte.add(reto);
+		                }
+		            }
+		        }
 
+		        // Si no se filtra por deporte, mantén los retos filtrados solo por fecha
+		        List<Reto> resultadosFinales = (deporteFiltro != null && !deporteFiltro.isEmpty()) ? retosFiltradosPorDeporte : retosFiltradosPorFecha;
+
+		        // Si no hay resultados, devuelve un 204 No Content
 		        if (resultadosFinales.isEmpty()) {
 		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		        }
 
+		        // Ordena los resultados por la fecha de inicio
 		        List<Reto> retosOrdenados = new ArrayList<>(resultadosFinales);
+		        retosOrdenados.sort((r1, r2) -> r2.getFecha_inicio().compareTo(r1.getFecha_inicio()));
 
-			    retosOrdenados.sort((r1, r2) -> r2.getFecha_inicio().compareTo(r1.getFecha_inicio()));
-	
-			    List<Reto> ultimos5Retos = new ArrayList<>();
-			    for (int i = 0; i < retosOrdenados.size() && i < 5; i++) {
-			        ultimos5Retos.add(retosOrdenados.get(i));
-			    }
-		        
+		        // Devuelve los últimos 5 retos
 		        List<RetoDTO> dtos = new ArrayList<>();
-		        for (Reto reto : ultimos5Retos) {
+		        for (Reto reto : retosOrdenados) {
 		            dtos.add(retoToDTO(reto));
 		        }
 
@@ -162,6 +151,7 @@ public class RetoController {
 		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
 		}
+
 		
 		
 		@Operation(
