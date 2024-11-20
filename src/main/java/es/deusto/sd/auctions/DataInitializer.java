@@ -72,13 +72,12 @@ public class DataInitializer {
 			retoservice.crearReto(5L, "Reto 30K Ciclismo", "ciclismo", LocalDate.now().minusDays(7), LocalDate.now().plusDays(25), 30, 0);
 			retoservice.crearReto(6L, "Reto 1 Hora Running", "running", LocalDate.now().minusDays(1), LocalDate.now().plusDays(30), 0, 60);
 			retoservice.crearReto(7L, "Reto 20K Running", "running", LocalDate.now(), LocalDate.now().plusDays(15), 20, 0);
-			
 			// Inicialización de sesiones de entrenamiento
-			sesionservice.createSession("Morning Run", "running", 5.0, LocalDate.now().minusDays(2), 45);
-			sesionservice.createSession(new CrearSesionDTO("Evening Ride", "ciclismo", 20.0, LocalDate.now().minusDays(1), 90));
-			sesionservice.createSession(new CrearSesionDTO("Marathon Practice", "running", 15.0, LocalDate.now().minusDays(3), 120));
-			sesionservice.createSession(new CrearSesionDTO("Cycling Challenge", "ciclismo", 40.0, LocalDate.now().minusDays(5), 180));
-			sesionservice.createSession(new CrearSesionDTO("Weekend Walk", "running", 3.5, LocalDate.now().minusDays(7), 30));
+			sesionservice.crearSesion(new SesionDTO("Morning Run", "running", 5.0, LocalDate.now().minusDays(2), 45));
+			sesionservice.crearSesion(new SesionDTO("Evening Ride", "ciclismo", 20.0, LocalDate.now().minusDays(1), 90));
+			sesionservice.crearSesion(new SesionDTO("Marathon Practice", "running", 15.0, LocalDate.now().minusDays(3), 120));
+			sesionservice.crearSesion(new SesionDTO("Cycling Challenge", "ciclismo", 40.0, LocalDate.now().minusDays(5), 180));
+			sesionservice.crearSesion(new SesionDTO("Weekend Walk", "running", 3.5, LocalDate.now().minusDays(7), 30));
 
             logger.info("Training sessions saved!");
             

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sesiones")
+@RequestMapping("/api/sesion")
 public class TrainingSessionController {
 
     private final TrainingSessionService trainingSessionService;
@@ -20,22 +20,22 @@ public class TrainingSessionController {
     }
 
     // Crear una nueva sesión
-    @PostMapping("/create")
-    public SesionDTO createSession(@RequestBody SesionDTO sesionDTO) {
-        return trainingSessionService.createSession(sesionDTO); // Llamamos al servicio para crear la sesión
+    @PostMapping("/sesiones/crear")
+    public SesionDTO crearSesion(@RequestBody SesionDTO sesionDTO) {
+        return trainingSessionService.crearSesion(sesionDTO); // Llamamos al servicio para crear la sesión
     }
 
     // Obtener las últimas 5 sesiones
-    @GetMapping("/recent")
-    public List<SesionDTO> getRecentSessions() {
-        return trainingSessionService.getRecentSessions(); // Llamamos al servicio para obtener las últimas 5 sesiones
+    @GetMapping("/sesiones/recientes")
+    public List<SesionDTO> getSesionesRecientes() {
+        return trainingSessionService.getSesionesRecientes(); // Llamamos al servicio para obtener las últimas 5 sesiones
     }
 
     // Obtener sesiones dentro de un rango de fechas
-    @GetMapping("/range")
-    public List<SesionDTO> getSessionsByDateRange(
+    @GetMapping("/sesiones/sesionesporfecha")
+    public List<SesionDTO> getSesionesPorFecha(
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate) {
-        return trainingSessionService.getSessionsByDateRange(startDate, endDate); // Llamamos al servicio para obtener sesiones en el rango de fechas
+        return trainingSessionService.getSesionesPorFecha(startDate, endDate); // Llamamos al servicio para obtener sesiones en el rango de fechas
     }
 }

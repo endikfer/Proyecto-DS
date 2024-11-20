@@ -10,12 +10,12 @@ import java.util.List;
 public class TrainingSessionService {
 
     private final List<Sesion> sesiones = new ArrayList<>();
-    private Long currentId = 1L;
+    private Long Id = 1L;
 
     // Crear una nueva sesión
-    public SesionDTO createSession(SesionDTO dto) {
+    public SesionDTO crearSesion(SesionDTO dto) {
         Sesion sesion = new Sesion();
-        sesion.setId(currentId++); 
+        sesion.setId(Id++); 
         sesion.setTitulo(dto.getTitulo());
         sesion.setDeporte(Deporte.valueOf(dto.getDeporte().toUpperCase())); 
         sesion.setDistancia(dto.getDistancia());
@@ -29,7 +29,7 @@ public class TrainingSessionService {
     }
 
     // Obtener las 5 últimas sesiones
-    public List<SesionDTO> getRecentSessions() {
+    public List<SesionDTO> getSesionesRecientes() {
         List<SesionDTO> recentSessions = new ArrayList<>();
 
         int totalSessions = sesiones.size();
@@ -45,7 +45,7 @@ public class TrainingSessionService {
 
 
     // Obtener sesiones entre fechas
-    public List<SesionDTO> getSessionsByDateRange(LocalDate startDate, LocalDate endDate) {
+    public List<SesionDTO> getSesionesPorFecha(LocalDate startDate, LocalDate endDate) {
         List<SesionDTO> filteredSessions = new ArrayList<>();
 
         for (Sesion sesion : sesiones) {
