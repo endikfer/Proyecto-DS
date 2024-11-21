@@ -163,12 +163,11 @@ public class RetoController {
 			        @ApiResponse(responseCode = "500", description = "Internal server error")
 			    }
 			)
-			@PostMapping("/retos/{retoId}/aceptar")
+			@PostMapping("/retos/aceptar")
 			public ResponseEntity<Void> aceptarReto(
-			        @Parameter(name = "retoId", description = "ID del reto a aceptar", required = true)
-			        @PathVariable Long retoId,
+			        @RequestParam("retoId") Long retoId,
 			        @Parameter(name = "token", description = "Authorization token", required = true)
-			        @RequestHeader("token") String token) {
+			        @RequestHeader(value = "Authorization") String token) {
 
 			    try {
 			        Usuario usuario = usuarioService.getUserByToken(token);
@@ -201,15 +200,16 @@ public class RetoController {
 			@GetMapping("/retos/aceptados")
 			public ResponseEntity<List<RetoAcptadoDTO>> consultarRetosAceptados(
 			        @Parameter(name = "token", description = "Authorization token", required = true)
-			        @RequestHeader("token") String token) {
+			        @RequestHeader(value = "Authorization") String token) {
 
 			    try {
 			        Usuario usuario = usuarioService.getUserByToken(token);
 			        if (usuario == null) {
 			            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			        }
-
+			        System.out.println("Entrada");
 			        List<RetoAcptadoDTO> retosAceptados = retoService.getRetosAceptados(usuario.getId());
+			        System.out.println("1");
 			        if (retosAceptados.isEmpty()) {
 			            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			        }

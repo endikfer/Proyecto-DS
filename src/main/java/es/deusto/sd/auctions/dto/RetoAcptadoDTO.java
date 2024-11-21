@@ -30,6 +30,30 @@ public class RetoAcptadoDTO {
 	}
 	
 	
+	public RetoAcptadoDTO(RetoAcptadoDTO r) {
+		// TODO Auto-generated constructor stub
+		this.id = r.getId();
+		this.idUsu = r.getIdUsu();
+		this.nombre = r.getNombre();
+		this.deporte = r.getDeporte();
+		this.fecha_inicio = r.getFecha_inicio();
+		this.fecha_fin = r.getFecha_fin();
+		this.distancia = r.getDistancia();
+		this.tiempo = r.getTiempo();
+		this.progreso = r.getProgreso();
+	}
+
+
+	public long getIdUsu() {
+		return idUsu;
+	}
+
+
+	public void setIdUsu(long idUsu) {
+		this.idUsu = idUsu;
+	}
+
+
 	public long getId() {
 		return id;
 	}

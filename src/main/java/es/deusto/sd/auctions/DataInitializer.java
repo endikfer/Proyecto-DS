@@ -50,11 +50,11 @@ public class DataInitializer {
 			logger.info("Retos saved!");
 			
 			// Inicialización de sesiones de entrenamiento
-			sesionservice.crearSesion(new SesionDTO("Morning Run", "running", 5.0, LocalDate.now().minusDays(2), 45));
+			sesionservice.crearSesion(new SesionDTO("Morning Run", "running", 5.0, LocalDate.now().minusDays(2), 1));
 			sesionservice.crearSesion(new SesionDTO("Evening Ride", "ciclismo", 20.0, LocalDate.now().minusDays(1), 90));
-			sesionservice.crearSesion(new SesionDTO("Marathon Practice", "running", 15.0, LocalDate.now().minusDays(3), 120));
+			sesionservice.crearSesion(new SesionDTO("Marathon Practice", "running", 15.0, LocalDate.now().minusDays(3), 2));
 			sesionservice.crearSesion(new SesionDTO("Cycling Challenge", "ciclismo", 40.0, LocalDate.now().minusDays(5), 180));
-			sesionservice.crearSesion(new SesionDTO("Weekend Walk", "running", 3.5, LocalDate.now().minusDays(7), 30));
+			sesionservice.crearSesion(new SesionDTO("Weekend Walk", "running", 3.5, LocalDate.now().minusDays(7), 3));
 
             logger.info("Training sessions saved!");
             System.out.println(usuarioservice.getUsuarios());
