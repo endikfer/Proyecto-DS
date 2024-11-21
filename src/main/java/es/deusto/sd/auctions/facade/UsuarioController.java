@@ -139,7 +139,7 @@ public class UsuarioController {
     @DeleteMapping("/logout")
     public ResponseEntity<Void> cerrarSesion(
             @Parameter(name = "token", description = "Token de sesión del usuario", required = true)
-            @RequestParam String token) {
+            @RequestParam(name = "token") String token) {
         try {
             // Validar si el token existe
             Usuario usuario = usuarioService.getUserByToken(token);
@@ -149,6 +149,8 @@ public class UsuarioController {
 
             // Eliminar el token del mapa de tokens
             usuarioService.LogOut(usuario); // Eliminar el token asociado
+            
+            System.out.println(usuarioService.obtenerTokens());
 
             return ResponseEntity.ok().build(); // Respuesta exitosa sin contenido
         } catch (Exception e) {
