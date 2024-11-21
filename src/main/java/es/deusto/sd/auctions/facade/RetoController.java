@@ -57,7 +57,7 @@ public class RetoController {
 		    @RequestParam("objetivo") String objetivo,
 		    @RequestParam("distancia") Integer distancia,
 		    @RequestParam("tiempo") Integer tiempo,
-		    @RequestHeader(value = "Authorization") String token
+		    @RequestParam(value = "Authorization") String token
 		){
 		    try {
 		    	Usuario user = usuarioService.getUserByToken(token);
@@ -93,7 +93,7 @@ public class RetoController {
 		    @RequestParam(value = "fecha", required = false) String fechaFiltroStr,
 
 		    @Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
-		    @RequestHeader(value = "Authorization") String token) {
+		    @RequestParam(value = "Authorization") String token) {
 		    
 		    try {
 		        // Verifica si el usuario está autorizado
@@ -170,7 +170,7 @@ public class RetoController {
 			public ResponseEntity<Void> aceptarReto(
 			        @RequestParam("retoId") Long retoId,
 			        @Parameter(name = "token", description = "Authorization token", required = true)
-			        @RequestHeader(value = "Authorization") String token) {
+			        @RequestParam(value = "Authorization") String token) {
 
 			    try {
 			        Usuario usuario = usuarioService.getUserByToken(token);
@@ -203,7 +203,7 @@ public class RetoController {
 			@GetMapping("/retos/aceptados")
 			public ResponseEntity<List<RetoAcptadoDTO>> consultarRetosAceptados(
 			        @Parameter(name = "token", description = "Authorization token", required = true)
-			        @RequestHeader(value = "Authorization") String token) {
+			        @RequestParam(value = "Authorization") String token) {
 
 			    try {
 			        Usuario usuario = usuarioService.getUserByToken(token);
