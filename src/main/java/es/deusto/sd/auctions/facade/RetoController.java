@@ -139,9 +139,13 @@ public class RetoController {
 		        List<Reto> retosOrdenados = new ArrayList<>(resultadosFinales);
 		        retosOrdenados.sort((r1, r2) -> r2.getFecha_inicio().compareTo(r1.getFecha_inicio()));
 
+		     // Devuelve los últimos 5 retos (o menos, si hay menos de 5)
+		        int maxRetos = Math.min(retosOrdenados.size(), 5);
+		        List<Reto> ultimosRetos = retosOrdenados.subList(0, maxRetos);
+		        
 		        // Devuelve los últimos 5 retos
 		        List<RetoDTO> dtos = new ArrayList<>();
-		        for (Reto reto : retosOrdenados) {
+		        for (Reto reto : ultimosRetos) {
 		            dtos.add(retoToDTO(reto));
 		        }
 

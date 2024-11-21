@@ -32,8 +32,8 @@ public class TrainingSessionController {
     // Obtener sesiones dentro de un rango de fechas
     @GetMapping("/sesiones/sesionesporfecha")
     public List<SesionDTO> getSesionesPorFecha(
-            @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate) {
+            @RequestParam (value = "startDate") String startDate,
+            @RequestParam (value = "endDate") String endDate) {
         return trainingSessionService.getSesionesPorFecha(startDate, endDate); // Llamamos al servicio para obtener sesiones en el rango de fechas
     }
 }

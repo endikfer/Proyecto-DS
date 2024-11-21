@@ -76,7 +76,7 @@ public class RetoService {
     public Double calcularProgresoReto(RetoAcptadoDTO r) {
 
         // Obtiene las sesiones dentro del rango de fechas del reto
-        List<SesionDTO> ListaS = TSS.getSesionesPorFecha(r.getFecha_inicio(), r.getFecha_fin());
+        List<SesionDTO> ListaS = TSS.getSesionesPorFecha(r.getFecha_inicio().toString(), r.getFecha_fin().toString());
         if (ListaS == null) {
             ListaS = new ArrayList<>();
         }
