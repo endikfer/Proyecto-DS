@@ -49,17 +49,13 @@ public class TrainingSessionService {
 
     // Obtener sesiones entre fechas
     public List<SesionDTO> getSesionesPorFecha(LocalDate startDate, LocalDate endDate) {
-    	System.out.println("Hola1");
         List<SesionDTO> filteredSessions = new ArrayList<>();
-        System.out.println("Hola");
 
         for (Sesion sesion : sesiones) {
             if (!sesion.getFechaInicio().isBefore(startDate) && !sesion.getFechaInicio().isAfter(endDate)) {
                 filteredSessions.add(toDTO(sesion));
-                System.out.println("Entro1");
             }
         }
-        System.out.println("Adios");
         return filteredSessions;
     }
 

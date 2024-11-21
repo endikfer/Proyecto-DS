@@ -74,15 +74,12 @@ public class RetoService {
     }
     
     public Double calcularProgresoReto(RetoAcptadoDTO r) {
-        System.out.println("Calculo de progreso iniciado");
 
         // Obtiene las sesiones dentro del rango de fechas del reto
         List<SesionDTO> ListaS = TSS.getSesionesPorFecha(r.getFecha_inicio(), r.getFecha_fin());
-        System.out.println("Sesiones1.0");
         if (ListaS == null) {
             ListaS = new ArrayList<>();
         }
-        System.out.println("Sesiones");
 
         double p = 0.0; // Progreso acumulado (distancia o tiempo)
         double progreso = 0.0; // Porcentaje de progreso
@@ -112,12 +109,10 @@ public class RetoService {
         // Convierte el progreso a porcentaje
         progreso *= 100;
 
-        System.out.println("Progreso calculado: " + progreso);
         return progreso;
     }
     
     public List<RetoAcptadoDTO> getRetosAceptados(Long UsuId) {
-        System.out.println("Inicio de consulta de retos aceptados");
 
         // Obtiene la lista de retos aceptados para el usuario o un valor por defecto
         List<RetoAcptadoDTO> retosUsuario = retoADTO.getOrDefault(UsuId, new ArrayList<>());
@@ -129,10 +124,8 @@ public class RetoService {
             RetoAcptadoDTO nuevoReto = new RetoAcptadoDTO(r); // Constructor copia
             nuevoReto.setProgreso(calcularProgresoReto(nuevoReto));
             lista.add(nuevoReto);
-            System.out.println("Progreso calculado para reto: " + nuevoReto.getId());
         }
 
-        System.out.println("Consulta de retos aceptados finalizada");
         return lista;
     }
     

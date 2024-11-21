@@ -207,9 +207,7 @@ public class RetoController {
 			        if (usuario == null) {
 			            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			        }
-			        System.out.println("Entrada");
 			        List<RetoAcptadoDTO> retosAceptados = retoService.getRetosAceptados(usuario.getId());
-			        System.out.println("1");
 			        if (retosAceptados.isEmpty()) {
 			            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			        }
