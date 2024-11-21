@@ -52,7 +52,35 @@ public class UsuarioController {
         }
     }
     
+    // Obtener la lista de tokens
+    @Operation(
+            summary = "Obtener la lista de tokens",
+            description = "Devuelve un mapa con los tokens activos y sus usuarios asociados.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK: Lista de tokens devuelta exitosamente."),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
+            }
+    )
+    @GetMapping("/tokens")
+    public ResponseEntity<Map<String, UsuarioDTO>> obtenerTokens() {
+        try {
+            // Obtener los tokens del servicio
+            Map<String, Usuario> tokens = usuarioService.obtenerTokens();
 
+            // Convertir los valores de Usuario a UsuarioDTO
+            Map<String, UsuarioDTO> tokensDTO = tokens.entrySet().stream()
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            entry -> convertirUsuarioADTO(entry.getValue())
+                    ));
+
+            return new ResponseEntity<>(tokensDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();  // Loguear el error
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);  // Respuesta con error 500
+        }
+    }
+    
     // Registrar un nuevo usuario
     @Operation(
             summary = "Registrar un nuevo usuario",
@@ -75,6 +103,7 @@ public class UsuarioController {
     ) {
         try {
             usuarioService.registro(nombre,email,fecha_nac,peso,altura,frec_car_max,frec_car_rep);
+            System.out.println(usuarioService.obtenerTokens());
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);  // Error de solicitud mal formada
@@ -101,20 +130,19 @@ public class UsuarioController {
             @RequestParam(name = "email") String email,
             @RequestParam(name = "contraseña") String contraseña) {
         try {
-        	System.out.println("SI");
             // Llamada al servicio para hacer login
             usuarioService.LogIn(email, contraseña);
-        	System.out.println("SI");
+
             // Buscar el token asociado al usuario
             Optional<String> tokenOpt = UsuarioService.getTokens().entrySet().stream()
                     .filter(entry -> entry.getValue().getEmail().equals(email))
                     .map(Map.Entry::getKey)
                     .findFirst();
-        	System.out.println("SI");
+            
             if (tokenOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Error 400 sin cuerpo
             }
-        	System.out.println("SI");
+            System.out.println(usuarioService.obtenerTokens());
             // Enviar una respuesta exitosa sin contenido (código 200)
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
@@ -142,16 +170,14 @@ public class UsuarioController {
             @RequestParam(name = "token") String token) {
         try {
             // Validar si el token existe
-            Usuario usuario = usuarioService.getUserByToken(token);
+            Usuario usuario = usuarioService.getUserByToken(token);;
             if (usuario == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Token no válido
             }
-
             // Eliminar el token del mapa de tokens
             usuarioService.LogOut(usuario); // Eliminar el token asociado
             
-            System.out.println(usuarioService.obtenerTokens());
-
+        	System.out.println(usuarioService.obtenerTokens());
             return ResponseEntity.ok().build(); // Respuesta exitosa sin contenido
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Error 500 sin contenido
