@@ -5,14 +5,14 @@ public class UsuarioDTO {
     private String nombre;
     private String email;
     private String fecha_nac;  // Cambiado a String
-    private float peso;
-    private int altura;
-    private int frec_car_max;
-    private int frec_car_rep;
+    private Float peso;
+    private Integer altura;
+    private Integer frec_car_max;
+    private Integer frec_car_rep;
 
     // Constructor
-    public UsuarioDTO(String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
-
+    public UsuarioDTO(Long id, String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+    	this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.fecha_nac = fecha_nac;  // Cambio aquí

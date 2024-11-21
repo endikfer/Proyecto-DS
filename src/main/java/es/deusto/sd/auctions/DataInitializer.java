@@ -32,8 +32,11 @@ public class DataInitializer {
 			usuarioservice.registro("María Gómez", "help@meta.com", "1993-10-10", 68.0f, 170, 185, 58);
 			
 			usuarioservice.LogIn("info@google.com", null);
+			Thread.sleep(100);
 			usuarioservice.LogIn("contact@meta.com", null);
+			Thread.sleep(100);
 			usuarioservice.LogIn("support@google.com", null);
+			Thread.sleep(100);
 			usuarioservice.LogIn("help@meta.com", null);
 	       
 			logger.info("Users saved!");			
@@ -57,7 +60,6 @@ public class DataInitializer {
 			sesionservice.crearSesion(new SesionDTO("Weekend Walk", "running", 3.5, LocalDate.now().minusDays(7), 30));
 
             logger.info("Training sessions saved!");
-            System.out.println(usuarioservice.getUsuarios());
             System.out.println(usuarioservice.obtenerTokens());
             	
 		};

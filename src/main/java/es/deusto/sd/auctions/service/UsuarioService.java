@@ -32,7 +32,7 @@ public class UsuarioService {
     }
 
     public void registro(String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
-        Usuario u = new Usuario(idGenerator.getAndIncrement(), nombre, email, fecha_nac);
+        Usuario u = new Usuario(idGenerator.getAndIncrement(), nombre, email, fecha_nac,0f,0,0,0);
 
         if (peso > 0) u.setPeso(peso);
         if (altura > 0) u.setAltura(altura);

@@ -8,10 +8,10 @@ public class Usuario {
     private String nombre;
     private String email;
     private String fecha_nac;
-    private float peso; //kilogramos
-    private int altura; //centímetros
-    private int frec_car_max; //en número de pulsaciones por minuto
-    private int frec_car_rep; //en número de pulsaciones por minuto
+    private Float peso; //kilogramos
+    private Integer altura; //centímetros
+    private Integer frec_car_max; //en número de pulsaciones por minuto
+    private Integer frec_car_rep; //en número de pulsaciones por minuto
 
     public Set<Reto> retosAceptados2 = new HashSet<>();
     private Set<Long> retosAceptados = new HashSet<>();
@@ -27,12 +27,16 @@ public class Usuario {
 		this.frec_car_rep = frec_car_rep;
 	}
 	//para registro
-	public Usuario(Long id, String nombre, String email, String fecha_nac) {
+	public Usuario(Long id, String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.email = email;
 		this.fecha_nac = fecha_nac;
+		this.peso = peso;
+		this.altura = altura;
+		this.frec_car_max = frec_car_max;
+		this.frec_car_rep = frec_car_rep;
 	}
 
 	public Long getId() {

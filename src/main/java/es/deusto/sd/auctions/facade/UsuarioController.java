@@ -51,6 +51,7 @@ public class UsuarioController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
 
     // Registrar un nuevo usuario
     @Operation(
@@ -63,7 +64,7 @@ public class UsuarioController {
             }
     )
     @PostMapping("/registro")
-    public ResponseEntity<UsuarioDTO> registrarUsuario(
+    public ResponseEntity<Void> registrarUsuario(
         @RequestParam("nombre") String nombre,
         @RequestParam("email") String email,
         @RequestParam("fecha_nac") String fecha_nac,
@@ -85,80 +86,81 @@ public class UsuarioController {
     }
 
     
-    // Iniciar sesión
+ // Iniciar sesión (PUT)
     @Operation(
             summary = "Iniciar sesión",
-            description = "Permite a un usuario iniciar sesión con su email y contraseña.",
+            description = "Permite a un usuario iniciar sesión verificando si tiene un token asignado. Si no, genera uno nuevo.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "OK: Inicio de sesión exitoso, se devuelve el token de autorización."),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized: Credenciales incorrectas."),
+                    @ApiResponse(responseCode = "200", description = "OK: Inicio de sesión exitoso, se devuelve el token."),
+                    @ApiResponse(responseCode = "400", description = "Bad Request: Usuario no registrado o datos incorrectos."),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
             }
     )
-    @PostMapping("/login")
-    public ResponseEntity<String> iniciarSesion(
-            @Parameter(name = "email", description = "Correo electrónico del usuario", required = true)
-            @RequestParam String email,
-            @Parameter(name = "contraseña", description = "Contraseña del usuario", required = true)
-            @RequestParam String contraseña) {
+    @PutMapping("/login")
+    public ResponseEntity<Void> iniciarSesion(
+            @RequestParam(name = "email") String email,
+            @RequestParam(name = "contraseña") String contraseña) {
         try {
-            // Intentar iniciar sesión usando el servicio
+        	System.out.println("SI");
+            // Llamada al servicio para hacer login
             usuarioService.LogIn(email, contraseña);
-
-            // Obtener el token generado para este usuario directamente del servicio
+        	System.out.println("SI");
+            // Buscar el token asociado al usuario
             Optional<String> tokenOpt = UsuarioService.getTokens().entrySet().stream()
                     .filter(entry -> entry.getValue().getEmail().equals(email))
                     .map(Map.Entry::getKey)
                     .findFirst();
-
+        	System.out.println("SI");
             if (tokenOpt.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Credenciales incorrectas o token no generado");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Error 400 sin cuerpo
             }
-
-            // Devolver el token generado
-            return ResponseEntity.ok(tokenOpt.get());
+        	System.out.println("SI");
+            // Enviar una respuesta exitosa sin contenido (código 200)
+            return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Error 400 sin cuerpo
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error interno al iniciar sesión");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Error 500 sin cuerpo
         }
     }
 
-    // Cerrar sesión
+
+
+    // Cerrar sesión (DELETE)
     @Operation(
             summary = "Cerrar sesión",
-            description = "Permite a un usuario cerrar sesión proporcionando su token.",
+            description = "Permite a un usuario cerrar sesión eliminando su token.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: Sesión cerrada correctamente."),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized: Token no válido o expirado."),
-                    @ApiResponse(responseCode = "500", description = "Internal server error")
+                    @ApiResponse(responseCode = "400", description = "Bad Request: Usuario no tiene un token válido."),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
             }
     )
-    @PostMapping("/logout")
-    public ResponseEntity<String> cerrarSesion(
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> cerrarSesion(
             @Parameter(name = "token", description = "Token de sesión del usuario", required = true)
             @RequestParam String token) {
         try {
+            // Validar si el token existe
             Usuario usuario = usuarioService.getUserByToken(token);
             if (usuario == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Token no válido o expirado.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Token no válido
             }
 
-            usuarioService.LogOut(usuario);
-            return ResponseEntity.ok("Sesión cerrada correctamente.");
+            // Eliminar el token del mapa de tokens
+            usuarioService.LogOut(usuario); // Eliminar el token asociado
+
+            return ResponseEntity.ok().build(); // Respuesta exitosa sin contenido
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error interno al cerrar sesión.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Error 500 sin contenido
         }
     }
+
 
     // Convertir un Usuario a UsuarioDTO
     private UsuarioDTO convertirUsuarioADTO(Usuario usuario) {
         return new UsuarioDTO(
+        		usuario.getId(),
                 usuario.getNombre(),
                 usuario.getEmail(),
                 usuario.getFecha_nac(),
