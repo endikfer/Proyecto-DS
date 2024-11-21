@@ -4,7 +4,6 @@ import es.deusto.sd.auctions.dto.SesionDTO;
 import es.deusto.sd.auctions.service.TrainingSessionService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
