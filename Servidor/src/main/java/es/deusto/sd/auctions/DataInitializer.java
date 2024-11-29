@@ -18,7 +18,6 @@ import es.deusto.sd.auctions.service.UsuarioService;
 
 @Configuration
 public class DataInitializer {
-	
 
 	private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 	
