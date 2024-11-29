@@ -25,6 +25,7 @@ public class DataInitializer {
     CommandLineRunner initData(UsuarioService usuarioservice, RetoService retoservice, TrainingSessionService sesionservice) {
 		return args -> {
 
+			
 			// Crear usuarios
 			usuarioservice.registro("Juan Pérez", "info@google.com", "1985-07-25", 70.5f, 175, 190, 60);
 			usuarioservice.registro("Ana López", "contact@meta.com", "2000-12-01", 62.0f, 165, 180, 55);
