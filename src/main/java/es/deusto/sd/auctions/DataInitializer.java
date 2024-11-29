@@ -31,6 +31,7 @@ public class DataInitializer {
 			usuarioservice.registro("Carlos Díaz", "support@google.com", "1990-05-15", 80.0f, 180, 195, 65);
 			usuarioservice.registro("María Gómez", "help@meta.com", "1993-10-10", 68.0f, 170, 185, 58);
 			
+			
 			usuarioservice.LogIn("info@google.com", null);
 			Thread.sleep(100);
 			usuarioservice.LogIn("contact@meta.com", null);
