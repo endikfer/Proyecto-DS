@@ -57,5 +57,6 @@ public class GoogleTranslator {
 		JSONArray jsonArray3 = (JSONArray) jsonArray2.get(0);
 
 		return jsonArray3.get(0).toString();
+		
 	}
 }
