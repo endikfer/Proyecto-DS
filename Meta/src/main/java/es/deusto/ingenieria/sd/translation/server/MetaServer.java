@@ -3,7 +3,7 @@ package es.deusto.ingenieria.sd.translation.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class TranslationServer {
+public class MetaServer {
 	
 	private static int numClients = 0;
 	
@@ -17,11 +17,11 @@ public class TranslationServer {
 		int serverPort = Integer.parseInt(args[0]);
 		
 		try (ServerSocket tcpServerSocket = new ServerSocket(serverPort);) {
-			System.out.println(" - TranslationServer: Waiting for connections '" + tcpServerSocket.getInetAddress().getHostAddress() + ":" + tcpServerSocket.getLocalPort() + "' ...");
+			System.out.println(" - TranslationServer: esperando conexiones '" + tcpServerSocket.getInetAddress().getHostAddress() + ":" + tcpServerSocket.getLocalPort() + "' ...");
 			
 			while (true) {
-				new TranslationService(tcpServerSocket.accept());
-				System.out.println(" - TranslationServer: New client connection accepted. Client number: " + ++numClients);
+				new MetaService(tcpServerSocket.accept());
+				System.out.println(" - TranslationServer: Nueva conexión de cliente aceptada. Número de cliente: " + ++numClients);
 			}
 		} catch (IOException e) {
 			System.err.println("# TranslationServer: IO error:" + e.getMessage());

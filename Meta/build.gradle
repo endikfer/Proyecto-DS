@@ -27,7 +27,7 @@ application {
 }
 
 // Server port
-def serverPort = 9500       
+def serverPort = 7600       
 
 run {
     // Port is passed as program argument
