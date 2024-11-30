@@ -9,7 +9,7 @@ public class MetaServer {
 	
 	public static void main(String args[]) {
 		if (args.length < 1) {
-			System.err.println(" # Usage: TranslationServer [PORT]");
+			System.err.println(" # Usage: MetaServer [PORT]");
 			System.exit(1);
 		}
 		
@@ -18,7 +18,7 @@ public class MetaServer {
 		
 		try (ServerSocket tcpServerSocket = new ServerSocket(serverPort);) {
 			System.out.println("Servidor abierto.");
-			System.out.println(" - TranslationServer: esperando conexiones '" + tcpServerSocket.getInetAddress().getHostAddress() + ":" + tcpServerSocket.getLocalPort() + "' ...");
+			System.out.println(" - MetaServer: esperando conexiones '" + tcpServerSocket.getInetAddress().getHostAddress() + ":" + tcpServerSocket.getLocalPort() + "' ...");
 			
 			while (true) {
 				new MetaService(tcpServerSocket.accept());

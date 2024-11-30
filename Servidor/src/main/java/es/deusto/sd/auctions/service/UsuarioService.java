@@ -12,12 +12,18 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Service;
 
 import es.deusto.sd.auctions.entity.Usuario;
+import es.deusto.sd.auctions.socket.SocketService;
 
 @Service
 public class UsuarioService {
     private final Map<Long, Usuario> usuarios = new HashMap<>();
     public static Map<String, Usuario> tokens = new HashMap<>();
     private final AtomicLong idGenerator = new AtomicLong(1);
+    private SocketService socket;
+    
+    public UsuarioService(){
+    	this.socket = new SocketService("127.0.0.1", 7600);
+    }
 
     public Optional<Usuario> obtenerUsuario(Long usuarioId) {
         return Optional.ofNullable(usuarios.get(usuarioId));
@@ -46,7 +52,10 @@ public class UsuarioService {
         if (tokens.values().stream().anyMatch(u -> u.getEmail().equals(email))) {
             return; // Ya tiene un token activo
         }
-
+        
+        //String mensaje = email + "#" + contrasenia;
+        //String response = socket.sendMessage(mensaje);
+        
         Usuario usuario = buscarUsuarioPorEmail(email);
         if (usuario != null) {
             generarToken(usuario);
