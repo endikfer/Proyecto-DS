@@ -31,6 +31,14 @@ public class MetaService extends Thread {
 					
 			this.out.writeUTF(data);					
 			System.out.println("   - TranslationService - datos enviados a " + tcpSocket.getInetAddress().getHostAddress() + ":" + tcpSocket.getPort() + "' -> '" + data.toUpperCase() + "'");
+			
+			if (loginWithMeta(data)) {
+                this.out.writeUTF("Login exitoso. Tu token de sesión es: TOKEN");
+                System.out.println("   - MetaService - Login exitoso. Token enviado: TOKEN");
+            } else {
+                this.out.writeUTF("Error de autenticación con Meta.");
+                System.out.println("   - MetaService - Error de autenticación para el email: " + data);
+            }
 		} catch (EOFException e) {
 			System.err.println("   # TranslationService - TCPConnection EOF error" + e.getMessage());
 		} catch (IOException e) {
@@ -43,5 +51,20 @@ public class MetaService extends Thread {
 				System.err.println("   # TranslationService - TCPConnection IO error:" + e.getMessage());
 			}
 		}
+		
 	}
+	
+	private boolean loginWithMeta(String email/*, String password*/) {
+        String accessToken = authenticateWithMetaAPI(email/*, password*/);
+        return accessToken != null && !accessToken.isEmpty();
+    }
+	
+	
+	private String authenticateWithMetaAPI(String email/*, String password*/) {
+        if (email.contains("@meta.com")/* && password.equals("12345")*/){
+            return "fake_facebook_access_token";
+        }
+        return null;
+    }
+	
 }
