@@ -5,14 +5,11 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.StringTokenizer;
 
 public class MetaService extends Thread {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private Socket tcpSocket;
-
-	private static String DELIMITER = "#";
 	
 	public MetaService(Socket socket) {
 		try {
@@ -40,6 +37,7 @@ public class MetaService extends Thread {
 			System.err.println("   # TranslationService - TCPConnection IO error:" + e.getMessage());
 		} finally {
 			try {
+				System.out.println("Cliente cerrado.");
 				tcpSocket.close();
 			} catch (IOException e) {
 				System.err.println("   # TranslationService - TCPConnection IO error:" + e.getMessage());

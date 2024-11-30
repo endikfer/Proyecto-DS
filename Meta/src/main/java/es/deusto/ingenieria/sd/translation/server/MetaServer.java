@@ -17,6 +17,7 @@ public class MetaServer {
 		int serverPort = Integer.parseInt(args[0]);
 		
 		try (ServerSocket tcpServerSocket = new ServerSocket(serverPort);) {
+			System.out.println("Servidor abierto.");
 			System.out.println(" - TranslationServer: esperando conexiones '" + tcpServerSocket.getInetAddress().getHostAddress() + ":" + tcpServerSocket.getLocalPort() + "' ...");
 			
 			while (true) {
