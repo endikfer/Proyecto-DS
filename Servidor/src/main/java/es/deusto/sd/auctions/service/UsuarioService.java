@@ -37,25 +37,41 @@ public class UsuarioService {
         return new ArrayList<>(usuarios.values());
     }
 
-    public void registro(String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
-        Usuario u = new Usuario(idGenerator.getAndIncrement(), nombre, email, fecha_nac,0f,0,0,0);
+	public void registro(String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max,
+			int frec_car_rep) {
+		String mensaje = email;
+		String response = socket.sendMessage(mensaje);
+		if ("OK".equals(response)) {
+			Usuario u = new Usuario(idGenerator.getAndIncrement(), nombre, email, fecha_nac, 0f, 0, 0, 0);
 
-        if (peso > 0) u.setPeso(peso);
-        if (altura > 0) u.setAltura(altura);
-        if (frec_car_max > 0) u.setFrec_car_max(frec_car_max);
-        if (frec_car_rep > 0) u.setFrec_car_rep(frec_car_rep);
+			if (peso > 0)
+				u.setPeso(peso);
+			if (altura > 0)
+				u.setAltura(altura);
+			if (frec_car_max > 0)
+				u.setFrec_car_max(frec_car_max);
+			if (frec_car_rep > 0)
+				u.setFrec_car_rep(frec_car_rep);
 
-        usuarios.put(u.getId(), u);
-    }
+			usuarios.put(u.getId(), u);
+		} else {
+			throw new IllegalArgumentException("El email '" + email + "' no está registrado en Meta.");
+		}
+
+	}
 
     public void LogIn(String email, String contrasenia) {
         if (tokens.values().stream().anyMatch(u -> u.getEmail().equals(email))) {
             return; // Ya tiene un token activo
         }
         
-        //String mensaje = email + "#" + contrasenia;
-        String mensaje="Hola desde el cliente";
+        String mensaje = email + "#" + contrasenia;
         String response = socket.sendMessage(mensaje);
+        if ("OK".equals(response)) {
+        	
+        }else {
+        	throw new IllegalArgumentException("La contraseña '" + contrasenia + "' no está registrado en Meta a este email'" + email + ".");
+        }
         
         Usuario usuario = buscarUsuarioPorEmail(email);
         if (usuario != null) {
