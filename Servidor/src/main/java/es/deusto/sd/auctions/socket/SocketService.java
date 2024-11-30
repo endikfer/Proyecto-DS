@@ -15,7 +15,7 @@ public class SocketService {
 
 	public String sendMessage(String message) {
 		String response = null;
-		String mens="Hola desde el cliente";
+		//String mens="Hola desde el cliente";
 
 		try (Socket socket = new Socket(serverIP, serverPort);
 			DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -25,7 +25,7 @@ public class SocketService {
 			
 
 			// Enviar mensaje al servidor
-			out.writeUTF(mens);
+			out.writeUTF(message);
 			out.flush();
 
 			// Leer respuesta del servidor

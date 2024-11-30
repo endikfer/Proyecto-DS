@@ -18,19 +18,19 @@ public class MetaService extends Thread {
 			this.out = new DataOutputStream(socket.getOutputStream());
 			this.start();
 		} catch (IOException e) {
-			System.err.println("# TranslationService - TCPConnection IO error:" + e.getMessage());
+			System.err.println("# MetaService - TCPConnection IO error:" + e.getMessage());
 		}
 	}
 
 	public void run() {
 		try {
 			String data = this.in.readUTF();			
-			System.out.println("   - TranslationService - Datos recibidos de '" + tcpSocket.getInetAddress().getHostAddress() + ":" + tcpSocket.getPort() + "' -> '" + data + "'");					
+			System.out.println("   - MetaService - Datos recibidos de '" + tcpSocket.getInetAddress().getHostAddress() + ":" + tcpSocket.getPort() + "' -> '" + data + "'");					
 			
 			data = "Hola desde el servidor";
 					
 			this.out.writeUTF(data);					
-			System.out.println("   - TranslationService - datos enviados a " + tcpSocket.getInetAddress().getHostAddress() + ":" + tcpSocket.getPort() + "' -> '" + data.toUpperCase() + "'");
+			System.out.println("   - MetaService - datos enviados a " + tcpSocket.getInetAddress().getHostAddress() + ":" + tcpSocket.getPort() + "' -> '" + data.toUpperCase() + "'");
 			
 			if (loginWithMeta(data)) {
                 this.out.writeUTF("Login exitoso. Tu token de sesión es: TOKEN");
@@ -40,15 +40,15 @@ public class MetaService extends Thread {
                 System.out.println("   - MetaService - Error de autenticación para el email: " + data);
             }
 		} catch (EOFException e) {
-			System.err.println("   # TranslationService - TCPConnection EOF error" + e.getMessage());
+			System.err.println("   # MetaService - TCPConnection EOF error" + e.getMessage());
 		} catch (IOException e) {
-			System.err.println("   # TranslationService - TCPConnection IO error:" + e.getMessage());
+			System.err.println("   # MetaService - TCPConnection IO error:" + e.getMessage());
 		} finally {
 			try {
 				System.out.println("Cliente cerrado.");
 				tcpSocket.close();
 			} catch (IOException e) {
-				System.err.println("   # TranslationService - TCPConnection IO error:" + e.getMessage());
+				System.err.println("   # MetaService - TCPConnection IO error:" + e.getMessage());
 			}
 		}
 		

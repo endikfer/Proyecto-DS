@@ -22,10 +22,10 @@ public class MetaServer {
 			
 			while (true) {
 				new MetaService(tcpServerSocket.accept());
-				System.out.println(" - TranslationServer: Nueva conexión de cliente aceptada. Número de cliente: " + ++numClients);
+				System.out.println(" - MetaServer: Nueva conexión de cliente aceptada. Número de cliente: " + ++numClients);
 			}
 		} catch (IOException e) {
-			System.err.println("# TranslationServer: IO error:" + e.getMessage());
+			System.err.println("# MetaServer: IO error:" + e.getMessage());
 		}
 	}
 }

@@ -18,7 +18,7 @@ java {
 }
 
 // Server IP
-def serverIP = '127.0.0.1'
+def serverIP = '0.0.0.0'
 def serverPort = 7600
 
 application {

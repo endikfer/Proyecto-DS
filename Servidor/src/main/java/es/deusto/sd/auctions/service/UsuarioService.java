@@ -54,7 +54,8 @@ public class UsuarioService {
         }
         
         //String mensaje = email + "#" + contrasenia;
-        //String response = socket.sendMessage(mensaje);
+        String mensaje="Hola desde el cliente";
+        String response = socket.sendMessage(mensaje);
         
         Usuario usuario = buscarUsuarioPorEmail(email);
         if (usuario != null) {
