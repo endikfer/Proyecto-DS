@@ -24,13 +24,18 @@ public class MetaService extends Thread {
 
 	public void run() {
 		try {
-			String data = this.in.readUTF();			
+			String data = this.in.readUTF();
+			String respuesta;
 			System.out.println("   - MetaService - Datos recibidos de '" + tcpSocket.getInetAddress().getHostAddress() + ":" + tcpSocket.getPort() + "' -> '" + data + "'");					
 			
 			if (data.contains("#")) {
 				//Login
+				respuesta=; //llama al metodo necesario aqui
+				this.out.writeUTF(respuesta);
 			}else if(data.matches("[^@]+@[^@]+\\.[^@]+")) {
 				//registro
+				respuesta=; //llama al metodo necesario aqui
+				this.out.writeUTF(respuesta);
 			}else {
 				this.out.writeUTF("Error: Formato de datos no válido.");
 	            System.out.println("   - MetaService - Formato de datos no válido: " + data);
