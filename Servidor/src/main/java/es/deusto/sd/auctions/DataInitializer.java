@@ -27,17 +27,17 @@ public class DataInitializer {
 
 			
 			// Crear usuarios
-			usuarioservice.registro("Juan Pérez", "info@google.com", "1985-07-25", 70.5f, 175, 190, 60);
+			usuarioservice.registro("Juan Pérez", "info@gmail.com", "1985-07-25", 70.5f, 175, 190, 60);
 			usuarioservice.registro("Ana López", "contact@meta.com", "2000-12-01", 62.0f, 165, 180, 55);
-			usuarioservice.registro("Carlos Díaz", "support@google.com", "1990-05-15", 80.0f, 180, 195, 65);
+			usuarioservice.registro("Carlos Díaz", "support@gmail.com", "1990-05-15", 80.0f, 180, 195, 65);
 			usuarioservice.registro("María Gómez", "help@meta.com", "1993-10-10", 68.0f, 170, 185, 58);
 			
 			
-			usuarioservice.LogIn("contact@meta.com", null);
-			Thread.sleep(100);
-			usuarioservice.LogIn("support@google.com", null);
-			Thread.sleep(100);
-			usuarioservice.LogIn("help@meta.com", null);
+//			usuarioservice.LogIn("contact@meta.com", null);
+//			Thread.sleep(100);
+//			usuarioservice.LogIn("support@gmail.com", null);
+//			Thread.sleep(100);
+//			usuarioservice.LogIn("help@meta.com", null);
 	       
 			logger.info("Users saved!");			
 			
