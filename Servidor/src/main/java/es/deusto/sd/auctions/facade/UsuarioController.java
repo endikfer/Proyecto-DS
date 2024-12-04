@@ -131,7 +131,7 @@ public class UsuarioController {
             @RequestParam(name = "contraseña") String contraseña) {
         try {
             // Llamada al servicio para hacer login
-            usuarioService.LogIn(email, contraseña);
+            usuarioService.logIn(email, contraseña);
 
             // Buscar el token asociado al usuario
             Optional<String> tokenOpt = UsuarioService.getTokens().entrySet().stream()

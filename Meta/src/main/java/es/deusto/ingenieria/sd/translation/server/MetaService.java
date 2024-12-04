@@ -121,5 +121,5 @@ public class MetaService extends Thread {
 			}
 		}
 		return (respuesta == null) ? "ERR" : "OK";
-
+	}
 }
