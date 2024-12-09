@@ -15,7 +15,6 @@ public class MetaService extends Thread {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private Socket tcpSocket;
-	private Map<String, String> emails = new HashMap<>();
 	
 	private static String DELIMITER = "#";
 
