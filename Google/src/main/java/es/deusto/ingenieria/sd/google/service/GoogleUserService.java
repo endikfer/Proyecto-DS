@@ -1,7 +1,10 @@
-package es.deusto.ingenieria.sd.translation.server;
+package es.deusto.ingenieria.sd.google.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import es.deusto.ingenieria.sd.google.dao.GoogleUserRepository;
+import es.deusto.ingenieria.sd.google.entity.GoogleUser;
 
 @Service
 public class GoogleUserService {

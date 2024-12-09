@@ -1,7 +1,9 @@
-package es.deusto.ingenieria.sd.translation.server;
+package es.deusto.ingenieria.sd.google.facade;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import es.deusto.ingenieria.sd.google.service.GoogleUserService;
 
 @RestController
 @RequestMapping("/google")

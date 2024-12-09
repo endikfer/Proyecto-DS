@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class GoogleServiceGateway implements ServiceGateway {
 
-    private static final String GOOGLE_BASE_URL = "http://localhost:8080/google";
+    private static final String GOOGLE_BASE_URL = "http://localhost:8090/google";
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override

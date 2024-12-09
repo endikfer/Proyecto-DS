@@ -1,4 +1,4 @@
-package es.deusto.ingenieria.sd.translation.server;
+package es.deusto.ingenieria.sd.google.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
