@@ -94,8 +94,10 @@ public class MetaService extends Thread {
 				e.printStackTrace();
 			}
 		}
-		return (respuesta == null) ? "ERR" : "OK";
-
+		if(respuesta != "OK") {
+			return "ERR";
+		}
+		return "OK";
 	}
 
 	private String Register(String email) {
@@ -110,6 +112,9 @@ public class MetaService extends Thread {
 				e.printStackTrace();
 			}
 		}
-		return (respuesta == null) ? "ERR" : "OK";
+		if(respuesta != "OK") {
+			return "ERR";
+		}
+		return "OK";
 	}
 }
