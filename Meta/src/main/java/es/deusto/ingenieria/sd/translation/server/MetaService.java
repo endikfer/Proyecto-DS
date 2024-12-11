@@ -83,6 +83,7 @@ public class MetaService extends Thread {
 
 	private String LogIn(String email, String contraseña) {
 		String respuesta = "";
+		String comprobacion = "OK";
 
 		if (email != null && contraseña != null) {
 			
@@ -92,7 +93,7 @@ public class MetaService extends Thread {
 				e.printStackTrace();
 			}
 		}
-		if(respuesta.equals("OK")) {
+		if(respuesta.equals(comprobacion)) {
 			return "OK";
 		}
 		return "ERR";
