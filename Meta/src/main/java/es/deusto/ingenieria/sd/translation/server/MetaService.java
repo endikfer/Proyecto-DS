@@ -5,10 +5,6 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 public class MetaService extends Thread {
@@ -17,8 +13,11 @@ public class MetaService extends Thread {
 	private Socket tcpSocket;
 	
 	private static String DELIMITER = "#";
+	DataChecker DC;
 
 	public MetaService(Socket socket) {
+		DC = new DataChecker();
+		DC.inicializarEmails();
 		try {
 			this.tcpSocket = socket;
 			this.in = new DataInputStream(socket.getInputStream());
@@ -83,38 +82,38 @@ public class MetaService extends Thread {
 	 */
 
 	private String LogIn(String email, String contraseña) {
-		String respuesta = null;
+		String respuesta = "";
 
 		if (email != null && contraseña != null) {
 			
-			DataChecker DC = new DataChecker();
 			try {
 				respuesta = DC.LogIn(email, contraseña);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		if(respuesta != "OK") {
-			return "ERR";
+		if(respuesta.equals("OK")) {
+			return "OK";
 		}
-		return "OK";
+		return "ERR";
 	}
 
 	private String Register(String email) {
-		String respuesta = null;
+		String respuesta = "";
+		String comprobacion = "OK";
 
 		if (email != null) {
 			
-			DataChecker DC = new DataChecker();
+			
 			try {
 				respuesta = DC.Register(email);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		if(respuesta != "OK") {
-			return "ERR";
+		if(respuesta.equals(comprobacion)) {
+			return "OK";
 		}
-		return "OK";
+		return "ERR";
 	}
 }

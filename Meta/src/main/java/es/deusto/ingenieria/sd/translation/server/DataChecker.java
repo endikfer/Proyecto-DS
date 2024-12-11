@@ -5,13 +5,14 @@ import java.util.Map;
 
 public class DataChecker {
 	
-	private Map<String, String> emails = new HashMap<>();
+	public Map<String, String> emails = new HashMap<>();	
 	
 	public void inicializarEmails() {
 	    emails.put("paco@meta.com", "password123");
 	    emails.put("maria@meta.com", "1234abcd");
 	    emails.put("help@meta.com", "ABCD1234");
 	    emails.put("contact@meta.com", "1a2b3c4d");
+	    
 	}
 
 	
@@ -22,15 +23,14 @@ public class DataChecker {
 				return "OK";
 			}
 		}
-		return null;
+		return "";
 	}
 	
 	public String Register(String email){
 		if(emails.containsKey(email)) {
 			return "OK";
 		}
-		
-		return null;
+		return "";
 	}
 	
 }

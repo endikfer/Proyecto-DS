@@ -8,6 +8,7 @@ public class MetaServer {
 	private static int numClients = 0;
 	
 	public static void main(String args[]) {
+		
 		if (args.length < 1) {
 			System.err.println(" # Usage: MetaServer [PORT]");
 			System.exit(1);
