@@ -42,29 +42,20 @@ public class MetaService extends Thread {
 				String email = tokenizer.nextToken();
 				String password = tokenizer.nextToken();
 				respuesta = LogIn(email, password); // llama al metodo necesario aqui
+				System.out.println("   - MetaService - Datos enviados de login '" + tcpSocket.getInetAddress().getHostAddress()
+						+ ":" + tcpSocket.getPort() + "' -> '" + respuesta + "'");
 				this.out.writeUTF(respuesta);
 
 			} else if (data.matches("[^@]+@[^@]+\\.[^@]+")) {
 				// registro
 				respuesta = Register(data); // llama al metodo necesario aqui
+				System.out.println("   - MetaService - Datos enviados de registro '" + tcpSocket.getInetAddress().getHostAddress()
+						+ ":" + tcpSocket.getPort() + "' -> '" + respuesta + "'");
 				this.out.writeUTF(respuesta);
 			} else {
 				this.out.writeUTF("Error: Formato de datos no válido.");
 				System.out.println("   - MetaService - Formato de datos no válido: " + data);
 			}
-
-			this.out.writeUTF(data);
-			System.out.println("   - MetaService - datos enviados a " + tcpSocket.getInetAddress().getHostAddress()
-					+ ":" + tcpSocket.getPort() + "' -> '" + data.toUpperCase() + "'");
-
-			/*
-			 * if (loginWithMeta(data)) {
-			 * this.out.writeUTF("Login exitoso. Tu token de sesión es: TOKEN");
-			 * System.out.println("   - MetaService - Login exitoso. Token enviado: TOKEN");
-			 * } else { this.out.writeUTF("Error de autenticación con Meta."); System.out.
-			 * println("   - MetaService - Error de autenticación para el email: " + data);
-			 * }
-			 */
 		} catch (EOFException e) {
 			System.err.println("   # MetaService - TCPConnection EOF error" + e.getMessage());
 		} catch (IOException e) {
