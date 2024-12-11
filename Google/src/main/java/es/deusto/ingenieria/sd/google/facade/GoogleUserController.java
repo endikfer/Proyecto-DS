@@ -12,8 +12,8 @@ public class GoogleUserController {
     @Autowired
     private GoogleUserService service;
 
-    @GetMapping("/verify/{email}")
-    public boolean verifyEmail(@PathVariable String email) {
+    @GetMapping("/verify")
+    public boolean verifyEmail(@RequestParam String email) {
         return service.verifyEmail(email);
     }
 

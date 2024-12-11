@@ -11,7 +11,7 @@ public class GoogleServiceGateway implements ServiceGateway {
 
     @Override
     public boolean verifyEmail(String email) {
-        String url = GOOGLE_BASE_URL + "/verify/" + email;
+        String url = GOOGLE_BASE_URL + "/verify?email=" + email;
         return restTemplate.getForObject(url, Boolean.class);
     }
 
