@@ -7,7 +7,7 @@ public class Usuario {
 	private Long id;
     private String nombre;
     private String email;
-    private TipoLogIn tipo;
+    private Login tipo;
     private String fecha_nac;
     private Float peso; //kilogramos
     private Integer altura; //centímetros
@@ -17,7 +17,7 @@ public class Usuario {
     public Set<Reto> retosAceptados2 = new HashSet<>();
     private Set<Long> retosAceptados = new HashSet<>();
     //para crearlos a mano
-	public Usuario(String nombre, String email, TipoLogIn tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+	public Usuario(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();
 		this.nombre = nombre;
 		this.email = email;
@@ -29,7 +29,7 @@ public class Usuario {
 		this.frec_car_rep = frec_car_rep;
 	}
 	//para registro
-	public Usuario(Long id, String nombre, String email, TipoLogIn tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+	public Usuario(Long id, String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -66,11 +66,11 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public TipoLogIn getTipo() {
+	public Login getTipo() {
 		return tipo;
 	}
 	
-	public void setTipo(TipoLogIn tipo) {
+	public void setTipo(Login tipo) {
 		this.tipo = tipo;
 	}
 	

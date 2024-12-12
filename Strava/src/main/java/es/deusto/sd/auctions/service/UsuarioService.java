@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Service;
 
 import es.deusto.sd.auctions.dao.UsuarioRepository;
-import es.deusto.sd.auctions.entity.TipoLogIn;
 import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.external.ServiceGateway;
 import es.deusto.sd.auctions.factory.FactoryGateway;
