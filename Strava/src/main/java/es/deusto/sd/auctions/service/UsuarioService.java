@@ -11,6 +11,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
+import es.deusto.sd.auctions.dao.UsuarioRepository;
+import es.deusto.sd.auctions.entity.TipoLogIn;
 import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.external.ServiceGateway;
 import es.deusto.sd.auctions.factory.FactoryGateway;
@@ -20,10 +22,12 @@ public class UsuarioService {
     private final Map<Long, Usuario> usuarios = new HashMap<>();
     public static Map<String, Usuario> tokens = new HashMap<>();
     private final AtomicLong idGenerator = new AtomicLong(1);
-    private String serverIP = "127.0.0.1";
-    private int serverPort = 7600;
+    private UsuarioRepository repository;
+    private FactoryGateway factoria;
     
-    public UsuarioService() {
+    public UsuarioService(UsuarioRepository user, FactoryGateway factoria) {
+    	this.repository = user;
+    	this.factoria = factoria;
     }
 
     public Optional<Usuario> obtenerUsuario(Long usuarioId) {
@@ -39,7 +43,6 @@ public class UsuarioService {
     }
 
     public void registro(String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
-        ServiceGateway serviceGateway = FactoryGateway.getFactory(email).createServiceGateway(serverIP, serverPort);
 
         if (serviceGateway.verifyEmail(email)) {
             Usuario u = new Usuario(idGenerator.getAndIncrement(), nombre, email, fecha_nac, 0f, 0, 0, 0);
@@ -59,17 +62,32 @@ public class UsuarioService {
         if (tokens.values().stream().anyMatch(u -> u.getEmail().equals(email))) {
             return;
         }
+        
+        Usuario usuario = repository.findByEmail(email);
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuario no encontrado con el email proporcionado.");
+        }
 
-        ServiceGateway serviceGateway = FactoryGateway.getFactory(email).createServiceGateway(serverIP, serverPort);
+        // Obtener el tipo de login del usuario
+        TipoLogIn tipoLogIn = usuario.getTipo();
+        if (tipoLogIn == null) {
+            throw new IllegalArgumentException("El tipo de login no está configurado para el usuario.");
+        }
 
-        if (serviceGateway.validateLogin(email, contrasenia)) {
-            Usuario usuario = buscarUsuarioPorEmail(email);
-            if (usuario != null) {
-                generarToken(usuario);
+        ServiceGateway serviceGateway = factoria.factoria(tipoLogIn);
+
+        /*if (serviceGateway.validateLogin(email, contrasenia)) {
+            Usuario usuario2 = buscarUsuarioPorEmail(email);
+            if (usuario2 != null) {
+                generarToken(usuario2);
             } else {
                 throw new IllegalArgumentException("Usuario no encontrado con el email proporcionado.");
             }
-        } else {
+        }*/
+        
+        if (serviceGateway.validateLogin(email, contrasenia)) {
+                generarToken(usuario);
+        }else {
             throw new IllegalArgumentException("Login fallido para el email: " + email);
         }
     }

@@ -4,13 +4,8 @@ import java.io.*;
 import java.net.*;
 
 public class MetaServiceGateway implements ServiceGateway {
-    private String serverIP;
-    private int serverPort;
-
-    public MetaServiceGateway(String serverIP, int serverPort) {
-        this.serverIP = serverIP;
-        this.serverPort = serverPort;
-    }
+    private String serverIP = "127.0.0.1";
+    private int serverPort = 7600;
 
     private String sendMessage(String message) {
         String response = null;
