@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Service;
 
 import es.deusto.sd.auctions.dao.UsuarioRepository;
+import es.deusto.sd.auctions.entity.Login;
 import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.external.ServiceGateway;
 import es.deusto.sd.auctions.factory.FactoryGateway;
@@ -23,6 +24,7 @@ public class UsuarioService {
     private final AtomicLong idGenerator = new AtomicLong(1);
     private UsuarioRepository repository;
     private FactoryGateway factoria;
+    private ServiceGateway serviceGateway;
     
     public UsuarioService(UsuarioRepository user, FactoryGateway factoria) {
     	this.repository = user;
@@ -68,7 +70,7 @@ public class UsuarioService {
         }
 
         // Obtener el tipo de login del usuario
-        TipoLogIn tipoLogIn = usuario.getTipo();
+        Login tipoLogIn = usuario.getTipo();
         if (tipoLogIn == null) {
             throw new IllegalArgumentException("El tipo de login no está configurado para el usuario.");
         }
