@@ -7,6 +7,7 @@ public class Usuario {
 	private Long id;
     private String nombre;
     private String email;
+    private TipoLogIn tipo;
     private String fecha_nac;
     private Float peso; //kilogramos
     private Integer altura; //centímetros
@@ -16,10 +17,11 @@ public class Usuario {
     public Set<Reto> retosAceptados2 = new HashSet<>();
     private Set<Long> retosAceptados = new HashSet<>();
     //para crearlos a mano
-	public Usuario(String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+	public Usuario(String nombre, String email, TipoLogIn tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();
 		this.nombre = nombre;
 		this.email = email;
+		this.tipo = tipo;
 		this.fecha_nac = fecha_nac;
 		this.peso = peso;
 		this.altura = altura;
@@ -27,11 +29,12 @@ public class Usuario {
 		this.frec_car_rep = frec_car_rep;
 	}
 	//para registro
-	public Usuario(Long id, String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+	public Usuario(Long id, String nombre, String email, TipoLogIn tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.email = email;
+		this.tipo = tipo;
 		this.fecha_nac = fecha_nac;
 		this.peso = peso;
 		this.altura = altura;
@@ -63,6 +66,14 @@ public class Usuario {
 		this.email = email;
 	}
 
+	public TipoLogIn getTipo() {
+		return tipo;
+	}
+	
+	public void setTipo(TipoLogIn tipo) {
+		this.tipo = tipo;
+	}
+	
 	public String getFecha_nac() {
 		return fecha_nac;
 	}
@@ -140,7 +151,7 @@ public class Usuario {
     }
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", email=" + email + ", fecha_nac="
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", email=" + email + ", tipo= " + tipo +", fecha_nac="
 				+ fecha_nac + ", peso=" + peso + ", altura=" + altura + ", frec_car_max=" + frec_car_max
 				+ ", frec_car_rep=" + frec_car_rep + ", retosAceptados2=" + retosAceptados2 + ", retosAceptados="
 				+ retosAceptados + "]";
