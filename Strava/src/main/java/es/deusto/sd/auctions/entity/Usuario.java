@@ -2,7 +2,6 @@ package es.deusto.sd.auctions.entity;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +26,7 @@ public class Usuario {
     private String email;
     
 	@Column(nullable = false)
-    private TipoLogIn tipo;
+    private Login tipo;
     
 	@Column(nullable = false)
     private String fecha_nac;
@@ -52,7 +51,7 @@ public class Usuario {
     private Set<Long> retosAceptados = new HashSet<>();
     
     //para crearlos a mano
-	public Usuario(String nombre, String email, TipoLogIn tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+	public Usuario(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();
 		this.nombre = nombre;
 		this.email = email;
@@ -64,7 +63,7 @@ public class Usuario {
 		this.frec_car_rep = frec_car_rep;
 	}
 	//para registro
-	public Usuario(Long id, String nombre, String email, TipoLogIn tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+	public Usuario(Long id, String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -101,11 +100,11 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public TipoLogIn getTipo() {
+	public Login getTipo() {
 		return tipo;
 	}
 	
-	public void setTipo(TipoLogIn tipo) {
+	public void setTipo(Login tipo) {
 		this.tipo = tipo;
 	}
 	

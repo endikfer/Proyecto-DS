@@ -1,7 +1,7 @@
 package es.deusto.sd.auctions.facade;
 
 import es.deusto.sd.auctions.dto.UsuarioDTO;
-import es.deusto.sd.auctions.entity.TipoLogIn;
+import es.deusto.sd.auctions.entity.Login;
 import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -96,7 +96,7 @@ public class UsuarioController {
     public ResponseEntity<Void> registrarUsuario(
         @RequestParam("nombre") String nombre,
         @RequestParam("email") String email,
-        @RequestParam("tipo") TipoLogIn tipo,
+        @RequestParam("tipo") Login tipo,
         @RequestParam("fecha_nac") String fecha_nac,
         @RequestParam("peso") float peso,
         @RequestParam("altura") int altura,
