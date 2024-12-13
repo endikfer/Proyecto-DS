@@ -42,10 +42,9 @@ public class UsuarioService {
         return new ArrayList<>(usuarios.values());
     }
 
-    public void registro(String nombre, String email, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+    public void registro(String nombre, String email, TipoLogIn tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 
-        if (serviceGateway.verifyEmail(email)) {
-            Usuario u = new Usuario(idGenerator.getAndIncrement(), nombre, email, fecha_nac, 0f, 0, 0, 0);
+            Usuario u = new Usuario(idGenerator.getAndIncrement(), nombre, email, tipo, fecha_nac, 0f, 0, 0, 0);
 
             if (peso > 0) u.setPeso(peso);
             if (altura > 0) u.setAltura(altura);
@@ -53,9 +52,7 @@ public class UsuarioService {
             if (frec_car_rep > 0) u.setFrec_car_rep(frec_car_rep);
 
             usuarios.put(u.getId(), u);
-        } else {
-            throw new IllegalArgumentException("El email '" + email + "' no está registrado.");
-        }
+            repository.save(u);
     }
 
     public void logIn(String email, String contrasenia) {

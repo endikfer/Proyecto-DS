@@ -3,19 +3,54 @@ package es.deusto.sd.auctions.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Usuario {
-	private Long id;
-    private String nombre;
-    private String email;
-    private TipoLogIn tipo;
-    private String fecha_nac;
-    private Float peso; //kilogramos
-    private Integer altura; //centímetros
-    private Integer frec_car_max; //en número de pulsaciones por minuto
-    private Integer frec_car_rep; //en número de pulsaciones por minuto
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(nullable = false, unique = true)
+    private String nombre;
+    
+	@Column(nullable = false, unique = true)
+    private String email;
+    
+	@Column(nullable = false)
+    private TipoLogIn tipo;
+    
+	@Column(nullable = false)
+    private String fecha_nac;
+    
+	@Column(nullable = false)
+    private Float peso; //kilogramos
+    
+	@Column(nullable = false)
+    private Integer altura; //centímetros
+    
+	@Column(nullable = false)
+    private Integer frec_car_max; //en número de pulsaciones por minuto
+    
+	@Column(nullable = false)
+    private Integer frec_car_rep; //en número de pulsaciones por minuto
+    
+    
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public Set<Reto> retosAceptados2 = new HashSet<>();
+    
+    
     private Set<Long> retosAceptados = new HashSet<>();
+    
     //para crearlos a mano
 	public Usuario(String nombre, String email, TipoLogIn tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		super();

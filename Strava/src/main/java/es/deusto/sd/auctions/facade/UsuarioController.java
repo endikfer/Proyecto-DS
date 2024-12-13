@@ -1,6 +1,7 @@
 package es.deusto.sd.auctions.facade;
 
 import es.deusto.sd.auctions.dto.UsuarioDTO;
+import es.deusto.sd.auctions.entity.TipoLogIn;
 import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -95,6 +96,7 @@ public class UsuarioController {
     public ResponseEntity<Void> registrarUsuario(
         @RequestParam("nombre") String nombre,
         @RequestParam("email") String email,
+        @RequestParam("tipo") TipoLogIn tipo,
         @RequestParam("fecha_nac") String fecha_nac,
         @RequestParam("peso") float peso,
         @RequestParam("altura") int altura,
@@ -102,7 +104,7 @@ public class UsuarioController {
         @RequestParam("frec_car_rep") int frec_car_rep
     ) {
         try {
-            usuarioService.registro(nombre,email,fecha_nac,peso,altura,frec_car_max,frec_car_rep);
+            usuarioService.registro(nombre,email, tipo, fecha_nac,peso,altura,frec_car_max,frec_car_rep);
             System.out.println(usuarioService.obtenerTokens());
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
@@ -191,6 +193,7 @@ public class UsuarioController {
         		usuario.getId(),
                 usuario.getNombre(),
                 usuario.getEmail(),
+                usuario.getTipo().name(),
                 usuario.getFecha_nac(),
                 usuario.getPeso(),
                 usuario.getAltura(),

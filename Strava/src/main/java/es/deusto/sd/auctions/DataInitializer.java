@@ -6,12 +6,19 @@
 package es.deusto.sd.auctions;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
+
+import es.deusto.sd.auctions.dao.UsuarioRepository;
 import es.deusto.sd.auctions.dto.SesionDTO;
+import es.deusto.sd.auctions.entity.TipoLogIn;
+import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.service.RetoService;
 import es.deusto.sd.auctions.service.TrainingSessionService;
 import es.deusto.sd.auctions.service.UsuarioService;
@@ -22,16 +29,18 @@ public class DataInitializer {
 	private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 	
     @Bean
-    CommandLineRunner initData(UsuarioService usuarioservice, RetoService retoservice, TrainingSessionService sesionservice) {
+    @Transactional
+    CommandLineRunner initData(UsuarioService usuarioservice, RetoService retoservice, TrainingSessionService sesionservice, UsuarioRepository usuariorepo) {
 		return args -> {
 
 			
 			// Crear usuarios
 			//usuarioservice.registro("Juan Pérez", "info@gmail.com", "1985-07-25", 70.5f, 175, 190, 60);
-			usuarioservice.registro("Ana López", "contact@meta.com", "2000-12-01", 62.0f, 165, 180, 55);
+			Usuario Ana = new Usuario("Ana López", "contact@meta.com", TipoLogIn.META, "2000-12-01", 62.0f, 165, 180, 55);
 			//usuarioservice.registro("Carlos Díaz", "support@gmail.com", "1990-05-15", 80.0f, 180, 195, 65);
-			usuarioservice.registro("María Gómez", "help@meta.com", "1993-10-10", 68.0f, 170, 185, 58);
+			Usuario Maria = new Usuario("María Gómez", "help@meta.com", TipoLogIn.META, "1993-10-10", 68.0f, 170, 185, 58);
 			
+			usuariorepo.saveAll(List.of(Ana, Maria));
 			
 			//usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
 			//Thread.sleep(100);
