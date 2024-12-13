@@ -24,7 +24,6 @@ public class UsuarioService {
     private final AtomicLong idGenerator = new AtomicLong(1);
     private UsuarioRepository repository;
     private FactoryGateway factoria;
-    private ServiceGateway serviceGateway;
     
     public UsuarioService(UsuarioRepository user, FactoryGateway factoria) {
     	this.repository = user;
