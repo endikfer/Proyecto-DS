@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,6 @@ import es.deusto.sd.auctions.factory.FactoryGateway;
 public class UsuarioService {
     private final Map<Long, Usuario> usuarios = new HashMap<>();
     public static Map<String, Usuario> tokens = new HashMap<>();
-    private final AtomicLong idGenerator = new AtomicLong(1);
     private UsuarioRepository repository;
     private FactoryGateway factoria;
     

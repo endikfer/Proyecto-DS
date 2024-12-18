@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import es.deusto.sd.auctions.dao.RetoRepository;
 import es.deusto.sd.auctions.dto.RetoAcptadoDTO;
 import es.deusto.sd.auctions.dto.SesionDTO;
 import es.deusto.sd.auctions.entity.Deporte;
@@ -22,9 +23,11 @@ public class RetoService {
 	private long clave = 1L;
 	private final Map<Long, List<RetoAcptadoDTO>> retoADTO = new HashMap<>();
 	public TrainingSessionService TSS;
+	public RetoRepository retorepo;
 
-	public RetoService(TrainingSessionService TSS) {
+	public RetoService(TrainingSessionService TSS, RetoRepository retorepo) {
 		this.TSS = TSS;
+		this.retorepo = retorepo;
 	}
 	
     public Reto obtenerReto(Long retoId) {
@@ -47,6 +50,7 @@ public class RetoService {
     	
         Reto reto = new Reto(nombre, deporteEnum, fecha_inicio, fecha_fin, distancia, tiempo);
 		retos.put(clave, reto);
+		retorepo.save(reto);
 		clave++;
 	}
     
