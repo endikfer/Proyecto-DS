@@ -1,6 +1,7 @@
 package es.deusto.sd.auctions.service;
 
 import es.deusto.sd.auctions.entity.Sesion;
+import es.deusto.sd.auctions.dao.SesionRepository;
 import es.deusto.sd.auctions.dto.SesionDTO;
 import es.deusto.sd.auctions.entity.Deporte;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public class TrainingSessionService {
 
     private final List<Sesion> sesiones = new ArrayList<>();
     private Long Id = 1L;
+    private SesionRepository sesionrepo;
 
     // Crear una nueva sesión
     public SesionDTO crearSesion(SesionDTO dto) {
@@ -27,7 +29,7 @@ public class TrainingSessionService {
         sesion.setTiempo(dto.getDuracion() * 60); 
 
         sesiones.add(sesion);
-
+        sesionrepo.save(sesion);
         return toDTO(sesion); 
     }
 

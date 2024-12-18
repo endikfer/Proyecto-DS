@@ -11,11 +11,11 @@ public class GoogleUserService {
     @Autowired
     private GoogleUserRepository repository;
 
-    public boolean verifyEmail(String email) {
+    public boolean verificarEmail(String email) {
         return repository.findByEmail(email) != null;
     }
 
-    public boolean validateLogin(String email, String password) {
+    public boolean validarLogin(String email, String password) {
         GoogleUser user = repository.findByEmail(email);
         return user != null && user.getPassword().equals(password);
     }
