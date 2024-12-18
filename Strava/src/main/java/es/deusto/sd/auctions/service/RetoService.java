@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,9 @@ public class RetoService {
 	}
 	
     public Reto obtenerReto(Long retoId) {
-        return retos.get(retoId);
+    	Optional<Reto> retoOptional = retorepo.findById(retoId);
+    	Reto reto = retoOptional.get();
+        return reto;
     }
 
     public Collection<Reto> obtenerRetos() {
@@ -110,12 +113,6 @@ public class RetoService {
             // En caso de error, retorna una lista vacía
             return Collections.emptyList();
         }
-    }
-
-    // Método de conversión a DTO (este puede estar en otro lugar si es necesario)
-    private RetoDTO retoToDTO(Reto reto) {
-        // Convierte Reto a RetoDTO aquí
-        return new RetoDTO(); // Implementa la conversión real aquí
     }
     
     public boolean aceptarReto(Long retoId, Long UsuId) {
@@ -196,4 +193,14 @@ public class RetoService {
 
         return lista;
     }
+    
+    private RetoDTO retoToDTO(Reto reto) {
+		return new RetoDTO( 
+				reto.getNombre(),
+				reto.getDeporte().name().toLowerCase(),
+				reto.getFecha_inicio(),
+				reto.getFecha_fin(),
+				reto.getDistancia(), 
+				reto.getTiempo());
+	}
 }
