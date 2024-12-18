@@ -39,7 +39,9 @@ public class Reto {
 	@Column(nullable = false)
 	public Integer tiempo; // en minutos
 	
-	
+	public Reto() {
+	}
+
 	public Reto(String nombre, Deporte deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
 			Integer tiempo) {
 		this.nombre = nombre;

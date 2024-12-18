@@ -12,8 +12,7 @@ public class UsuarioDTO {
     private Integer frec_car_rep;
 
     // Constructor
-    public UsuarioDTO(Long id, String nombre, String email, String tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
-    	this.id = id;
+    public UsuarioDTO(String nombre, String email, String tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
         this.nombre = nombre;
         this.email = email;
         this.tipo = tipo;

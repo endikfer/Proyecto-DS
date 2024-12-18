@@ -34,15 +34,16 @@ public class DataInitializer {
     @Transactional
     CommandLineRunner initData(UsuarioService usuarioservice, TrainingSessionService sesionservice, UsuarioRepository usuariorepo, RetoRepository retorepo) {
 		return args -> {
-
-			
+			retorepo.deleteAll();
+	        usuariorepo.deleteAll();
+	        
+			Usuario Ana = new Usuario("Ana López", "contact@meta.com", Login.META, "2000-12-01", 62.0f, 165, 180, 55);
+	        Usuario Maria = new Usuario("María Gómez", "help@meta.com", Login.META, "1993-10-10", 68.0f, 170, 185, 58);
+	        usuariorepo.saveAll(List.of(Ana, Maria));
+	        
 			// Crear usuarios
 			//usuarioservice.registro("Juan Pérez", "info@gmail.com", "1985-07-25", 70.5f, 175, 190, 60);
-			Usuario Ana = new Usuario("Ana López", "contact@meta.com", Login.META, "2000-12-01", 62.0f, 165, 180, 55);
 			//usuarioservice.registro("Carlos Díaz", "support@gmail.com", "1990-05-15", 80.0f, 180, 195, 65);
-			Usuario Maria = new Usuario("María Gómez", "help@meta.com", Login.META, "1993-10-10", 68.0f, 170, 185, 58);
-			
-			usuariorepo.saveAll(List.of(Ana, Maria));
 			
 			//usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
 			//Thread.sleep(100);

@@ -2,6 +2,8 @@ package es.deusto.sd.auctions.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,6 +22,7 @@ public class Usuario {
 	@Column(nullable = false, unique = true)
     private String email;
     
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
     private Login tipo;
     
@@ -38,6 +41,9 @@ public class Usuario {
 	@Column(nullable = false)
     private Integer frec_car_rep; //en número de pulsaciones por minuto
     
+	public Usuario() {
+        
+    }
     
     //para crearlos a mano
 	public Usuario(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {

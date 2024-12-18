@@ -190,7 +190,6 @@ public class UsuarioController {
     // Convertir un Usuario a UsuarioDTO
     private UsuarioDTO convertirUsuarioADTO(Usuario usuario) {
         return new UsuarioDTO(
-        		usuario.getId(),
                 usuario.getNombre(),
                 usuario.getEmail(),
                 usuario.getTipo().name(),
