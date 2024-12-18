@@ -65,7 +65,7 @@ public class RetoController {
 		    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		    	}
 		    	
-		        retoService.crearReto(id, nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo);
+		        retoService.crearReto(nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo);
 		        
 		        return new ResponseEntity<>(HttpStatus.OK);
 		    } catch (Exception e) {
@@ -220,7 +220,7 @@ public class RetoController {
 			}
 		
 		private RetoDTO retoToDTO(Reto reto) {
-			return new RetoDTO( reto.getId(), 
+			return new RetoDTO( 
 					reto.getNombre(),
 					reto.getDeporte().name().toLowerCase(),
 					reto.getFecha_inicio(),

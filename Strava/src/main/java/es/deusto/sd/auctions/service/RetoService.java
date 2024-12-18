@@ -35,7 +35,7 @@ public class RetoService {
         return retos.values();
     }
     
-    public void crearReto(long id, String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
+    public void crearReto(String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
 			Integer tiempo) {		
 		
     	Deporte deporteEnum;
@@ -45,7 +45,7 @@ public class RetoService {
             throw new IllegalArgumentException("El deporte '" + deporte + "' no es válido. Los valores permitidos son: " + Arrays.toString(Deporte.values()));
         }
     	
-        Reto reto = new Reto(id, nombre, deporteEnum, fecha_inicio, fecha_fin, distancia, tiempo);
+        Reto reto = new Reto(nombre, deporteEnum, fecha_inicio, fecha_fin, distancia, tiempo);
 		retos.put(clave, reto);
 		clave++;
 	}

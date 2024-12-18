@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +23,7 @@ public class Reto {
 	@Column(nullable = false, unique = true)
 	public String nombre;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	public Deporte deporte;  // ciclismo o running
 	
@@ -30,17 +33,15 @@ public class Reto {
 	@Column(nullable = false)
 	public LocalDate fecha_fin;
 	
-	@Column(nullable = true)
+	@Column(nullable = false)
 	public Integer distancia; //en km
 	
-	@Column(nullable = true)
+	@Column(nullable = false)
 	public Integer tiempo; // en minutos
 	
 	
-	public Reto(long id, String nombre, Deporte deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
+	public Reto(String nombre, Deporte deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
 			Integer tiempo) {
-		super();
-		this.id = id;
 		this.nombre = nombre;
 		this.deporte = deporte;
 		this.fecha_inicio = fecha_inicio;

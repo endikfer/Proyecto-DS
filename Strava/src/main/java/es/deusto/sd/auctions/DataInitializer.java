@@ -52,13 +52,13 @@ public class DataInitializer {
 			logger.info("Users saved!");			
 			
 			//Inicializacion de retos
-			Reto r1 = new Reto(1L, "Reto 10K Running", Deporte.RUNNING, LocalDate.now().minusDays(5), LocalDate.now().plusDays(10), 10, 0);
-			Reto r2 = new Reto(2L, "Reto 50K Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(4), LocalDate.now().plusDays(20), 50, 0);
-			Reto r3 = new Reto(3L, "Reto Maratón Running", Deporte.RUNNING, LocalDate.now().minusDays(3), LocalDate.now().plusDays(15), 42, 0);
-			Reto r4 = new Reto(4L, "Reto 2 Horas Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(10), LocalDate.now().minusDays(4), 0, 120);
-			Reto r5 = new Reto(5L, "Reto 30K Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(7), LocalDate.now().plusDays(25), 30, 0);
-			Reto r6 = new Reto(6L, "Reto 1 Hora Running", Deporte.RUNNING, LocalDate.now().minusDays(1), LocalDate.now().plusDays(30), 0, 60);
-			Reto r7 = new Reto(7L, "Reto 20K Running", Deporte.RUNNING, LocalDate.now(), LocalDate.now().plusDays(15), 20, 0);
+			Reto r1 = new Reto("Reto 10K Running", Deporte.RUNNING, LocalDate.now().minusDays(5), LocalDate.now().plusDays(10), 10, 0);
+			Reto r2 = new Reto("Reto 50K Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(4), LocalDate.now().plusDays(20), 50, 0);
+			Reto r3 = new Reto("Reto Maratón Running", Deporte.RUNNING, LocalDate.now().minusDays(3), LocalDate.now().plusDays(15), 42, 0);
+			Reto r4 = new Reto("Reto 2 Horas Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(10), LocalDate.now().minusDays(4), 0, 120);
+			Reto r5 = new Reto("Reto 30K Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(7), LocalDate.now().plusDays(25), 30, 0);
+			Reto r6 = new Reto("Reto 1 Hora Running", Deporte.RUNNING, LocalDate.now().minusDays(1), LocalDate.now().plusDays(30), 0, 60);
+			Reto r7 = new Reto("Reto 20K Running", Deporte.RUNNING, LocalDate.now(), LocalDate.now().plusDays(15), 20, 0);
 			
 			retorepo.saveAll(List.of(r1, r2, r3, r4, r5, r6, r7));
 			
