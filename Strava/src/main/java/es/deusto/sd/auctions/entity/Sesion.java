@@ -2,91 +2,117 @@ package es.deusto.sd.auctions.entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "sesiones")
 public class Sesion {
 
-	private Long id; // ID único de la sesión
-	private Long usuarioId; // ID del usuario que realizó la sesión
-	private String titulo; // Título de la sesión
-	private Deporte deporte; // Tipo de deporte: "ciclismo" o "running"
-	private double distancia; // Distancia en kilómetros
-	private LocalDate fechaInicio; // Fecha y hora de inicio
-	private int duracion; // Duración en minutos
-	private int tiempo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	// Constructor
-	public void SesionEntrenamiento(Long id, Long usuarioId, String titulo, Deporte deporte, double distancia,
-			LocalDate fechaInicio, int duracion) {
-		this.id = id;
-		this.usuarioId = usuarioId;
-		this.titulo = titulo;
-		this.deporte = deporte;
-		this.distancia = distancia;
-		this.fechaInicio = fechaInicio;
-		this.duracion = duracion;
-	}
+    @Column(nullable = false)
+    private Long usuarioId;
 
-	// Getters y Setters
-	public Long getId() {
-		return id;
-	}
+    @Column(nullable = false)
+    private String titulo;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Deporte deporte;
 
-	public Long getUsuarioId() {
-		return usuarioId;
-	}
+    @Column(nullable = false)
+    private double distancia;
 
-	public void setUsuarioId(Long usuarioId) {
-		this.usuarioId = usuarioId;
-	}
+    @Column(nullable = false)
+    private LocalDate fechaInicio;
 
-	public String getTitulo() {
-		return titulo;
-	}
+    @Column(nullable = false)
+    private int duracion;
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
+    @Column(nullable = false)
+    private int tiempo;
 
-	public Deporte getDeporte() {
-		return deporte;
-	}
+    public Sesion(Long id, Long usuarioId, String titulo, Deporte deporte, double distancia,
+                  LocalDate fechaInicio, int duracion) {
+        this.id = id;
+        this.usuarioId = usuarioId;
+        this.titulo = titulo;
+        this.deporte = deporte;
+        this.distancia = distancia;
+        this.fechaInicio = fechaInicio;
+        this.duracion = duracion;
+    }
 
-	public void setDeporte(Deporte deporte) {
-		this.deporte = deporte;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public double getDistancia() {
-		return distancia;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setDistancia(double distancia) {
-		this.distancia = distancia;
-	}
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
 
-	public LocalDate getFechaInicio() {
-		return fechaInicio;
-	}
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 
-	public void setFechaInicio(LocalDate fechaInicio) {
-		this.fechaInicio = fechaInicio;
-	}
+    public String getTitulo() {
+        return titulo;
+    }
 
-	public int getDuracion() {
-		return duracion;
-	}
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
-	public void setDuracion(int duracion) {
-		this.duracion = duracion;
-	}
+    public Deporte getDeporte() {
+        return deporte;
+    }
 
-	public int getTiempo() {
-		return tiempo;
-	}
+    public void setDeporte(Deporte deporte) {
+        this.deporte = deporte;
+    }
 
-	public void setTiempo(int tiempo) {
-		this.tiempo = tiempo;
-	}
+    public double getDistancia() {
+        return distancia;
+    }
+
+    public void setDistancia(double distancia) {
+        this.distancia = distancia;
+    }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    public int getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
+    }
 }
