@@ -48,7 +48,7 @@ public class DataInitializer {
 
 			//usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
 			//Thread.sleep(100);
-			//usuarioservice.logIn("support@gmail.com", null);
+			//usuarioservice.logIn("support@gmail.com", "456");
 			//Thread.sleep(100);
 	       
 			logger.info("Users saved!");			

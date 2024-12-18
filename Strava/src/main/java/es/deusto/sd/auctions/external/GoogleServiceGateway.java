@@ -25,7 +25,7 @@ public class GoogleServiceGateway implements ServiceGateway {
 
     @Override
     public boolean validateLogin(String email, String password) {
-        String url = GOOGLE_BASE_URL + "/validate?email=" + email + "&password=" + password;
+        String url = GOOGLE_BASE_URL + "/validate?email=" + email + "&contraseña=" + password;
         try {
             return restTemplate.getForObject(url, Boolean.class);
         } catch (Exception e) {

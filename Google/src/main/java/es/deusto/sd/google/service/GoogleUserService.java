@@ -17,11 +17,17 @@ public class GoogleUserService {
     }
     
     public boolean verificarEmail(String email) {
-        return repository.findByEmail(email) != null;
+    	if (repository.findByEmail(email) == null) {
+			return false;
+		}
+        return true;
     }
 
     public boolean validarLogin(String email, String password) {
         GoogleUser user = repository.findByEmail(email);
-        return user != null && user.getPassword().equals(password);
+        if (user != null && user.getPassword().equals(password)) {
+			return true;
+		}
+        return false;
     }
 }

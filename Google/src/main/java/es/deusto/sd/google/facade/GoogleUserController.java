@@ -40,7 +40,7 @@ public class GoogleUserController {
     @GetMapping("/validate")
     public boolean validateLogin(
         @RequestParam("email") String email, 
-        @RequestParam("password") String password) {
+        @RequestParam("contraseña") String password) {
         return service.validarLogin(email, password);
     }
 
