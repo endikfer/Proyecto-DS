@@ -16,11 +16,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.deusto.sd.auctions.dao.RetoRepository;
+import es.deusto.sd.auctions.dao.SesionRepository;
 import es.deusto.sd.auctions.dao.UsuarioRepository;
-import es.deusto.sd.auctions.dto.SesionDTO;
 import es.deusto.sd.auctions.entity.Deporte;
 import es.deusto.sd.auctions.entity.Login;
 import es.deusto.sd.auctions.entity.Reto;
+import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.auctions.entity.Usuario;
 import es.deusto.sd.auctions.service.TrainingSessionService;
 import es.deusto.sd.auctions.service.UsuarioService;
@@ -32,7 +33,7 @@ public class DataInitializer {
 	
     @Bean
     @Transactional
-    CommandLineRunner initData(UsuarioService usuarioservice, TrainingSessionService sesionservice, UsuarioRepository usuariorepo, RetoRepository retorepo) {
+    CommandLineRunner initData(UsuarioService usuarioservice, TrainingSessionService sesionservice, UsuarioRepository usuariorepo, RetoRepository retorepo, SesionRepository sesionrepo) {
 		return args -> {
 
 			
@@ -65,11 +66,15 @@ public class DataInitializer {
 			logger.info("Retos saved!");
 			
 			// Inicialización de sesiones de entrenamiento
-			sesionservice.crearSesion(new SesionDTO("Morning Run", "running", 5.0, LocalDate.now().minusDays(2), 45));
-			sesionservice.crearSesion(new SesionDTO("Evening Ride", "ciclismo", 20.0, LocalDate.now().minusDays(1), 90));
-			sesionservice.crearSesion(new SesionDTO("Marathon Practice", "running", 1.0, LocalDate.now().minusDays(3), 120));
-			sesionservice.crearSesion(new SesionDTO("Cycling Challenge", "ciclismo", 40.0, LocalDate.now().minusDays(5), 80));
-			sesionservice.crearSesion(new SesionDTO("Weekend Walk", "running", 3.5, LocalDate.now().minusDays(7), 30));
+			Sesion s1 = new Sesion(null, 1L, "Morning Run", Deporte.RUNNING, 5.0, LocalDate.now().minusDays(2), 45);
+			Sesion s2 = new Sesion(null, 2L, "Evening Ride", Deporte.CICLISMO, 20.0, LocalDate.now().minusDays(1), 90);
+			Sesion s3 = new Sesion(null, 1L, "Marathon Practice", Deporte.RUNNING, 1.0, LocalDate.now().minusDays(3), 120);
+			Sesion s4 = new Sesion(null, 3L, "Cycling Challenge", Deporte.CICLISMO, 40.0, LocalDate.now().minusDays(5), 80);
+			Sesion s5 = new Sesion(null, 4L, "Weekend Walk", Deporte.RUNNING, 3.5, LocalDate.now().minusDays(7), 30);
+
+			sesionrepo.saveAll(List.of(s1, s2, s3, s4, s5));
+
+			logger.info("Sesiones saved!");
 
             logger.info("Training sessions saved!");
             System.out.println(usuarioservice.obtenerTokens());
