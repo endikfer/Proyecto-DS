@@ -15,11 +15,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.deusto.sd.auctions.dao.RetoRepository;
 import es.deusto.sd.auctions.dao.UsuarioRepository;
 import es.deusto.sd.auctions.dto.SesionDTO;
+import es.deusto.sd.auctions.entity.Deporte;
 import es.deusto.sd.auctions.entity.Login;
+import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Usuario;
-import es.deusto.sd.auctions.service.RetoService;
 import es.deusto.sd.auctions.service.TrainingSessionService;
 import es.deusto.sd.auctions.service.UsuarioService;
 
@@ -30,7 +32,7 @@ public class DataInitializer {
 	
     @Bean
     @Transactional
-    CommandLineRunner initData(UsuarioService usuarioservice, RetoService retoservice, TrainingSessionService sesionservice, UsuarioRepository usuariorepo) {
+    CommandLineRunner initData(UsuarioService usuarioservice, TrainingSessionService sesionservice, UsuarioRepository usuariorepo, RetoRepository retorepo) {
 		return args -> {
 
 			
@@ -50,13 +52,15 @@ public class DataInitializer {
 			logger.info("Users saved!");			
 			
 			//Inicializacion de retos
-			retoservice.crearReto(1L, "Reto 10K Running", "running", LocalDate.now().minusDays(5), LocalDate.now().plusDays(10), 10, 0);
-			retoservice.crearReto(2L, "Reto 50K Ciclismo", "ciclismo", LocalDate.now().minusDays(4), LocalDate.now().plusDays(20), 50, 0);
-			retoservice.crearReto(3L, "Reto Maratón Running", "running", LocalDate.now().minusDays(3), LocalDate.now().plusDays(15), 42, 0);
-			retoservice.crearReto(4L, "Reto 2 Horas Ciclismo", "ciclismo", LocalDate.now().minusDays(10), LocalDate.now().minusDays(4), 0, 120);
-			retoservice.crearReto(5L, "Reto 30K Ciclismo", "ciclismo", LocalDate.now().minusDays(7), LocalDate.now().plusDays(25), 30, 0);
-			retoservice.crearReto(6L, "Reto 1 Hora Running", "running", LocalDate.now().minusDays(1), LocalDate.now().plusDays(30), 0, 60);
-			retoservice.crearReto(7L, "Reto 20K Running", "running", LocalDate.now(), LocalDate.now().plusDays(15), 20, 0);
+			Reto r1 = new Reto(1L, "Reto 10K Running", Deporte.RUNNING, LocalDate.now().minusDays(5), LocalDate.now().plusDays(10), 10, 0);
+			Reto r2 = new Reto(2L, "Reto 50K Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(4), LocalDate.now().plusDays(20), 50, 0);
+			Reto r3 = new Reto(3L, "Reto Maratón Running", Deporte.RUNNING, LocalDate.now().minusDays(3), LocalDate.now().plusDays(15), 42, 0);
+			Reto r4 = new Reto(4L, "Reto 2 Horas Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(10), LocalDate.now().minusDays(4), 0, 120);
+			Reto r5 = new Reto(5L, "Reto 30K Ciclismo", Deporte.CICLISMO, LocalDate.now().minusDays(7), LocalDate.now().plusDays(25), 30, 0);
+			Reto r6 = new Reto(6L, "Reto 1 Hora Running", Deporte.RUNNING, LocalDate.now().minusDays(1), LocalDate.now().plusDays(30), 0, 60);
+			Reto r7 = new Reto(7L, "Reto 20K Running", Deporte.RUNNING, LocalDate.now(), LocalDate.now().plusDays(15), 20, 0);
+			
+			retorepo.saveAll(List.of(r1, r2, r3, r4, r5, r6, r7));
 			
 			logger.info("Retos saved!");
 			

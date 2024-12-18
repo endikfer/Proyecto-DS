@@ -44,11 +44,11 @@ public class Usuario {
     private Integer frec_car_rep; //en número de pulsaciones por minuto
     
     
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    public Set<Reto> retosAceptados2 = new HashSet<>();
+	//@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    //public Set<Reto> retosAceptados2 = new HashSet<>();
     
     
-    private Set<Long> retosAceptados = new HashSet<>();
+    //private Set<Long> retosAceptados = new HashSet<>();
     
     //para crearlos a mano
 	public Usuario(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
@@ -148,32 +148,32 @@ public class Usuario {
 		this.frec_car_rep = frec_car_rep;
 	}
 
-	public Set<Long> getRetosAceptados() {
+	/*public Set<Long> getRetosAceptados() {
 		return retosAceptados;
-	}
+	}*/
 
-	public void setRetosAceptados2(Set<Reto> retosAceptados2) {
+	/*public void setRetosAceptados2(Set<Reto> retosAceptados2) {
 		this.retosAceptados2 = retosAceptados2;
-	}
+	}*/
 
-	public void setRetosAceptados(Set<Long> retosAceptados) {
+	/*public void setRetosAceptados(Set<Long> retosAceptados) {
 		this.retosAceptados = retosAceptados;
-	}
+	}*/
 
 
-	public void aceptarReto(Long retoId) {
+	/*public void aceptarReto(Long retoId) {
         retosAceptados.add(retoId);
-    }
+    }*/
 	
-	public void añadirReto(Reto reto) {
+	/*public void añadirReto(Reto reto) {
 		retosAceptados2.add(reto);
-    }
+    }*/
 	
-    public Set<Reto> getRetosAceptados2() {
+    /*public Set<Reto> getRetosAceptados2() {
         return retosAceptados2;
-    }
+    }*/
 	
-	public void mostrarRetos() {
+	/*public void mostrarRetos() {
         if (retosAceptados.isEmpty()) {
             System.out.println("No hay retos aceptados.");
         } else {
@@ -182,13 +182,15 @@ public class Usuario {
                 System.out.println(reto);
             }
         }
-    }
+    }*/
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", email=" + email + ", tipo= " + tipo +", fecha_nac="
 				+ fecha_nac + ", peso=" + peso + ", altura=" + altura + ", frec_car_max=" + frec_car_max
-				+ ", frec_car_rep=" + frec_car_rep + ", retosAceptados2=" + retosAceptados2 + ", retosAceptados="
-				+ retosAceptados + "]";
+				+ ", frec_car_rep=" + frec_car_rep + ", retosAceptados2=" 
+				//+ retosAceptados2 + ", retosAceptados="
+				//+ retosAceptados 
+				+ "]";
 	}
 	
 	

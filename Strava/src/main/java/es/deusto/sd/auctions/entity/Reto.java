@@ -3,14 +3,37 @@ package es.deusto.sd.auctions.entity;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "retos")
 public class Reto {
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
+	
+	@Column(nullable = false, unique = true)
 	public String nombre;
+	
+	@Column(nullable = false)
 	public Deporte deporte;  // ciclismo o running
+	
+	@Column(nullable = false)
 	public LocalDate fecha_inicio;
+	
+	@Column(nullable = false)
 	public LocalDate fecha_fin;
+	
+	@Column(nullable = true)
 	public Integer distancia; //en km
+	
+	@Column(nullable = true)
 	public Integer tiempo; // en minutos
 	
 	
