@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import es.deusto.sd.auctions.dao.UsuarioRepository;
 import es.deusto.sd.auctions.entity.Login;
 import es.deusto.sd.auctions.entity.Usuario;
+import es.deusto.sd.auctions.external.GoogleServiceGateway;
 import es.deusto.sd.auctions.external.ServiceGateway;
 import es.deusto.sd.auctions.factory.FactoryGateway;
 
@@ -22,22 +23,24 @@ public class UsuarioService {
     public static Map<String, Usuario> tokens = new HashMap<>();
     private UsuarioRepository repository;
     private FactoryGateway factoria;
+
+
     
     public UsuarioService(UsuarioRepository user, FactoryGateway factoria) {
     	this.repository = user;
     	this.factoria = factoria;
     }
 
-    public Optional<Usuario> obtenerUsuario(Long usuarioId) {
-        return Optional.ofNullable(usuarios.get(usuarioId));
-    }
-
     public Usuario getUserByToken(String token) {
         return tokens.get(token); 
     }
+    public Optional<Usuario> obtenerUsuarioPorId(Long id) {
+        return repository.findById(id);
+    }
 
-    public List<Usuario> getUsuarios() {
-        return new ArrayList<>(usuarios.values());
+    // Obtener todos los usuarios
+    public List<Usuario> obtenerTodosLosUsuarios() {
+        return repository.findAll();
     }
 
     public void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
@@ -51,6 +54,7 @@ public class UsuarioService {
 
             usuarios.put(u.getId(), u);
             repository.save(u);
+
     }
 
     public void logIn(String email, String contrasenia) {

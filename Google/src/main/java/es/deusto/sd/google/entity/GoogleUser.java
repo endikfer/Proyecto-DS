@@ -1,12 +1,15 @@
-package es.deusto.ingenieria.sd.google.entity;
+package es.deusto.sd.google.entity;
+
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 
 @Entity
+@Table(name = "googleuser")
 public class GoogleUser {
 
     @Id

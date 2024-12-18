@@ -42,7 +42,7 @@ public class Usuario {
     private Integer frec_car_rep; //en número de pulsaciones por minuto
     
 	public Usuario() {
-        
+
     }
     
     //para crearlos a mano
@@ -57,26 +57,10 @@ public class Usuario {
 		this.frec_car_max = frec_car_max;
 		this.frec_car_rep = frec_car_rep;
 	}
-	//para registro
-	public Usuario(Long id, String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.email = email;
-		this.tipo = tipo;
-		this.fecha_nac = fecha_nac;
-		this.peso = peso;
-		this.altura = altura;
-		this.frec_car_max = frec_car_max;
-		this.frec_car_rep = frec_car_rep;
-	}
+
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getNombre() {

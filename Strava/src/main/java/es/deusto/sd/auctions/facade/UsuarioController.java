@@ -40,7 +40,7 @@ public class UsuarioController {
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> obtenerTodosLosUsuarios() {
         try {
-            List<Usuario> usuarios = usuarioService.getUsuarios();
+            List<Usuario> usuarios = usuarioService.obtenerTodosLosUsuarios();
             if (usuarios.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

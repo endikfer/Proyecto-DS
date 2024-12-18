@@ -1,8 +1,8 @@
-package es.deusto.ingenieria.sd.google.facade;
+package es.deusto.sd.google.facade;
 
-import es.deusto.ingenieria.sd.google.service.GoogleUserService;
+
+import es.deusto.sd.google.service.GoogleUserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +37,11 @@ public class GoogleUserController {
             @ApiResponse(responseCode = "401", description = "Credenciales incorrectas")
         }
     )
-    @PostMapping("/validate")
+    @GetMapping("/validate")
     public boolean validateLogin(
         @RequestParam("email") String email, 
         @RequestParam("password") String password) {
         return service.validarLogin(email, password);
     }
+
 }

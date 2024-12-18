@@ -1,14 +1,14 @@
-package es.deusto.ingenieria.sd.google.service;
+package es.deusto.sd.google.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.stereotype.Service;
-import es.deusto.ingenieria.sd.google.dao.GoogleUserRepository;
-import es.deusto.ingenieria.sd.google.entity.GoogleUser;
+import es.deusto.sd.google.dao.GoogleUserRepository;
+import es.deusto.sd.google.entity.GoogleUser;
 
 @Service
 public class GoogleUserService {
 
-    @Autowired
     private GoogleUserRepository repository;
 
     public boolean verificarEmail(String email) {

@@ -1,5 +1,7 @@
 package es.deusto.sd.auctions.external;
 
+
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,12 +14,24 @@ public class GoogleServiceGateway implements ServiceGateway {
     @Override
     public boolean verifyEmail(String email) {
         String url = GOOGLE_BASE_URL + "/verify?email=" + email;
-        return restTemplate.getForObject(url, Boolean.class);
+        try {
+            return restTemplate.getForObject(url, Boolean.class);
+        } catch (Exception e) {
+            // Manejar la excepción
+            e.printStackTrace();
+            return false; // O algún valor predeterminado
+        }
     }
 
     @Override
     public boolean validateLogin(String email, String password) {
         String url = GOOGLE_BASE_URL + "/validate?email=" + email + "&password=" + password;
-        return restTemplate.postForObject(url, null, Boolean.class);
+        try {
+            return restTemplate.getForObject(url, Boolean.class);
+        } catch (Exception e) {
+            // Manejar la excepción
+            e.printStackTrace();
+            return false; // O algún valor predeterminado
+        }
     }
 }
