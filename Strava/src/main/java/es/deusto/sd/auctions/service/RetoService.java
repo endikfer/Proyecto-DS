@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import es.deusto.sd.auctions.dao.RetoRepository;
 import es.deusto.sd.auctions.dto.RetoAcptadoDTO;
+import es.deusto.sd.auctions.dto.RetoDTO;
 import es.deusto.sd.auctions.dto.SesionDTO;
 import es.deusto.sd.auctions.entity.Deporte;
 import es.deusto.sd.auctions.entity.Reto;
@@ -35,7 +37,7 @@ public class RetoService {
     }
 
     public Collection<Reto> obtenerRetos() {
-        return retos.values();
+        return retorepo.findAll();
     }
     
     public void crearReto(String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
@@ -53,6 +55,68 @@ public class RetoService {
 		retorepo.save(reto);
 		clave++;
 	}
+    
+    public List<RetoDTO> obtenerRetos(String deporteFiltro, String fechaFiltroStr) {
+        try {
+
+            // Obtiene la lista de retos
+            Collection<Reto> retos = obtenerRetos();
+
+            // Convierte la fecha desde el parámetro si se pasa, sino usa la fecha actual
+            LocalDate fechaBusqueda = (fechaFiltroStr != null && !fechaFiltroStr.isEmpty()) ? LocalDate.parse(fechaFiltroStr) : LocalDate.now();
+
+            // Filtra los retos por fecha
+            List<Reto> retosFiltradosPorFecha = new ArrayList<>();
+            for (Reto reto : retos) {
+                if (reto.getFecha_fin().isAfter(fechaBusqueda)) {
+                    retosFiltradosPorFecha.add(reto);
+                }
+            }
+
+            // Filtra los retos por deporte si se proporciona
+            List<Reto> retosFiltradosPorDeporte = new ArrayList<>();
+            if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
+                for (Reto reto : retosFiltradosPorFecha) {
+                    if (reto.getDeporte().name().equalsIgnoreCase(deporteFiltro)) {
+                        retosFiltradosPorDeporte.add(reto);
+                    }
+                }
+            }
+
+            // Si no se filtra por deporte, mantén los retos filtrados solo por fecha
+            List<Reto> resultadosFinales = (deporteFiltro != null && !deporteFiltro.isEmpty()) ? retosFiltradosPorDeporte : retosFiltradosPorFecha;
+
+            // Si no hay resultados, devuelve lista vacía
+            if (resultadosFinales.isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            // Ordena los resultados por la fecha de inicio
+            List<Reto> retosOrdenados = new ArrayList<>(resultadosFinales);
+            retosOrdenados.sort((r1, r2) -> r2.getFecha_inicio().compareTo(r1.getFecha_inicio()));
+
+            // Devuelve los últimos 5 retos (o menos, si hay menos de 5)
+            int maxRetos = Math.min(retosOrdenados.size(), 5);
+            List<Reto> ultimosRetos = retosOrdenados.subList(0, maxRetos);
+
+            // Convierte los retos a DTOs
+            List<RetoDTO> dtos = new ArrayList<>();
+            for (Reto reto : ultimosRetos) {
+                dtos.add(retoToDTO(reto));
+            }
+
+            return dtos;
+        } catch (Exception e) {
+            // En caso de error, retorna una lista vacía
+            return Collections.emptyList();
+        }
+    }
+
+    // Método de conversión a DTO (este puede estar en otro lugar si es necesario)
+    private RetoDTO retoToDTO(Reto reto) {
+        // Convierte Reto a RetoDTO aquí
+        return new RetoDTO(); // Implementa la conversión real aquí
+    }
     
     public boolean aceptarReto(Long retoId, Long UsuId) {
         boolean acptado = false;
@@ -132,7 +196,4 @@ public class RetoService {
 
         return lista;
     }
-    
-    
-    
 }

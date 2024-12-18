@@ -41,7 +41,11 @@ public class Sesion {
     @Column(nullable = false)
     private int tiempo;
 
-    public Sesion(Long id, Long usuarioId, String titulo, Deporte deporte, double distancia,
+    public Sesion() {
+		super();
+	}
+
+	public Sesion(Long id, Long usuarioId, String titulo, Deporte deporte, double distancia,
                   LocalDate fechaInicio, int duracion) {
         this.id = id;
         this.usuarioId = usuarioId;

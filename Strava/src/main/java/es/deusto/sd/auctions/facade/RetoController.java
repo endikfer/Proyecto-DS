@@ -100,54 +100,10 @@ public class RetoController {
 		        if (user == null) {
 		            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		        }
-
-		        // Obtiene la lista de retos
-		        Collection<Reto> retos = retoService.obtenerRetos();
-
-		        // Convierte la fecha desde el parámetro si se pasa, sino usa la fecha actual
-		        LocalDate fechaBusqueda = (fechaFiltroStr != null && !fechaFiltroStr.isEmpty()) ? LocalDate.parse(fechaFiltroStr) : LocalDate.now();
-
-		        // Filtra los retos por fecha
-		        List<Reto> retosFiltradosPorFecha = new ArrayList<>();
-		        for (Reto reto : retos) {
-		            if (reto.getFecha_fin().isAfter(fechaBusqueda)) {
-		                retosFiltradosPorFecha.add(reto);
-		            }
-		        }
-
-		        // Filtra los retos por deporte si se proporciona
-		        List<Reto> retosFiltradosPorDeporte = new ArrayList<>();
-		        if (deporteFiltro != null && !deporteFiltro.isEmpty()) {
-		            for (Reto reto : retosFiltradosPorFecha) {
-		                if (reto.getDeporte().name().equalsIgnoreCase(deporteFiltro)) {
-		                    retosFiltradosPorDeporte.add(reto);
-		                }
-		            }
-		        }
-
-		        // Si no se filtra por deporte, mantén los retos filtrados solo por fecha
-		        List<Reto> resultadosFinales = (deporteFiltro != null && !deporteFiltro.isEmpty()) ? retosFiltradosPorDeporte : retosFiltradosPorFecha;
-
-		        // Si no hay resultados, devuelve un 204 No Content
-		        if (resultadosFinales.isEmpty()) {
-		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		        }
-
-		        // Ordena los resultados por la fecha de inicio
-		        List<Reto> retosOrdenados = new ArrayList<>(resultadosFinales);
-		        retosOrdenados.sort((r1, r2) -> r2.getFecha_inicio().compareTo(r1.getFecha_inicio()));
-
-		     // Devuelve los últimos 5 retos (o menos, si hay menos de 5)
-		        int maxRetos = Math.min(retosOrdenados.size(), 5);
-		        List<Reto> ultimosRetos = retosOrdenados.subList(0, maxRetos);
 		        
-		        // Devuelve los últimos 5 retos
-		        List<RetoDTO> dtos = new ArrayList<>();
-		        for (Reto reto : ultimosRetos) {
-		            dtos.add(retoToDTO(reto));
-		        }
+		        List<RetoDTO> retos = retoService.obtenerRetos(deporteFiltro, fechaFiltroStr);
 
-		        return new ResponseEntity<>(dtos, HttpStatus.OK);
+		        return new ResponseEntity<>(retos, HttpStatus.OK);
 		    } catch (Exception e) {
 		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
