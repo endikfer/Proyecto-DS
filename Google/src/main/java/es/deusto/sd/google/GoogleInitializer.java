@@ -12,8 +12,8 @@ import es.deusto.sd.google.entity.GoogleUser;
 import es.deusto.sd.google.service.GoogleUserService;
 
 @Configuration
-public class DataInitializer {
-	private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
+public class GoogleInitializer {
+	private static final Logger logger = LoggerFactory.getLogger(GoogleInitializer.class);
 
 	
     @Bean
@@ -31,3 +31,4 @@ public class DataInitializer {
         };
     }
 }
+

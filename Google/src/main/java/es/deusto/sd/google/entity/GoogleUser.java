@@ -1,6 +1,5 @@
 package es.deusto.sd.google.entity;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,12 +21,18 @@ public class GoogleUser {
     @Column(nullable = false)
     private String password;
 
+    // Constructor sin parámetros (necesario para Hibernate)
+    public GoogleUser() {
+    }
+
+    // Constructor con parámetros
     public GoogleUser(Long id, String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;
     }
 
+    // Getters y Setters
     public Long getId() {
         return id;
     }

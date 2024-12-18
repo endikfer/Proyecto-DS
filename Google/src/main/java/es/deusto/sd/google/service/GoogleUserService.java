@@ -2,6 +2,7 @@ package es.deusto.sd.google.service;
 
 
 
+
 import org.springframework.stereotype.Service;
 import es.deusto.sd.google.dao.GoogleUserRepository;
 import es.deusto.sd.google.entity.GoogleUser;
@@ -10,7 +11,11 @@ import es.deusto.sd.google.entity.GoogleUser;
 public class GoogleUserService {
 
     private GoogleUserRepository repository;
-
+    
+    public GoogleUserService(GoogleUserRepository repository) {
+        this.repository = repository;
+    }
+    
     public boolean verificarEmail(String email) {
         return repository.findByEmail(email) != null;
     }
