@@ -23,7 +23,6 @@ import es.deusto.sd.auctions.entity.Login;
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.auctions.entity.Usuario;
-import es.deusto.sd.auctions.service.TrainingSessionService;
 import es.deusto.sd.auctions.service.UsuarioService;
 
 @Configuration
@@ -33,7 +32,7 @@ public class DataInitializer {
 	
     @Bean
     @Transactional
-    CommandLineRunner initData(UsuarioService usuarioservice, TrainingSessionService sesionservice, UsuarioRepository usuariorepo, RetoRepository retorepo, SesionRepository sesionrepo) {
+    CommandLineRunner initData(UsuarioService usuarioservice, UsuarioRepository usuariorepo, RetoRepository retorepo, SesionRepository sesionrepo) {
 		return args -> {
 			retorepo.deleteAll();
 	        usuariorepo.deleteAll();
@@ -46,11 +45,10 @@ public class DataInitializer {
 
 	        usuariorepo.saveAll(List.of(Ana, Maria, Juan, Carlos));
 
-			//usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
-			//Thread.sleep(100);
+			usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
+			Thread.sleep(100);
 			//usuarioservice.logIn("support@gmail.com", "456");
 			//Thread.sleep(100);
-			//usuarioservice.LogOut(Carlos);
 			logger.info("Users saved!");			
 			
 			//Inicializacion de retos

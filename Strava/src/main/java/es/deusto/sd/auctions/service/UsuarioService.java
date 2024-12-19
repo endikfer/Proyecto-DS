@@ -2,7 +2,6 @@ package es.deusto.sd.auctions.service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import es.deusto.sd.auctions.dao.UsuarioRepository;
 import es.deusto.sd.auctions.entity.Login;
 import es.deusto.sd.auctions.entity.Usuario;
-import es.deusto.sd.auctions.external.GoogleServiceGateway;
 import es.deusto.sd.auctions.external.ServiceGateway;
 import es.deusto.sd.auctions.factory.FactoryGateway;
 
@@ -57,8 +55,6 @@ public class UsuarioService {
             
             usuarios.put(u.getId(), u);
             repository.save(u);
-
-
     }
 
     public void logIn(String email, String contrasenia) {
@@ -78,15 +74,6 @@ public class UsuarioService {
         }
 
         ServiceGateway serviceGateway = factoria.factoria(tipoLogIn);
-
-        /*if (serviceGateway.validateLogin(email, contrasenia)) {
-            Usuario usuario2 = buscarUsuarioPorEmail(email);
-            if (usuario2 != null) {
-                generarToken(usuario2);
-            } else {
-                throw new IllegalArgumentException("Usuario no encontrado con el email proporcionado.");
-            }
-        }*/
         
         if (serviceGateway.validateLogin(email, contrasenia)) {
                 generarToken(usuario);
@@ -94,13 +81,6 @@ public class UsuarioService {
             throw new IllegalArgumentException("Login fallido para el email: " + email);
         }
         System.out.println(tokens);
-    }
-
-    private Usuario buscarUsuarioPorEmail(String email) {
-        return usuarios.values().stream()
-            .filter(u -> u.getEmail().equals(email))
-            .findFirst()
-            .orElse(null);
     }
 
     public void generarToken(Usuario u) {

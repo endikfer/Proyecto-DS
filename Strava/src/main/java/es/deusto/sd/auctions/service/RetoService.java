@@ -21,9 +21,6 @@ import es.deusto.sd.auctions.entity.Reto;
 
 @Service
 public class RetoService {
-
-	private final Map<Long, Reto> retos = new HashMap<>();
-	private long clave = 1L;
 	private final Map<Long, List<RetoAcptadoDTO>> retoADTO = new HashMap<>();
 	public TrainingSessionService TSS;
 	public RetoRepository retorepo;
@@ -54,9 +51,7 @@ public class RetoService {
         }
     	
         Reto reto = new Reto(nombre, deporteEnum, fecha_inicio, fecha_fin, distancia, tiempo);
-		retos.put(clave, reto);
 		retorepo.save(reto);
-		clave++;
 	}
     
     public List<RetoDTO> obtenerRetos(String deporteFiltro, String fechaFiltroStr) {
