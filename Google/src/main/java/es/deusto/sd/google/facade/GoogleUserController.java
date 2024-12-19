@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,9 +41,8 @@ public class GoogleUserController {
     )
     @GetMapping("/validate")
     public boolean validateLogin(
-        @RequestParam("email") String email, 
-        @RequestParam("contraseña") String password) {
+	        @RequestParam("email") String email, 
+	        @RequestParam("contraseña") String password) {
         return service.validarLogin(email, password);
     }
-
 }

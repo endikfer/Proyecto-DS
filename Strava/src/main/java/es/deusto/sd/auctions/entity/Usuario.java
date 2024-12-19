@@ -1,5 +1,7 @@
 package es.deusto.sd.auctions.entity;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -132,6 +134,18 @@ public class Usuario {
 				+ fecha_nac + ", peso=" + peso + ", altura=" + altura + ", frec_car_max=" + frec_car_max
 				+ ", frec_car_rep=" + frec_car_rep + "]";
 	}
-	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    Usuario usuario = (Usuario) obj;
+	    return Objects.equals(id, usuario.id); // Cambia "id" por el atributo relevante
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(id); // Cambia "id" por el atributo relevante
+	}
+
 	
 }

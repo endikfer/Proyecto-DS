@@ -48,9 +48,9 @@ public class DataInitializer {
 
 			//usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
 			//Thread.sleep(100);
-			//usuarioservice.logIn("support@gmail.com", "456");
+			usuarioservice.logIn("support@gmail.com", "456");
 			//Thread.sleep(100);
-	       
+			usuarioservice.LogOut(Carlos);
 			logger.info("Users saved!");			
 			
 			//Inicializacion de retos
@@ -75,10 +75,7 @@ public class DataInitializer {
 
 			sesionrepo.saveAll(List.of(s1, s2, s3, s4, s5));
 
-			logger.info("Sesiones saved!");
-
             logger.info("Training sessions saved!");
-            System.out.println(usuarioservice.obtenerTokens());
             	
 		};
 	}

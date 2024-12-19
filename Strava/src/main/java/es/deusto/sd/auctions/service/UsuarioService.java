@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,8 +24,6 @@ public class UsuarioService {
     public static Map<String, Usuario> tokens = new HashMap<>();
     private UsuarioRepository repository;
     private FactoryGateway factoria;
-
-
     
     public UsuarioService(UsuarioRepository user, FactoryGateway factoria) {
     	this.repository = user;
@@ -54,7 +53,6 @@ public class UsuarioService {
 
             usuarios.put(u.getId(), u);
             repository.save(u);
-
     }
 
     public void logIn(String email, String contrasenia) {
@@ -89,6 +87,7 @@ public class UsuarioService {
         }else {
             throw new IllegalArgumentException("Login fallido para el email: " + email);
         }
+        System.out.println(tokens);
     }
 
     private Usuario buscarUsuarioPorEmail(String email) {
@@ -104,8 +103,16 @@ public class UsuarioService {
     }
 
     public void LogOut(Usuario u) {
-        tokens.entrySet().removeIf(entry -> entry.getValue().equals(u));
+        Iterator<Map.Entry<String, Usuario>> iterator = tokens.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Usuario> entry = iterator.next();
+            if (entry.getValue().equals(u)) {
+                iterator.remove();
+            }
+        }
+        System.out.println(tokens);
     }
+
 
     public static Map<String, Usuario> getTokens() {
         return tokens;
