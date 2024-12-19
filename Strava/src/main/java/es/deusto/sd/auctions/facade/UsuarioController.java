@@ -105,7 +105,6 @@ public class UsuarioController {
     ) {
         try {
             usuarioService.registro(nombre,email, tipo, fecha_nac,peso,altura,frec_car_max,frec_car_rep);
-            System.out.println(usuarioService.obtenerTokens());
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);  // Error de solicitud mal formada
@@ -144,7 +143,6 @@ public class UsuarioController {
             if (tokenOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Error 400 sin cuerpo
             }
-            System.out.println(usuarioService.obtenerTokens());
             // Enviar una respuesta exitosa sin contenido (código 200)
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
@@ -178,8 +176,7 @@ public class UsuarioController {
             }
             // Eliminar el token del mapa de tokens
             usuarioService.LogOut(usuario); // Eliminar el token asociado
-            
-        	System.out.println(usuarioService.obtenerTokens());
+
             return ResponseEntity.ok().build(); // Respuesta exitosa sin contenido
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Error 500 sin contenido

@@ -43,16 +43,22 @@ public class UsuarioService {
     }
 
     public void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
-
+           
+            Usuario usuario = repository.findByEmail(email);
+            if (usuario != null) {
+                throw new IllegalArgumentException("Usuario con el email proporcionado ya existe.");
+            }
             Usuario u = new Usuario(nombre, email, tipo, fecha_nac, 0f, 0, 0, 0);
 
             if (peso > 0) u.setPeso(peso);
             if (altura > 0) u.setAltura(altura);
             if (frec_car_max > 0) u.setFrec_car_max(frec_car_max);
             if (frec_car_rep > 0) u.setFrec_car_rep(frec_car_rep);
-
+            
             usuarios.put(u.getId(), u);
             repository.save(u);
+
+
     }
 
     public void logIn(String email, String contrasenia) {
