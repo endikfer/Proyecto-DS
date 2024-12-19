@@ -190,7 +190,7 @@ public class RetoService {
     }
     
     private RetoDTO retoToDTO(Reto reto) {
-		return new RetoDTO( 
+		return new RetoDTO( reto.getId(),
 				reto.getNombre(),
 				reto.getDeporte().name().toLowerCase(),
 				reto.getFecha_inicio(),

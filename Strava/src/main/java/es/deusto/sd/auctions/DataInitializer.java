@@ -60,7 +60,8 @@ public class DataInitializer {
 			Reto r6 = new Reto("Reto 1 Hora Running", Deporte.RUNNING, LocalDate.now().minusDays(1), LocalDate.now().plusDays(30), 0, 60);
 			Reto r7 = new Reto("Reto 20K Running", Deporte.RUNNING, LocalDate.now(), LocalDate.now().plusDays(15), 20, 0);
 			
-			retorepo.saveAll(List.of(r1, r2, r3, r4, r5, r6, r7));
+			List<Reto> retos = retorepo.saveAll(List.of(r1, r2, r3, r4, r5, r6, r7));
+			retos.forEach(reto -> System.out.println("ID generado: " + reto.getId()));
 			
 			logger.info("Retos saved!");
 			
