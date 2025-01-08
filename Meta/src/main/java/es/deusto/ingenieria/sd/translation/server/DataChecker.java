@@ -12,7 +12,6 @@ public class DataChecker {
 	    emails.put("maria@meta.com", "1234abcd");
 	    emails.put("help@meta.com", "ABCD1234");
 	    emails.put("contact@meta.com", "1a2b3c4d");
-	    
 	}
 
 	
