@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="Cliente/src/main/java"/>
+	<classpathentry kind="src" path="Google/src/main/java"/>
+	<classpathentry kind="src" path="Meta/.gradle/8.10.2/dependencies-accessors/d7f838bb16dc243bdd05bfa8f75ef956f6209f3c/sources"/>
+	<classpathentry kind="src" path="Meta/src/main/java"/>
+	<classpathentry kind="src" path="Strava/src/main/java"/>
+	<classpathentry kind="lib" path="Cliente/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="Google/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="Meta/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="output" path="Cliente/bin/main"/>
+</classpath>
