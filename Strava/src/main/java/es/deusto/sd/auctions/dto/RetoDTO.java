@@ -16,9 +16,10 @@ public class RetoDTO {
 	public RetoDTO() {
 	}
 
-	public RetoDTO(String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin,
+	public RetoDTO(Long id, String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin,
 			Integer distancia, Integer tiempo) {
 		super();
+		this.id = id;
 		this.nombre = nombre;
 		this.deporte = deporte;
 		this.fecha_inicio = fecha_inicio;

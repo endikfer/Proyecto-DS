@@ -23,7 +23,6 @@ import es.deusto.sd.auctions.entity.Login;
 import es.deusto.sd.auctions.entity.Reto;
 import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.auctions.entity.Usuario;
-import es.deusto.sd.auctions.service.TrainingSessionService;
 import es.deusto.sd.auctions.service.UsuarioService;
 
 @Configuration
@@ -33,24 +32,23 @@ public class DataInitializer {
 	
     @Bean
     @Transactional
-    CommandLineRunner initData(UsuarioService usuarioservice, TrainingSessionService sesionservice, UsuarioRepository usuariorepo, RetoRepository retorepo, SesionRepository sesionrepo) {
+    CommandLineRunner initData(UsuarioService usuarioservice, UsuarioRepository usuariorepo, RetoRepository retorepo, SesionRepository sesionrepo) {
 		return args -> {
 			retorepo.deleteAll();
 	        usuariorepo.deleteAll();
+	        sesionrepo.deleteAll();
 	        
-			Usuario Ana = new Usuario("Ana López", "contact@meta.com", Login.META, "2000-12-01", 62.0f, 165, 180, 55);
+	        Usuario Ana = new Usuario("Ana López", "contact@meta.com", Login.META, "2000-12-01", 62.0f, 165, 180, 55);
 	        Usuario Maria = new Usuario("María Gómez", "help@meta.com", Login.META, "1993-10-10", 68.0f, 170, 185, 58);
-	        usuariorepo.saveAll(List.of(Ana, Maria));
-	        
-			// Crear usuarios
-			//usuarioservice.registro("Juan Pérez", "info@gmail.com", "1985-07-25", 70.5f, 175, 190, 60);
-			//usuarioservice.registro("Carlos Díaz", "support@gmail.com", "1990-05-15", 80.0f, 180, 195, 65);
-			
-			//usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
+	        Usuario Juan = new Usuario("Juan Pérez", "info@gmail.com", Login.GOOGLE, "1985-07-25", 70.5f, 175, 190, 60);
+	        Usuario Carlos = new Usuario("Carlos Díaz", "support@gmail.com", Login.GOOGLE, "1990-05-15", 80.0f, 180, 195, 65);
+
+	        usuariorepo.saveAll(List.of(Ana, Maria, Juan, Carlos));
+
+			usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
+			Thread.sleep(100);
+			//usuarioservice.logIn("support@gmail.com", "456");
 			//Thread.sleep(100);
-			//usuarioservice.logIn("support@gmail.com", null);
-			//Thread.sleep(100);
-	       
 			logger.info("Users saved!");			
 			
 			//Inicializacion de retos
@@ -62,7 +60,8 @@ public class DataInitializer {
 			Reto r6 = new Reto("Reto 1 Hora Running", Deporte.RUNNING, LocalDate.now().minusDays(1), LocalDate.now().plusDays(30), 0, 60);
 			Reto r7 = new Reto("Reto 20K Running", Deporte.RUNNING, LocalDate.now(), LocalDate.now().plusDays(15), 20, 0);
 			
-			retorepo.saveAll(List.of(r1, r2, r3, r4, r5, r6, r7));
+			List<Reto> retos = retorepo.saveAll(List.of(r1, r2, r3, r4, r5, r6, r7));
+			retos.forEach(reto -> System.out.println("ID generado: " + reto.getId()));
 			
 			logger.info("Retos saved!");
 			
@@ -75,10 +74,7 @@ public class DataInitializer {
 
 			sesionrepo.saveAll(List.of(s1, s2, s3, s4, s5));
 
-			logger.info("Sesiones saved!");
-
             logger.info("Training sessions saved!");
-            System.out.println(usuarioservice.obtenerTokens());
             	
 		};
 	}
