@@ -23,7 +23,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'Diseño.de.software'
+    mainClass = 'es.deusto.ingenieria.sd.translation.server.MetaServer'
 }
 
 // Server port
