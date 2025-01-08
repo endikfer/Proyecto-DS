@@ -1,7 +1,5 @@
 package es.deusto.sd.auctions.external;
 
-
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
