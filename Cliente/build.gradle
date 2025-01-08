@@ -1,0 +1,27 @@
+plugins {
+	id 'java'
+	id 'application'
+	id 'org.springframework.boot' version '3.4.0'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'Diseño.de.software'
+version = '1.0'
+
+repositories {
+	mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+// Task to run the swing client
+task runSwingClient(type: JavaExec) {
+    group = 'application'
+    description = 'Run the Swing Client'
+    mainClass = 'es.deusto.sd.auctions.client.swing.SwingClientGUI'
+    classpath = sourceSets.main.runtimeClasspath
+}
