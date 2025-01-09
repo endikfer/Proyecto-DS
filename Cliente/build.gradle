@@ -18,20 +18,6 @@ java {
     }
 }
 
-dependencies {
-	// Spring Boot Starter Web for building web applications
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-}
-
-// Task to run the console client
-task runConsoleClient(type: JavaExec) {
-    group = 'application'
-    description = 'Run the Console Client'
-    mainClass = 'es.deusto.sd.auctions.client.console.ConsoleClient'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
 // Task to run the swing client
 task runSwingClient(type: JavaExec) {
     group = 'application'
@@ -40,7 +26,3 @@ task runSwingClient(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
-// Spring Boot configuration, defaults to running the web client
-bootRun {
-    mainClass.set("es.deusto.sd.auctions.client.web.WebClientApplication")
-}
