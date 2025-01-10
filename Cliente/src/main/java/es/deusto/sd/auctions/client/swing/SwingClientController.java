@@ -5,11 +5,13 @@
  */
 package es.deusto.sd.auctions.client.swing;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import es.deusto.sd.auctions.client.data.Article;
 import es.deusto.sd.auctions.client.data.Category;
 import es.deusto.sd.auctions.client.data.Credentials;
+import es.deusto.sd.auctions.client.data.Reto;
 import es.deusto.sd.auctions.client.proxies.HttpServiceProxy;
 import es.deusto.sd.auctions.client.proxies.IAuctionsServiceProxy;
 
@@ -64,5 +66,14 @@ public class SwingClientController {
 
     public void placeBid(Long articleId, Float amount, String currency) {
         serviceProxy.makeBid(articleId, amount, currency, token);
+    }
+    
+    public void crearReto(String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
+			Integer tiempo) {
+        serviceProxy.crearReto(nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo, token);
+    }
+    
+    public List<Reto> consultarRetos(String deporte, String fecha) {
+        return serviceProxy.consultarReto(deporte, fecha, token);
     }
 }
