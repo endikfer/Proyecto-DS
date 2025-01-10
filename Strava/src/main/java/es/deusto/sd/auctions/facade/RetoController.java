@@ -44,7 +44,7 @@ public class RetoController {
 			    }
 			)
 		@PostMapping("/retos/crear")
-		public ResponseEntity<List<RetoDTO>> crearReto(
+		public ResponseEntity<Void> crearReto(
 		    @RequestParam("nombre") String nombre,
 		    @RequestParam("deporte") String deporte,
 		    @RequestParam("fecha_inicio") LocalDate fecha_inicio,

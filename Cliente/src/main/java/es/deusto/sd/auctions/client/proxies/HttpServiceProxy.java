@@ -12,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.deusto.sd.auctions.client.data.Article;
 import es.deusto.sd.auctions.client.data.Category;
 import es.deusto.sd.auctions.client.data.Credentials;
+import es.deusto.sd.auctions.client.data.Reto;
 
 /**
  * HttpServiceProxy class is an implementation of the Service Proxy design pattern
@@ -196,4 +198,17 @@ public class HttpServiceProxy implements IAuctionsServiceProxy {
             throw new RuntimeException("Error while making a bid", e);
         }
     }
+
+	@Override
+	public void crearReto(String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
+			Integer tiempo, String token) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Reto> consultarReto(String deporte, String fecha, String token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
