@@ -49,7 +49,7 @@ import es.deusto.sd.auctions.client.data.Reto;
  * (Description generated with ChatGPT 4o mini)
  */
 public class HttpServiceProxy implements IAuctionsServiceProxy {
-    private static final String BASE_URL = "http://localhost:8080";
+    private static final String BASE_URL = "http://localhost:8081";
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
