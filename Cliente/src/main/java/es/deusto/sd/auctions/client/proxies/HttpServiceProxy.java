@@ -202,8 +202,26 @@ public class HttpServiceProxy implements IAuctionsServiceProxy {
 	@Override
 	public void crearReto(String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
 			Integer tiempo, String token) {
-		// TODO Auto-generated method stub
-		
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+	                .uri(URI.create(BASE_URL + "/acciones/retos/crear?nombre=" + nombre + "&deporte=" + 
+	                		deporte + "&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin + "&distancia=" +
+	                		distancia + "&tiempo=" + tiempo + "&Authorization=" + token))
+	                .header("Content-Type", "application/json")
+	                .POST(HttpRequest.BodyPublishers.noBody())
+	                .build();
+
+	            HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+	            
+	            switch (response.statusCode()) {
+	                case 200 -> {} // Reto creado correctamente
+	                case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
+	                case 500 -> throw new RuntimeException("Internal server error");
+	                default -> throw new RuntimeException("Fallo al crear el reto con el codigo de estatus: " + response.statusCode());
+            }
+		}catch(IOException | InterruptedException e) {
+			throw new RuntimeException("Error creando el reto.", e);
+		}		
 	}
 
 	@Override
