@@ -226,7 +226,25 @@ public class HttpServiceProxy implements IAuctionsServiceProxy {
 
 	@Override
 	public List<Reto> consultarReto(String deporte, String fecha, String token) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+	                .uri(URI.create(BASE_URL + "/acciones/retos?deporte=" + deporte + "&fecha=" + 
+	                		fecha + "&Authorization=" + token))
+	                .header("Content-Type", "application/json")
+	                .GET()
+	                .build();
+
+	            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+	            
+	            return switch (response.statusCode()) {
+	                case 200 -> objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class, Reto.class));
+	                case 204 -> throw new RuntimeException("No Content: No hay retos aceptados");
+	                case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
+	                case 500 -> throw new RuntimeException("Internal server error");
+	                default -> throw new RuntimeException("Fallo al aceptar el reto con el codigo de estatus: " + response.statusCode());
+            };
+		}catch(IOException | InterruptedException e) {
+			throw new RuntimeException("Error aceptando el reto.", e);
+		}
 	}
 }
