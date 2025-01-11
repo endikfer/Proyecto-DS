@@ -189,7 +189,7 @@ public class UsuarioController {
         return new UsuarioDTO(
                 usuario.getNombre(),
                 usuario.getEmail(),
-                usuario.getTipo().name(),
+                usuario.getTipo().getName(),
                 usuario.getFecha_nac(),
                 usuario.getPeso(),
                 usuario.getAltura(),
