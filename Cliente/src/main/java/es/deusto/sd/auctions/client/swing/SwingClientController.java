@@ -76,4 +76,13 @@ public class SwingClientController {
     public List<Reto> consultarRetos(String deporte, String fecha) {
         return serviceProxy.consultarReto(deporte, fecha, token);
     }
+    
+    public List<Reto> consultarRetosAceptados() {
+        return serviceProxy.consultarRetosAceptados(token);
+    }
+    
+    public void aceptarReto(Long retoId) {
+        serviceProxy.aceptarReto(retoId, token);
+    }
+
 }

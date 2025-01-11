@@ -247,4 +247,51 @@ public class HttpServiceProxy implements IAuctionsServiceProxy {
 			throw new RuntimeException("Error aceptando el reto.", e);
 		}
 	}
+	
+	@Override
+	public void aceptarReto(Long retoId, String token) {
+	    try {
+	        HttpRequest request = HttpRequest.newBuilder()
+	            .uri(URI.create(BASE_URL + "/acciones/retos/" + retoId + "/aceptar?Authorization=" + token))
+	            .header("Content-Type", "application/json")
+	            .POST(HttpRequest.BodyPublishers.noBody())
+	            .build();
+
+	        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+
+	        switch (response.statusCode()) {
+	            case 200 -> {} // Reto aceptado correctamente
+	            case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
+	            case 404 -> throw new RuntimeException("Not Found: Reto no encontrado");
+	            case 500 -> throw new RuntimeException("Internal server error");
+	            default -> throw new RuntimeException("Fallo al aceptar el reto con el código de estado: " + response.statusCode());
+	        }
+	    } catch (IOException | InterruptedException e) {
+	        throw new RuntimeException("Error aceptando el reto.", e);
+	    }
+	}
+
+	@Override
+	public List<Reto> consultarRetosAceptados(String token) {
+	    try {
+	        HttpRequest request = HttpRequest.newBuilder()
+	            .uri(URI.create(BASE_URL + "/acciones/retos/aceptados?Authorization=" + token))
+	            .header("Content-Type", "application/json")
+	            .GET()
+	            .build();
+
+	        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+	        return switch (response.statusCode()) {
+	            case 200 -> objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class, Reto.class));
+	            case 204 -> throw new RuntimeException("No Content: No hay retos aceptados");
+	            case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
+	            case 500 -> throw new RuntimeException("Internal server error");
+	            default -> throw new RuntimeException("Fallo al consultar los retos aceptados con el código de estado: " + response.statusCode());
+	        };
+	    } catch (IOException | InterruptedException e) {
+	        throw new RuntimeException("Error consultando los retos aceptados.", e);
+	    }
+	}
+
 }

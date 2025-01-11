@@ -63,4 +63,10 @@ public interface IAuctionsServiceProxy {
 			LocalDate fecha_fin, Integer distancia, Integer tiempo, String token);
 	
 	List<Reto> consultarReto(String deporte, String fecha, String token);
+	
+	
+	void aceptarReto(Long retoId, String token);
+
+	List<Reto> consultarRetosAceptados(String token);
+
 }
