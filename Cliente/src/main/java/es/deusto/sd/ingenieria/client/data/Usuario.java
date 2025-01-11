@@ -1,6 +1,5 @@
 package es.deusto.sd.ingenieria.client.data;
-
-import java.util.Objects;
+import es.deusto.sd.auctions.entity.Login;
 
 public record Usuario(
     Long id,
