@@ -1,4 +1,4 @@
-package es.deusto.sd.ingenieria.client.data;
+package es.deusto.sd.client.data;
 
 import java.time.LocalDate;
 

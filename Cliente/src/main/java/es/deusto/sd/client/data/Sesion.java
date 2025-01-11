@@ -1,6 +1,5 @@
-package es.deusto.sd.ingenieria.client.data;
+package es.deusto.sd.client.data;
 import java.time.LocalDate;
-import es.deusto.sd.auctions.entity.Deporte;
 
 public record Sesion(
         Long id,

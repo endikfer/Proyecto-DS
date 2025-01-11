@@ -3,7 +3,7 @@
  * adapted using GitHub Copilot. It has been thoroughly reviewed 
  * and validated to ensure correctness and that it is free of errors.
  */
-package es.deusto.sd.ingenieria.client.proxies;
+package es.deusto.sd.client.proxies;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,13 +14,13 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import es.deusto.sd.ingenieria.client.data.Article;
-import es.deusto.sd.ingenieria.client.data.Category;
-import es.deusto.sd.ingenieria.client.data.Credentials;
-import es.deusto.sd.ingenieria.client.data.Reto;
+import es.deusto.sd.client.data.Article;
+import es.deusto.sd.client.data.Category;
+import es.deusto.sd.client.data.Credentials;
+import es.deusto.sd.client.data.Login;
+import es.deusto.sd.client.data.Reto;
+import es.deusto.sd.client.data.Usuario;
 
 /**
  * HttpServiceProxy class is an implementation of the Service Proxy design pattern
@@ -48,7 +48,7 @@ import es.deusto.sd.ingenieria.client.data.Reto;
  * 
  * (Description generated with ChatGPT 4o mini)
  */
-public class HttpServiceProxy implements IAuctionsServiceProxy {
+public class HttpServiceProxy implements IServiceProxy {
     private static final String BASE_URL = "http://localhost:8081";
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
@@ -292,6 +292,31 @@ public class HttpServiceProxy implements IAuctionsServiceProxy {
 	    } catch (IOException | InterruptedException e) {
 	        throw new RuntimeException("Error consultando los retos aceptados.", e);
 	    }
+	}
+
+	@Override
+	public void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura,
+			int frec_car_max, int frec_car_rep) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void logIn(String email, String contrasenia) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void generarToken(Usuario u) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void LogOut(Usuario u) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

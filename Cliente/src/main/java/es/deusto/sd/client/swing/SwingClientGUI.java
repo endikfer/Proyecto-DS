@@ -3,7 +3,7 @@
  * adapted using GitHub Copilot. It has been thoroughly reviewed 
  * and validated to ensure correctness and that it is free of errors.
  */
-package es.deusto.sd.ingenieria.client.swing;
+package es.deusto.sd.client.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -35,8 +35,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import es.deusto.sd.ingenieria.client.data.Article;
-import es.deusto.sd.ingenieria.client.data.Category;
+import es.deusto.sd.client.data.Article;
+import es.deusto.sd.client.data.Category;
 
 /**
  * SwingClientGUI class is a Swing-based client that demonstrates the usage of the

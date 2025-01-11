@@ -3,15 +3,17 @@
  * adapted using GitHub Copilot. It has been thoroughly reviewed 
  * and validated to ensure correctness and that it is free of errors.
  */
-package es.deusto.sd.ingenieria.client.proxies;
+package es.deusto.sd.client.proxies;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import es.deusto.sd.ingenieria.client.data.Article;
-import es.deusto.sd.ingenieria.client.data.Category;
-import es.deusto.sd.ingenieria.client.data.Credentials;
-import es.deusto.sd.ingenieria.client.data.Reto;
+import es.deusto.sd.client.data.Login;
+import es.deusto.sd.client.data.Usuario;
+import es.deusto.sd.client.data.Article;
+import es.deusto.sd.client.data.Category;
+import es.deusto.sd.client.data.Credentials;
+import es.deusto.sd.client.data.Reto;
 
 /**
  * IAuctionsServiceProxy interface defines a contract for communication 
@@ -40,7 +42,7 @@ import es.deusto.sd.ingenieria.client.data.Reto;
  * 
  * (Description generated with ChatGPT 4o mini)
  */
-public interface IAuctionsServiceProxy {
+public interface IServiceProxy {
 	// Method for user login
 	String login(Credentials credentials);
 
@@ -58,6 +60,14 @@ public interface IAuctionsServiceProxy {
 
 	// Method to place a bid on an article
 	void makeBid(Long articleId, Float amount, String currency, String token);
+	
+	void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep);
+	
+	void logIn(String email, String contrasenia);
+	
+	public void generarToken(Usuario u);
+	
+	public void LogOut(Usuario u);
 	
 	void crearReto(String nombre, String deporte, LocalDate fecha_inicio, 
 			LocalDate fecha_fin, Integer distancia, Integer tiempo, String token);

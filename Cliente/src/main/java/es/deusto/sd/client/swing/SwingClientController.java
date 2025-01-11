@@ -3,17 +3,17 @@
  * adapted using GitHub Copilot. It has been thoroughly reviewed 
  * and validated to ensure correctness and that it is free of errors.
  */
-package es.deusto.sd.ingenieria.client.swing;
+package es.deusto.sd.client.swing;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import es.deusto.sd.ingenieria.client.data.Article;
-import es.deusto.sd.ingenieria.client.data.Category;
-import es.deusto.sd.ingenieria.client.data.Credentials;
-import es.deusto.sd.ingenieria.client.data.Reto;
-import es.deusto.sd.ingenieria.client.proxies.HttpServiceProxy;
-import es.deusto.sd.ingenieria.client.proxies.IAuctionsServiceProxy;
+import es.deusto.sd.client.data.Article;
+import es.deusto.sd.client.data.Category;
+import es.deusto.sd.client.data.Credentials;
+import es.deusto.sd.client.data.Reto;
+import es.deusto.sd.client.proxies.HttpServiceProxy;
+import es.deusto.sd.client.proxies.IServiceProxy;
 
 /**
  * SwingClientController class acts as a Controller in the Model-View-Controller 
@@ -33,7 +33,7 @@ import es.deusto.sd.ingenieria.client.proxies.IAuctionsServiceProxy;
  */
 public class SwingClientController {
 	// Service proxy for interacting with the AuctionsService using HTTP-based implementation
-	private IAuctionsServiceProxy serviceProxy = new HttpServiceProxy();
+	private IServiceProxy serviceProxy = new HttpServiceProxy();
 	// Token to be used during the session
     private String token;
 
