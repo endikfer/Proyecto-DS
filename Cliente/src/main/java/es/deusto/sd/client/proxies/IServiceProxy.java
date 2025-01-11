@@ -10,6 +10,8 @@ import java.util.List;
 
 import es.deusto.sd.client.data.Login;
 import es.deusto.sd.client.data.Usuario;
+import es.deusto.sd.auctions.dto.SesionDTO;
+import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Credentials;
@@ -78,5 +80,12 @@ public interface IServiceProxy {
 	void aceptarReto(Long retoId, String token);
 
 	List<Reto> consultarRetosAceptados(String token);
-
+	
+	List<SesionDTO> getSesionesRecientes();
+	
+	List<SesionDTO> getSesionesPorFecha(String startDate, String endDate);
+	
+	SesionDTO toDTO(Sesion sesion);
+	
+	SesionDTO crearSesion(SesionDTO dto);
 }
