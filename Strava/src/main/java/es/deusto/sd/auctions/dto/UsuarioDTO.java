@@ -1,7 +1,5 @@
 package es.deusto.sd.auctions.dto;
 
-import es.deusto.sd.auctions.entity.Login;
-
 public class UsuarioDTO {
     private Long id;
     private String nombre;

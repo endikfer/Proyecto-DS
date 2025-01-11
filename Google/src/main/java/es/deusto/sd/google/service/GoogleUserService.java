@@ -30,17 +30,5 @@ public class GoogleUserService {
 		}
         return false;
     }
-    
-    public boolean registrarUsuario(String email, String password) {
 
-    	if (repository.findByEmail(email) != null) {
-            return false;
-        }
-
-        GoogleUser newUser = new GoogleUser();
-        newUser.setEmail(email);
-        newUser.setPassword(password);
-        repository.save(newUser);
-        return true;
-    }
 }

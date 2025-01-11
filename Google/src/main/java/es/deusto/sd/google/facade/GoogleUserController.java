@@ -1,6 +1,7 @@
 package es.deusto.sd.google.facade;
 
 
+import es.deusto.sd.google.entity.GoogleUser;
 import es.deusto.sd.google.service.GoogleUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,4 +46,6 @@ public class GoogleUserController {
 	        @RequestParam("contraseña") String password) {
         return service.validarLogin(email, password);
     }
+
+
 }

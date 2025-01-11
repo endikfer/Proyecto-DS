@@ -7,9 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-
 import es.deusto.sd.auctions.dao.UsuarioRepository;
 import es.deusto.sd.auctions.entity.Login;
 import es.deusto.sd.auctions.entity.Usuario;
@@ -35,7 +33,6 @@ public class UsuarioService {
         return repository.findById(id);
     }
 
-    // Obtener todos los usuarios
     public List<Usuario> obtenerTodosLosUsuarios() {
         return repository.findAll();
     }
@@ -67,7 +64,6 @@ public class UsuarioService {
             throw new IllegalArgumentException("Usuario no encontrado con el email proporcionado.");
         }
 
-        // Obtener el tipo de login del usuario
         Login tipoLogIn = usuario.getTipo();
         if (tipoLogIn == null) {
             throw new IllegalArgumentException("El tipo de login no está configurado para el usuario.");
