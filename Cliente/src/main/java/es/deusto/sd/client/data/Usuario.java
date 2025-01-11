@@ -4,7 +4,7 @@ public record Usuario(
     Long id,
     String nombre,
     String email,
-    Login tipo,
+    String tiponame,
     String fechaNac,
     Float peso, // kilogramos
     Integer altura, // centímetros

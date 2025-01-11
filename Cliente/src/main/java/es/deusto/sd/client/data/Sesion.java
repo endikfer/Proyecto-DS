@@ -5,7 +5,7 @@ public record Sesion(
         Long id,
         Long usuarioId,
         String titulo,
-        Deporte deporte,
+        String deportename,
         double distancia,
         LocalDate fechaInicio,
         int duracion,
