@@ -15,6 +15,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import es.deusto.sd.auctions.dto.SesionDTO;
+import es.deusto.sd.auctions.entity.Sesion;
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Credentials;
@@ -317,6 +320,30 @@ public class HttpServiceProxy implements IServiceProxy {
 	public void LogOut(Usuario u) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<SesionDTO> getSesionesRecientes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<SesionDTO> getSesionesPorFecha(String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SesionDTO toDTO(Sesion sesion) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SesionDTO crearSesion(SesionDTO dto) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
