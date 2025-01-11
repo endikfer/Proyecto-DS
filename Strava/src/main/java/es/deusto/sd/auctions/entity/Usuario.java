@@ -5,11 +5,11 @@ import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,8 +25,8 @@ public class Usuario {
 	@Column(nullable = false, unique = true)
     private String email;
     
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "login_id", nullable = false)
     private Login tipo;
     
 	@Column(nullable = false)
