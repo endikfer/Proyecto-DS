@@ -51,8 +51,8 @@ import es.deusto.sd.client.data.Usuario;
  * 
  * (Description generated with ChatGPT 4o mini)
  */
-public class HttpServiceProxy implements IServiceProxy {
-    private static final String BASE_URL = "http://localhost:8081";
+public class HttpServiceProxy implements IStravaServiceProxy {
+    private static final String BASE_URL = "http://localhost:8080";
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 

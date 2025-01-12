@@ -18,6 +18,7 @@ import es.deusto.sd.client.data.Sesion;
 import es.deusto.sd.client.data.Usuario;
 import es.deusto.sd.client.proxies.HttpServiceProxy;
 import es.deusto.sd.client.proxies.IServiceProxy;
+import es.deusto.sd.client.proxies.IStravaServiceProxy;
 
 /**
  * SwingClientController class acts as a Controller in the Model-View-Controller 
@@ -37,7 +38,7 @@ import es.deusto.sd.client.proxies.IServiceProxy;
  */
 public class SwingClientController {
 	// Service proxy for interacting with the AuctionsService using HTTP-based implementation
-	private IServiceProxy serviceProxy = new HttpServiceProxy();
+	private IStravaServiceProxy serviceProxy = new HttpServiceProxy();
 	// Token to be used during the session
     private String token;
 
