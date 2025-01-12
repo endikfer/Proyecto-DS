@@ -9,9 +9,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import es.deusto.sd.client.data.Login;
 import es.deusto.sd.client.data.Usuario;
 import es.deusto.sd.client.data.Sesion;
+import es.deusto.sd.auctions.dto.SesionDTO;
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Credentials;
@@ -87,5 +90,5 @@ public interface IServiceProxy {
 	
 	List<Sesion> getSesionesPorFecha(String startDate, String endDate);
 	
-	Sesion crearSesion(Sesion dto);
+	void crearSesion(Long id,String titulo,String deporte, double distancia,LocalDate fechaInicio,int duracion);
 }

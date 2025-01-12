@@ -366,20 +366,72 @@ public class HttpServiceProxy implements IServiceProxy {
 
 	@Override
 	public List<Sesion> getSesionesRecientes() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+	                .uri(URI.create(BASE_URL + "/sesiones/recientes"))
+	                .header("Content-Type", "application/json")
+	                .GET()
+	                .build();
+
+	            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+	            
+	            return switch (response.statusCode()) {
+	                case 200 -> objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class, Sesion.class));
+	                case 204 -> throw new RuntimeException("No Content: No existen sesiones");
+	                case 500 -> throw new RuntimeException("Internal server error");
+	                default -> throw new RuntimeException("Fallo al acceder a las sesiones recientes: " + response.statusCode());
+            };
+		}catch(IOException | InterruptedException e) {
+			throw new RuntimeException("Error accediendo a las sesiones recientes.", e);
+		}
 	}
 
 	@Override
 	public List<Sesion> getSesionesPorFecha(String startDate, String endDate) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+	                .uri(URI.create(BASE_URL + "/sesiones/sesionesporfecha?startDate=" + startDate + "&endDate=" + 
+	                		endDate))
+	                .header("Content-Type", "application/json")
+	                .GET()
+	                .build();
+
+	            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+	            
+	            return switch (response.statusCode()) {
+	                case 200 -> objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class, Sesion.class));
+	                case 204 -> throw new RuntimeException("No Content: No existen sesiones");
+	                case 400 -> throw new RuntimeException("Formato de fecha invalido");
+	                case 500 -> throw new RuntimeException("Internal server error");
+	                default -> throw new RuntimeException("Fallo al acceder a las sesiones recientes: " + response.statusCode());
+            };
+		}catch(IOException | InterruptedException e) {
+			throw new RuntimeException("Error accediendo a las sesiones recientes.", e);
+		}
 	}
 
 	@Override
-	public Sesion crearSesion(Sesion dto) {
-		// TODO Auto-generated method stub
-		return null;
+	public void crearSesion(Long sesionId, String titulo, String deporte, double distancia, LocalDate fechaInicio, int duracion) {
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+	                .uri(URI.create(BASE_URL + "/sesiones/crear/?sesionId=" + sesionId + "&titulo=" + 
+	                		titulo + "&deporte=" + deporte + "&distancia=" +distancia + "&fechaInicio=" +
+	                		fechaInicio + "&duracion=" +duracion))
+	                .header("Content-Type", "application/json")
+	                .POST(HttpRequest.BodyPublishers.noBody())
+	                .build();
+
+	            HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+	            
+	            switch (response.statusCode()) {
+	            case 200 -> {} // Sesión creada exitosamente
+	            case 400 -> throw new RuntimeException("Bad Request: Datos inválidos o faltantes en la solicitud");
+	            case 500 -> throw new RuntimeException("Internal Server Error: Error en el servidor al crear la sesión");
+	            default -> throw new RuntimeException("Error inesperado con código de estado: " + response.statusCode());
+	        }
+	    } catch (IOException | InterruptedException e) {
+	        throw new RuntimeException("Error al intentar crear la sesión", e);
+	    }	
 	}
 
 	@Override
