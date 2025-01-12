@@ -7,11 +7,15 @@ package es.deusto.sd.client.swing;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Credentials;
+import es.deusto.sd.client.data.Login;
 import es.deusto.sd.client.data.Reto;
+import es.deusto.sd.client.data.Sesion;
+import es.deusto.sd.client.data.Usuario;
 import es.deusto.sd.client.proxies.HttpServiceProxy;
 import es.deusto.sd.client.proxies.IServiceProxy;
 
@@ -84,5 +88,37 @@ public class SwingClientController {
     public void aceptarReto(Long retoId) {
         serviceProxy.aceptarReto(retoId, token);
     }
+    
+	public List<Usuario> obtenerTodosLosUsuarios() {
+		return serviceProxy.obtenerTodosLosUsuarios();
+	}
+	
+	public Map<String, Usuario> obtenerTokens() {
+		return serviceProxy.obtenerTokens();
+	}
+	
+	public void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+		serviceProxy.registro(nombre, email, tipo, fecha_nac, peso, altura, frec_car_max, frec_car_rep);
+	}
+	
+	public void logIn(String email, String contrasenia) {
+		serviceProxy.logIn(email, contrasenia);
+	}
+	
+	public void LogOut(String token) {
+		serviceProxy.LogOut(token);
+	}
+	
+	public List<Sesion> getSesionesRecientes() {
+		return serviceProxy.getSesionesRecientes();
+	}
+	
+	public List<Sesion> getSesionesPorFecha(String startDate, String endDate) {
+		return serviceProxy.getSesionesPorFecha(startDate, endDate);
+	}
+	
+	public void crearSesion(Long id,String titulo,String deporte, double distancia,LocalDate fechaInicio,int duracion) {
+		serviceProxy.crearSesion(id, titulo, deporte, distancia, fechaInicio, duracion);
+	}
 
 }
