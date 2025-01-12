@@ -170,7 +170,7 @@ public class UsuarioController {
             @RequestParam(name = "token") String token) {
         try {
             // Validar si el token existe
-            Usuario usuario = usuarioService.getUserByToken(token);;
+            Usuario usuario = usuarioService.getUserByToken(token);
             if (usuario == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Token no válido
             }
@@ -182,7 +182,6 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Error 500 sin contenido
         }
     }
-
 
     // Convertir un Usuario a UsuarioDTO
     private UsuarioDTO convertirUsuarioADTO(Usuario usuario) {

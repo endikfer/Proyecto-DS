@@ -14,6 +14,8 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.deusto.sd.client.data.Sesion;
 import es.deusto.sd.client.data.Article;
@@ -298,26 +300,68 @@ public class HttpServiceProxy implements IServiceProxy {
 	@Override
 	public void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura,
 			int frec_car_max, int frec_car_rep) {
-		// TODO Auto-generated method stub
-		
+		 try {
+	        HttpRequest request = HttpRequest.newBuilder()
+	            .uri(URI.create(BASE_URL + "/usuarios/registro?nombre=" + nombre + "&email=" + email+"&tipo=" + tipo.name() + "&fecha_nac=" + fecha_nac+
+	            		"&peso=" + peso+"&altura=" + altura + "&frec_car_max=" + frec_car_max + "&frec_car_rep=" + frec_car_rep))
+	            .header("Content-Type", "application/json")
+	            .POST(HttpRequest.BodyPublishers.noBody())
+	            .build();
+
+	        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+
+	        switch (response.statusCode()) {
+	            case 200 -> {} // Usuario registrado correctamente
+	            case 401 -> throw new RuntimeException("Bad Request: Datos inválidos o incompletos");
+	            case 500 -> throw new RuntimeException("Internal server error");
+	            default -> throw new RuntimeException("Fallo al crear usuario con el código de estado: " + response.statusCode());
+	        }
+	    } catch (IOException | InterruptedException e) {
+	        throw new RuntimeException("Error registrando usuario.", e);
+	    }
 	}
 
 	@Override
 	public void logIn(String email, String contrasenia) {
-		// TODO Auto-generated method stub
+		 try {
+	        HttpRequest request = HttpRequest.newBuilder()
+	            .uri(URI.create(BASE_URL + "/usuarios/login?email=" + email + "&contraseña=" + contrasenia))
+	            .PUT(HttpRequest.BodyPublishers.noBody())
+	            .build();
+
+	        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+
+	        switch (response.statusCode()) {
+	            case 200 -> {} // Usuario registrado correctamente
+	            case 401 -> throw new RuntimeException("Bad Request: Usuario no registrado o datos incorrectos.");
+	            case 500 -> throw new RuntimeException("Internal Server Error: Error interno en el servidor.");
+	            default -> throw new RuntimeException("Fallo al hacer login con el código de estado: " + response.statusCode());
+	        }
+	    } catch (IOException | InterruptedException e) {
+	        throw new RuntimeException("Error registrando usuario.", e);
+	    }
 		
 	}
 
 	@Override
-	public void generarToken(Usuario u) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void LogOut(String token) {
+	    try {
+	        HttpRequest request = HttpRequest.newBuilder()
+	            .uri(URI.create(BASE_URL + "/usuarios/logout?token=" + token))
+	            .DELETE()
+	            .build();
 
-	@Override
-	public void LogOut(Usuario u) {
-		// TODO Auto-generated method stub
-		
+	        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+
+	        switch (response.statusCode()) {
+	            case 200 -> {} // Sesión cerrada correctamente
+	            case 400 -> throw new RuntimeException("Bad Request: Token no válido.");
+	            case 500 -> throw new RuntimeException("Internal Server Error: Error interno en el servidor.");
+	            default -> throw new RuntimeException("Fallo al cerrar sesión con el código de estado: " + response.statusCode());
+	        }
+	    } catch (IOException | InterruptedException e) {
+	        throw new RuntimeException("Error cerrando sesión.", e);
+	    }
 	}
 
 	@Override
@@ -336,6 +380,49 @@ public class HttpServiceProxy implements IServiceProxy {
 	public Sesion crearSesion(Sesion dto) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Usuario> obtenerTodosLosUsuarios() {
+	    try {
+	        HttpRequest request = HttpRequest.newBuilder()
+	            .uri(URI.create(BASE_URL + "/usuarios" ))
+	            .header("Content-Type", "application/json")
+	            .GET()
+	            .build();
+
+	        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+	        return switch (response.statusCode()) {
+	            case 200 -> objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class, Usuario.class));
+	            case 204 -> throw new RuntimeException("No Content: No hay usuarios registrados");
+	            case 500 -> throw new RuntimeException("Internal server error");
+	            default -> throw new RuntimeException("Fallo al consultar los usuarios registrados con el código de estado: " + response.statusCode());
+	        };
+	    } catch (IOException | InterruptedException e) {
+	        throw new RuntimeException("Error al consultar los usuarios registrados.", e);
+	    }
+	}
+
+	@Override
+	public Map<String, Usuario> obtenerTokens() {
+	    try {
+	        HttpRequest request = HttpRequest.newBuilder()
+	            .uri(URI.create(BASE_URL + "/usuarios/tokens" ))
+	            .header("Content-Type", "application/json")
+	            .GET()
+	            .build();
+
+	        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+	        return switch (response.statusCode()) {
+	            case 200 -> objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructMapLikeType(Map.class, String.class, Usuario.class));
+	            case 500 -> throw new RuntimeException("Internal server error: Error interno en el servidor.");
+	            default -> throw new RuntimeException("Fallo al consultar los retos aceptados con el código de estado: " + response.statusCode());
+	        };
+	    } catch (IOException | InterruptedException e) {
+	        throw new RuntimeException("Error consultando los tokens.", e);
+	    }
 	}
 
 }
