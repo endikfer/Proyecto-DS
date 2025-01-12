@@ -18,7 +18,7 @@ public class TrainingSessionService {
     private SesionRepository sesionrepo;
 
     // Crear una nueva sesión
-    public SesionDTO crearSesion(SesionDTO dto) {
+    public void crearSesion(SesionDTO dto) {
         Sesion sesion = new Sesion();
         sesion.setId(Id++); 
         sesion.setTitulo(dto.getTitulo());
@@ -30,7 +30,6 @@ public class TrainingSessionService {
 
         sesiones.add(sesion);
         sesionrepo.save(sesion);
-        return toDTO(sesion); 
     }
 
     // Obtener las 5 últimas sesiones
