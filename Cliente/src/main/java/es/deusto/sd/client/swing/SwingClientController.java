@@ -17,7 +17,6 @@ import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.Sesion;
 import es.deusto.sd.client.data.Usuario;
 import es.deusto.sd.client.proxies.HttpServiceProxy;
-import es.deusto.sd.client.proxies.IServiceProxy;
 import es.deusto.sd.client.proxies.IStravaServiceProxy;
 
 /**
