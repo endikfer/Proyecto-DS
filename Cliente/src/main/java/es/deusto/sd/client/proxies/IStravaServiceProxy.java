@@ -8,8 +8,6 @@ package es.deusto.sd.client.proxies;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
-import es.deusto.sd.client.data.Login;
 import es.deusto.sd.client.data.Usuario;
 import es.deusto.sd.client.data.Sesion;
 import es.deusto.sd.client.data.Article;
@@ -67,11 +65,11 @@ public interface IStravaServiceProxy {
 	
 	Map<String, Usuario> obtenerTokens();
 	
-	void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep);
+	void registro(String nombre, String email, String tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep);
 	
-	void logIn(String email, String contrasenia);
+	String logIn(String email, String contrasenia);
 	
-	public void LogOut(String token);
+	void LogOut(String token);
 	
 	void crearReto(String nombre, String deporte, LocalDate fecha_inicio, 
 			LocalDate fecha_fin, Integer distancia, Integer tiempo, String token);

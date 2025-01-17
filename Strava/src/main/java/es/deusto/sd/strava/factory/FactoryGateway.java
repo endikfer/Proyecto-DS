@@ -10,14 +10,14 @@ import es.deusto.sd.strava.external.ServiceGateway;
 @Component
 public class FactoryGateway {
     public ServiceGateway factoria (Login tipoLogIn) {
-        if (tipoLogIn.getName() == null || tipoLogIn.getName().isEmpty()) {
+        if (tipoLogIn == null) {
             throw new IllegalArgumentException("El tipo de login no puede ser nulo.");
         }
 
-        switch (tipoLogIn.getName().toUpperCase()) {
-            case "META":
+        switch (tipoLogIn) {
+            case META:
                 return new MetaServiceGateway();
-            case "GOOGLE":
+            case GOOGLE:
                 return new GoogleServiceGateway();
             default:
                 throw new IllegalArgumentException("Tipo de login no soportado: " + tipoLogIn);

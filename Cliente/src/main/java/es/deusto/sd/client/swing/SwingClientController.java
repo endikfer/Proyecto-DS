@@ -8,11 +8,9 @@ package es.deusto.sd.client.swing;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Credentials;
-import es.deusto.sd.client.data.Login;
 import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.Sesion;
 import es.deusto.sd.client.data.Usuario;
@@ -41,20 +39,7 @@ public class SwingClientController {
 	// Token to be used during the session
     private String token;
 
-	public boolean login(String email, String password) {
-        try {
-            Credentials credentials = new Credentials(email, password);
-            token = serviceProxy.login(credentials);
-            
-            return true;
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Login failed: " + e.getMessage());
-        }
-    }
-
-    public void logout() {
-        serviceProxy.logout(token);
-    }
+	
 
     public List<Category> getCategories() {
         return serviceProxy.getAllCategories();
@@ -96,16 +81,34 @@ public class SwingClientController {
 	public Map<String, Usuario> obtenerTokens() {
 		return serviceProxy.obtenerTokens();
 	}
-	
-	public void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+	public boolean login(String email, String password) {
+        try {
+            Credentials credentials = new Credentials(email, password);
+            token = serviceProxy.login(credentials);
+            
+            return true;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Login failed: " + e.getMessage());
+        }
+    }
+
+    public void logout() {
+        serviceProxy.logout(token);
+    }
+	public void registro(String nombre, String email, String tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		serviceProxy.registro(nombre, email, tipo, fecha_nac, peso, altura, frec_car_max, frec_car_rep);
 	}
 	
-	public void logIn(String email, String contrasenia) {
-		serviceProxy.logIn(email, contrasenia);
+	public boolean logIn(String email, String contrasenia) {
+        try {
+    		token = serviceProxy.logIn(email, contrasenia);      
+            return true;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Login failed: " + e.getMessage());
+        }
 	}
 	
-	public void LogOut(String token) {
+	public void LogOut() {
 		serviceProxy.LogOut(token);
 	}
 	

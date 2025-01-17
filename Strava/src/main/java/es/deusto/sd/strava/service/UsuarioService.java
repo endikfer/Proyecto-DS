@@ -38,13 +38,13 @@ public class UsuarioService {
         return repository.findAll();
     }
 
-    public void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+    public void registro(String nombre, String email, String tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
            
             Usuario usuario = repository.findByEmail(email);
             if (usuario != null) {
                 throw new IllegalArgumentException("Usuario con el email proporcionado ya existe.");
             }
-            Usuario u = new Usuario(nombre, email, tipo, fecha_nac, 0f, 0, 0, 0);
+            Usuario u = new Usuario(nombre, email, Login.valueOf(tipo), fecha_nac, 0f, 0, 0, 0);
 
             if (peso > 0) u.setPeso(peso);
             if (altura > 0) u.setAltura(altura);
@@ -55,9 +55,10 @@ public class UsuarioService {
             repository.save(u);
     }
 
-    public void logIn(String email, String contrasenia) {
+    public Optional<String> logIn(String email, String contrasenia) {
+    	String token = "";
         if (tokens.values().stream().anyMatch(u -> u.getEmail().equals(email))) {
-            return;
+            return Optional.empty();
         }
         
         Usuario usuario = repository.findByEmail(email);
@@ -73,30 +74,31 @@ public class UsuarioService {
         ServiceGateway serviceGateway = factoria.factoria(tipoLogIn);
         
         if (serviceGateway.validateLogin(email, contrasenia)) {
-                generarToken(usuario);
+                token = generarToken(usuario);
         }else {
             throw new IllegalArgumentException("Login fallido para el email: " + email);
         }
         System.out.println(tokens);
+        return Optional.ofNullable(token);
     }
 
-    public void generarToken(Usuario u) {
+    public String generarToken(Usuario u) {
         String token = Timestamp.from(Instant.now()).toString();
         tokens.put(token, u);
+        return token;
     }
 
-    public void LogOut(Usuario u) {
-        Iterator<Map.Entry<String, Usuario>> iterator = tokens.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, Usuario> entry = iterator.next();
-            if (entry.getValue().equals(u)) {
-                iterator.remove();
-            }
+    public Optional<Boolean> logout(String token) {
+        if (tokens.containsKey(token)) {
+            tokens.remove(token);
+            System.out.println(tokens);
+            return Optional.of(true);
+        } else {
+            return Optional.empty();
         }
-        System.out.println(tokens);
+
     }
-
-
+        
     public static Map<String, Usuario> getTokens() {
         return tokens;
     }

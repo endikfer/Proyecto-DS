@@ -4,7 +4,6 @@ import es.deusto.sd.strava.dto.UsuarioDTO;
 import es.deusto.sd.strava.entity.Login;
 import es.deusto.sd.strava.entity.Usuario;
 import es.deusto.sd.strava.service.UsuarioService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -97,7 +96,7 @@ public class UsuarioController {
     public ResponseEntity<Void> registrarUsuario(
         @RequestParam("nombre") String nombre,
         @RequestParam("email") String email,
-        @RequestParam("tipo") Login tipo,
+        @RequestParam("tipo") String tipo,
         @RequestParam("fecha_nac") String fecha_nac,
         @RequestParam("peso") float peso,
         @RequestParam("altura") int altura,
@@ -127,25 +126,19 @@ public class UsuarioController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
             }
     )
-    @PutMapping("/login")
-    public ResponseEntity<Void> iniciarSesion(
+    @PostMapping("/login")
+    public ResponseEntity<String> iniciarSesion(
             @RequestParam(name = "email") String email,
             @RequestParam(name = "contraseña") String contraseña) {
         try {
             // Llamada al servicio para hacer login
-            usuarioService.logIn(email, contraseña);
+        	Optional<String> token = usuarioService.logIn(email, contraseña);
 
-            // Buscar el token asociado al usuario
-            Optional<String> tokenOpt = UsuarioService.getTokens().entrySet().stream()
-                    .filter(entry -> entry.getValue().getEmail().equals(email))
-                    .map(Map.Entry::getKey)
-                    .findFirst();
-            
-            if (tokenOpt.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Error 400 sin cuerpo
+            if (token.isPresent()) {
+            	return new ResponseEntity<>(token.get(), HttpStatus.OK);
+            } else {
+            	return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-            // Enviar una respuesta exitosa sin contenido (código 200)
-            return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Error 400 sin cuerpo
         } catch (Exception e) {
@@ -170,15 +163,18 @@ public class UsuarioController {
             @Parameter(name = "token", description = "Token de sesión del usuario", required = true)
             @RequestParam(name = "token") String token) {
         try {
-            // Validar si el token existe
-            Usuario usuario = usuarioService.getUserByToken(token);
-            if (usuario == null) {
+            if (token == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Token no válido
             }
             // Eliminar el token del mapa de tokens
-            usuarioService.LogOut(usuario); // Eliminar el token asociado
+            Optional<Boolean> result = usuarioService.logout(token);
+            
+            if (result.isPresent() && result.get()) {
+            	return new ResponseEntity<>(HttpStatus.OK);	
+            } else {
+            	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }  
 
-            return ResponseEntity.ok().build(); // Respuesta exitosa sin contenido
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Error 500 sin contenido
         }
@@ -186,15 +182,14 @@ public class UsuarioController {
 
     // Convertir un Usuario a UsuarioDTO
     private UsuarioDTO convertirUsuarioADTO(Usuario usuario) {
-        return new UsuarioDTO(
-                usuario.getNombre(),
-                usuario.getEmail(),
-                usuario.getTipo().getName(),
-                usuario.getFecha_nac(),
-                usuario.getPeso(),
-                usuario.getAltura(),
-                usuario.getFrec_car_max(),
-                usuario.getFrec_car_rep()
-        );
+        return new UsuarioDTO(usuario.getNombre(), 
+        		usuario.getEmail(), 
+        		usuario.getTipo(), 
+        		usuario.getFecha_nac(), 
+        		usuario.getPeso(), 
+        		usuario.getAltura(),
+        		usuario.getFrec_car_max(), 
+        		usuario.getFrec_car_rep()
+        	);
     }
 }

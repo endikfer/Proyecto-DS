@@ -15,13 +15,11 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.deusto.sd.client.data.Sesion;
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Credentials;
-import es.deusto.sd.client.data.Login;
 import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.Usuario;
 
@@ -298,11 +296,11 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	}
 
 	@Override
-	public void registro(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura,
+	public void registro(String nombre, String email, String tipo, String fecha_nac, float peso, int altura,
 			int frec_car_max, int frec_car_rep) {
 		 try {
 	        HttpRequest request = HttpRequest.newBuilder()
-	            .uri(URI.create(BASE_URL + "/usuarios/registro?nombre=" + nombre + "&email=" + email+"&tipo=" + tipo.name() + "&fecha_nac=" + fecha_nac+
+	            .uri(URI.create(BASE_URL + "/usuarios/registro?nombre=" + nombre + "&email=" + email+"&tipo=" + tipo + "&fecha_nac=" + fecha_nac+
 	            		"&peso=" + peso+"&altura=" + altura + "&frec_car_max=" + frec_car_max + "&frec_car_rep=" + frec_car_rep))
 	            .header("Content-Type", "application/json")
 	            .POST(HttpRequest.BodyPublishers.noBody())
@@ -322,21 +320,21 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	}
 
 	@Override
-	public void logIn(String email, String contrasenia) {
+	public String logIn(String email, String contrasenia) {
 		 try {
 	        HttpRequest request = HttpRequest.newBuilder()
 	            .uri(URI.create(BASE_URL + "/usuarios/login?email=" + email + "&contraseña=" + contrasenia))
 	            .PUT(HttpRequest.BodyPublishers.noBody())
 	            .build();
 
-	        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-	        switch (response.statusCode()) {
-	            case 200 -> {} // Usuario registrado correctamente
+	        return switch (response.statusCode()) {
+	            case 200 -> response.body();
 	            case 401 -> throw new RuntimeException("Bad Request: Usuario no registrado o datos incorrectos.");
 	            case 500 -> throw new RuntimeException("Internal Server Error: Error interno en el servidor.");
 	            default -> throw new RuntimeException("Fallo al hacer login con el código de estado: " + response.statusCode());
-	        }
+	        };
 	    } catch (IOException | InterruptedException e) {
 	        throw new RuntimeException("Error registrando usuario.", e);
 	    }
@@ -476,5 +474,6 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	        throw new RuntimeException("Error consultando los tokens.", e);
 	    }
 	}
+
 
 }

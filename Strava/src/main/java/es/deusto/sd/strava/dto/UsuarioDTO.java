@@ -1,10 +1,12 @@
 package es.deusto.sd.strava.dto;
 
+import es.deusto.sd.strava.entity.Login;
+
 public class UsuarioDTO {
     private Long id;
     private String nombre;
     private String email;
-    private String tipo;
+    private Login tipo;
     private String fecha_nac;  // Cambiado a String
     private Float peso;
     private Integer altura;
@@ -12,7 +14,7 @@ public class UsuarioDTO {
     private Integer frec_car_rep;
 
     // Constructor
-    public UsuarioDTO(String nombre, String email, String tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
+    public UsuarioDTO(String nombre, String email, Login tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
         this.nombre = nombre;
         this.email = email;
         this.tipo = tipo;
@@ -48,11 +50,11 @@ public class UsuarioDTO {
         this.email = email;
     }
 
-    public String getTipo() {
+    public Login getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
+	public void setTipo(Login tipo) {
 		this.tipo = tipo;
 	}
 
