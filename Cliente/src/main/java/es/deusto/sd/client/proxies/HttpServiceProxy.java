@@ -21,6 +21,7 @@ import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Credentials;
 import es.deusto.sd.client.data.Reto;
+import es.deusto.sd.client.data.RetoAceptado;
 import es.deusto.sd.client.data.Usuario;
 
 /**
@@ -273,7 +274,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	}
 
 	@Override
-	public List<Reto> consultarRetosAceptados(String token) {
+	public List<RetoAceptado> consultarRetosAceptados(String token) {
 	    try {
 	        HttpRequest request = HttpRequest.newBuilder()
 	            .uri(URI.create(BASE_URL + "/acciones/retos/aceptados?Authorization=" + token))
