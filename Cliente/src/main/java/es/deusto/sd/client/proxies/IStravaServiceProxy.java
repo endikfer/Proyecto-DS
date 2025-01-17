@@ -16,6 +16,7 @@ import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Credentials;
 import es.deusto.sd.client.data.Reto;
+import es.deusto.sd.client.data.RetoAceptado;
 
 /**
  * IAuctionsServiceProxy interface defines a contract for communication 
@@ -81,7 +82,7 @@ public interface IStravaServiceProxy {
 	
 	void aceptarReto(Long retoId, String token);
 
-	List<Reto> consultarRetosAceptados(String token);
+	List<RetoAceptado> consultarRetosAceptados(String token);
 	
 	List<Sesion> getSesionesRecientes();
 	
