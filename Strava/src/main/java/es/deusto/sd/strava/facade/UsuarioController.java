@@ -1,7 +1,6 @@
 package es.deusto.sd.strava.facade;
 
 import es.deusto.sd.strava.dto.UsuarioDTO;
-import es.deusto.sd.strava.entity.Login;
 import es.deusto.sd.strava.entity.Usuario;
 import es.deusto.sd.strava.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -182,7 +181,8 @@ public class UsuarioController {
 
     // Convertir un Usuario a UsuarioDTO
     private UsuarioDTO convertirUsuarioADTO(Usuario usuario) {
-        return new UsuarioDTO(usuario.getNombre(), 
+        return new UsuarioDTO(
+        		usuario.getNombre(), 
         		usuario.getEmail(), 
         		usuario.getTipo(), 
         		usuario.getFecha_nac(), 
