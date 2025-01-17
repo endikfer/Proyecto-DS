@@ -45,7 +45,7 @@ public class DataInitializer {
 
 	        usuariorepo.saveAll(List.of(Ana, Maria, Juan, Carlos));
 
-			usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
+			//usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
 			Thread.sleep(100);
 			//usuarioservice.logIn("support@gmail.com", "456");
 			//Thread.sleep(100);
