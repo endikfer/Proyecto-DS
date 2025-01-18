@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +35,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
@@ -54,18 +58,23 @@ public class SwingClientGUI extends JFrame {
 
 	private JLabel logoutLabel;
 	private JComboBox<String> currencyComboBox;
-	private JList<Category> categoryList;
+	private JList<String> categoryList;
 	private JTable jtbleArticles;
 	private JLabel lblArticleTitle;
 	private JLabel lblArticlePrice;
 	private JLabel lblArticleBids;
 	private JSpinner spinBidAmount;
 	private JButton btnBid;
+	private JScrollPane articleScrollPane;
+	private JPanel jPanelArticleDetails;
 
 	private static final String[] CURRENCIES = { "EUR", "USD", "GBP", "JPY" };
 
 	public SwingClientGUI(SwingClientController controller) {
 		this.controller = controller;
+		
+		articleScrollPane = new JScrollPane();
+		jPanelArticleDetails = new JPanel();
 
 		if (!performLogin()) {
 			System.exit(0);
@@ -85,7 +94,7 @@ public class SwingClientGUI extends JFrame {
 		currencyComboBox.setSelectedItem("EUR"); // Default currency
 		currencyComboBox.addActionListener(e -> {
 			loadArticleDetails();
-			loadArticlesForCategory();
+			//loadArticlesForCategory();
 		});
 		topPanel.add(currencyComboBox, BorderLayout.WEST);
 
@@ -102,18 +111,10 @@ public class SwingClientGUI extends JFrame {
 		add(topPanel, BorderLayout.NORTH);
 
 		// Category List
-		categoryList = new JList<>();
-		categoryList.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (!e.getValueIsAdjusting()) {
-					loadArticlesForCategory();
-				}
-			}
-		});
+		categoryList = new JList<>(new String[]{"Sesiones", "Retos", "Retos Aceptados"});
 		
 		categoryList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-			JLabel label = new JLabel(value.name());
+			JLabel label = new JLabel(value);
 			label.setBackground(list.getBackground());
 			label.setOpaque(true);
 		
@@ -125,18 +126,42 @@ public class SwingClientGUI extends JFrame {
 			return label;
 		});
 		
+		categoryList.addListSelectionListener(e -> {
+		    if (!e.getValueIsAdjusting()) {
+		        String selectedOption = categoryList.getSelectedValue();
+		        cambioPanel(selectedOption);
+		    }
+		});
+		
 		JScrollPane categoryScrollPane = new JScrollPane(categoryList);
 		categoryScrollPane.setPreferredSize(new Dimension(200, getHeight()));
-		categoryScrollPane.setBorder(new TitledBorder("Categories"));
+		categoryScrollPane.setBorder(new TitledBorder("Operaciones"));
 		add(categoryScrollPane, BorderLayout.WEST);
 
-		// Articles Table
-		jtbleArticles = new JTable(new DefaultTableModel(new Object[] { "ID", "Title", "Current Price", "Bids" }, 0)) {
-			private static final long serialVersionUID = 1L;
+		cambioPanel("Sesiones");
 
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
+		setVisible(true);
+	}
+	
+	private void cambioPanel(String option) {
+	    switch (option) {
+	        case "Sesiones" -> Panel1();
+	        case "Retos" -> Panel2();
+	        case "Retos Aceptados" -> Panel3();
+	    }
+	}
+	
+	private void Panel1() {
+        // Update Central Panel
+		if (articleScrollPane != null) {
+	        articleScrollPane.removeAll();
+	    }
+		jtbleArticles = new JTable(new DefaultTableModel(new Object[] { "ID", "Title", "Current Price", "Bids" }, 0)) {
+		private static final long serialVersionUID = 1L;
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
             }
 		};
 		jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -145,17 +170,24 @@ public class SwingClientGUI extends JFrame {
 				loadArticleDetails();
 			}
 		});
-		jtbleArticles.getColumnModel().getColumn(0).setMaxWidth(40);
-		jtbleArticles.getColumnModel().getColumn(1).setPreferredWidth(200);
-		jtbleArticles.getColumnModel().getColumn(3).setMaxWidth(40);
+//		jtbleArticles.getColumnModel().getColumn(0).setMaxWidth(40);
+//		jtbleArticles.getColumnModel().getColumn(1).setPreferredWidth(200);
+//		jtbleArticles.getColumnModel().getColumn(3).setMaxWidth(40);
+		
+		adjustColumnWidths(jtbleArticles);
 
-		JScrollPane articleScrollPane = new JScrollPane(jtbleArticles);
+		articleScrollPane = new JScrollPane(jtbleArticles);
 		articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
 		articleScrollPane.setBorder(new TitledBorder("Articles of the selected Category"));
 		add(articleScrollPane, BorderLayout.CENTER);
+		
+		
 
-		// Article Details
-		JPanel jPanelArticleDetails = new JPanel(new GridLayout(5, 2, 10, 10));
+        // Update East Panel
+		if (jPanelArticleDetails != null) {
+			jPanelArticleDetails.removeAll();
+	    }
+        jPanelArticleDetails = new JPanel(new GridLayout(5, 2, 10, 10));
 		jPanelArticleDetails.setBorder(new TitledBorder("Article Details"));
 		jPanelArticleDetails.setPreferredSize(new Dimension(300, getHeight())); // Remaining width
 
@@ -190,9 +222,166 @@ public class SwingClientGUI extends JFrame {
 
 		add(jPanelArticleDetails, BorderLayout.EAST);
 
-		loadCategories();
-		setVisible(true);
-	}
+        refreshPanels();
+    }
+
+    private void Panel2() {
+    	// Update Central Panel
+    			articleScrollPane.removeAll();
+    			jtbleArticles = new JTable(new DefaultTableModel(new Object[] { "ID", "Nombre", "Deporte", "Fecha inicio", "Fecha fin", "Distancia", "Tiempo" }, 0)) {
+    			private static final long serialVersionUID = 1L;
+
+    	        @Override
+    	        public boolean isCellEditable(int row, int column) {
+    	            return false;
+    	            }
+    			};
+    			jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    			jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
+    				if (!e.getValueIsAdjusting()) {
+    					loadArticleDetails();
+    				}
+    			});
+    			
+    			adjustColumnWidths(jtbleArticles);
+
+    			articleScrollPane = new JScrollPane(jtbleArticles);
+    			articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
+    			articleScrollPane.setBorder(new TitledBorder("Retos creados"));
+    			add(articleScrollPane, BorderLayout.CENTER);
+    			
+    			
+
+    	        // Update East Panel
+    	        jPanelArticleDetails.removeAll();
+    	        jPanelArticleDetails = new JPanel(new GridLayout(5, 2, 10, 10));
+    			jPanelArticleDetails.setBorder(new TitledBorder("Crear retos"));
+    			jPanelArticleDetails.setPreferredSize(new Dimension(300, getHeight())); // Remaining width
+
+    			jPanelArticleDetails.add(new JLabel("Title:"));
+    			lblArticleTitle = new JLabel();
+    			jPanelArticleDetails.add(lblArticleTitle);
+
+    			jPanelArticleDetails.add(new JLabel("Current Price:"));
+    			lblArticlePrice = new JLabel();
+    			jPanelArticleDetails.add(lblArticlePrice);
+
+    			jPanelArticleDetails.add(new JLabel("Bids:"));
+    			lblArticleBids = new JLabel();
+    			jPanelArticleDetails.add(lblArticleBids);
+
+    			jPanelArticleDetails.add(new JLabel("Bid Amount:"));
+    			spinBidAmount = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+    			jPanelArticleDetails.add(spinBidAmount);
+
+    			btnBid = new JButton("Place Bid");
+    			btnBid.setEnabled(false);
+    			btnBid.addActionListener(new ActionListener() {
+    				@Override
+    				public void actionPerformed(ActionEvent e) {
+    					placeBid();
+    				}
+    			});
+
+    			JPanel jPanelBidButton = new JPanel();
+    			jPanelBidButton.add(btnBid);
+    			jPanelArticleDetails.add(jPanelBidButton);
+
+    			add(jPanelArticleDetails, BorderLayout.EAST);
+
+    	        refreshPanels();
+    }
+
+    private void Panel3() {
+    	// Update Central Panel
+    			articleScrollPane.removeAll();
+    			jtbleArticles = new JTable(new DefaultTableModel(new Object[] { "ID", "Title", "Current Price", "Bids" }, 0)) {
+    			private static final long serialVersionUID = 1L;
+
+    	        @Override
+    	        public boolean isCellEditable(int row, int column) {
+    	            return false;
+    	            }
+    			};
+    			jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    			jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
+    				if (!e.getValueIsAdjusting()) {
+    					loadArticleDetails();
+    				}
+    			});
+//    			jtbleArticles.getColumnModel().getColumn(0).setMaxWidth(40);
+//    			jtbleArticles.getColumnModel().getColumn(1).setPreferredWidth(200);
+//    			jtbleArticles.getColumnModel().getColumn(3).setMaxWidth(40);
+    			
+    			adjustColumnWidths(jtbleArticles);
+
+    			articleScrollPane = new JScrollPane(jtbleArticles);
+    			articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
+    			articleScrollPane.setBorder(new TitledBorder("Retos Aceptados"));
+    			add(articleScrollPane, BorderLayout.CENTER);
+    			
+    			
+
+    	        // Update East Panel
+    	        jPanelArticleDetails.removeAll();
+    	        jPanelArticleDetails = new JPanel(new GridLayout(5, 2, 10, 10));
+    			jPanelArticleDetails.setBorder(new TitledBorder("Aceptar Retos"));
+    			jPanelArticleDetails.setPreferredSize(new Dimension(300, getHeight())); // Remaining width
+
+    			jPanelArticleDetails.add(new JLabel("Title:"));
+    			lblArticleTitle = new JLabel();
+    			jPanelArticleDetails.add(lblArticleTitle);
+
+    			jPanelArticleDetails.add(new JLabel("Current Price:"));
+    			lblArticlePrice = new JLabel();
+    			jPanelArticleDetails.add(lblArticlePrice);
+
+    			jPanelArticleDetails.add(new JLabel("Bids:"));
+    			lblArticleBids = new JLabel();
+    			jPanelArticleDetails.add(lblArticleBids);
+
+    			jPanelArticleDetails.add(new JLabel("Bid Amount:"));
+    			spinBidAmount = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+    			jPanelArticleDetails.add(spinBidAmount);
+
+    			btnBid = new JButton("Place Bid");
+    			btnBid.setEnabled(false);
+    			btnBid.addActionListener(new ActionListener() {
+    				@Override
+    				public void actionPerformed(ActionEvent e) {
+    					placeBid();
+    				}
+    			});
+
+    			JPanel jPanelBidButton = new JPanel();
+    			jPanelBidButton.add(btnBid);
+    			jPanelArticleDetails.add(jPanelBidButton);
+
+    			add(jPanelArticleDetails, BorderLayout.EAST);
+
+    	        refreshPanels();
+    }
+
+    private void refreshPanels() {
+    	articleScrollPane.revalidate();
+    	articleScrollPane.repaint();
+        jPanelArticleDetails.revalidate();
+        jPanelArticleDetails.repaint();
+    }
+    
+    private void adjustColumnWidths(JTable table) {
+        JTableHeader header = table.getTableHeader();
+        TableColumnModel columnModel = table.getColumnModel();
+        FontMetrics metrics = header.getFontMetrics(header.getFont());
+        
+        for (int column = 0; column < columnModel.getColumnCount(); column++) {
+            TableColumn tableColumn = columnModel.getColumn(column);
+            String headerValue = (String) tableColumn.getHeaderValue();
+            int headerWidth = metrics.stringWidth(headerValue) + 20; // Añadimos un margen
+            tableColumn.setPreferredWidth(headerWidth);
+        }
+    }
+	
 	private boolean performLogin() {
 	    JTextField emailField = new JTextField(20);
 	    emailField.setText(defaultEmail);
@@ -303,40 +492,40 @@ public class SwingClientGUI extends JFrame {
 		}
 	}
 
-	private void loadCategories() {
-		try {
-			List<Category> categories = controller.getCategories();
+//	private void loadCategories() {
+//		try {
+//			List<Category> categories = controller.getCategories();
+//
+//			SwingUtilities.invokeLater(() -> {
+//				categoryList.setListData(categories.toArray(new Category[0]));
+//			});
+//		} catch (RuntimeException e) {
+//			JOptionPane.showMessageDialog(this, e.getMessage());
+//		}
+//	}
 
-			SwingUtilities.invokeLater(() -> {
-				categoryList.setListData(categories.toArray(new Category[0]));
-			});
-		} catch (RuntimeException e) {
-			JOptionPane.showMessageDialog(this, e.getMessage());
-		}
-	}
-
-	private void loadArticlesForCategory() {
-		Category selectedCategory = categoryList.getSelectedValue();
-		String currency = (String) currencyComboBox.getSelectedItem();
-
-		if (selectedCategory != null) {
-			try {
-				List<Article> articles = controller.getArticlesByCategory(selectedCategory.name(), currency);
-
-				SwingUtilities.invokeLater(() -> {
-					DefaultTableModel model = (DefaultTableModel) jtbleArticles.getModel();
-					model.setRowCount(0);
-
-					for (Article article : articles) {
-						model.addRow(new Object[] { article.id(), article.title(),
-								formatPrice(article.currentPrice(), currency), article.bids() });
-					}
-				});
-			} catch (RuntimeException e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-			}
-		}
-	}
+//	private void loadArticlesForCategory() {
+//		Category selectedCategory = categoryList.getSelectedValue();
+//		String currency = (String) currencyComboBox.getSelectedItem();
+//
+//		if (selectedCategory != null) {
+//			try {
+//				List<Article> articles = controller.getArticlesByCategory(selectedCategory.name(), currency);
+//
+//				SwingUtilities.invokeLater(() -> {
+//					DefaultTableModel model = (DefaultTableModel) jtbleArticles.getModel();
+//					model.setRowCount(0);
+//
+//					for (Article article : articles) {
+//						model.addRow(new Object[] { article.id(), article.title(),
+//								formatPrice(article.currentPrice(), currency), article.bids() });
+//					}
+//				});
+//			} catch (RuntimeException e) {
+//				JOptionPane.showMessageDialog(this, e.getMessage());
+//			}
+//		}
+//	}
 
 	private void loadArticleDetails() {
 		int selectedRow = jtbleArticles.getSelectedRow();
@@ -377,7 +566,7 @@ public class SwingClientGUI extends JFrame {
 				});
 
 				loadArticleDetails();
-				loadArticlesForCategory();
+				//loadArticlesForCategory();
 
 				SwingUtilities.invokeLater(() -> {
 					jtbleArticles.setRowSelectionInterval(selectedRow, selectedRow);
