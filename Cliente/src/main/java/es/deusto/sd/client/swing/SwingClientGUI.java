@@ -9,12 +9,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -29,6 +31,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -42,6 +45,7 @@ import javax.swing.table.TableColumnModel;
 
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
+import es.deusto.sd.client.data.Reto;
 
 /**
  * SwingClientGUI class is a Swing-based client that demonstrates the usage of the
@@ -229,27 +233,86 @@ public class SwingClientGUI extends JFrame {
     private void Panel2() {
     	// Update Central Panel
     			articleScrollPane.removeAll();
-    			jtbleArticles = new JTable(new DefaultTableModel(new Object[] { "ID", "Nombre", "Deporte", "Fecha inicio", "Fecha fin", "Distancia", "Tiempo" }, 0)) {
-    			private static final long serialVersionUID = 1L;
+    			// Crear panel principal para la tabla y los botones
+    			JPanel centralPanel = new JPanel(new BorderLayout());
 
-    	        @Override
-    	        public boolean isCellEditable(int row, int column) {
-    	            return false;
-    	            }
+    			// Configuración de la tabla
+    			jtbleArticles = new JTable(new DefaultTableModel(
+    			    new Object[]{"ID", "Nombre", "Deporte", "Fecha inicio", "Fecha fin", "Distancia", "Tiempo"}, 0
+    			)) {
+    			    private static final long serialVersionUID = 1L;
+
+    			    @Override
+    			    public boolean isCellEditable(int row, int column) {
+    			        return false;
+    			    }
     			};
     			jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     			jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
-    				if (!e.getValueIsAdjusting()) {
-    					loadArticleDetails();
-    				}
+    			    if (!e.getValueIsAdjusting()) {
+    			        loadArticleDetails();
+    			    }
     			});
-    			
+
+    			// Ajustar ancho de las columnas
     			adjustColumnWidths(jtbleArticles);
 
+    			// Agregar tabla al panel con un JScrollPane
     			articleScrollPane = new JScrollPane(jtbleArticles);
     			articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
     			articleScrollPane.setBorder(new TitledBorder("Retos creados"));
-    			add(articleScrollPane, BorderLayout.CENTER);
+    			centralPanel.add(articleScrollPane, BorderLayout.CENTER);
+
+    			// Crear panel de botones
+    			JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+    			buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+    			// Botón Aceptar Retos
+    			JButton btnAcceptRetos = new JButton("Aceptar Retos");
+    			btnAcceptRetos.addActionListener(e -> {
+    			    int selectedRow = jtbleArticles.getSelectedRow();
+    			    if (selectedRow != -1) {
+    			        Long retoId = (Long) jtbleArticles.getValueAt(selectedRow, 0);
+    			        try {
+    			            controller.aceptarReto(retoId);
+    			            JOptionPane.showMessageDialog(this, "Reto aceptado con éxito.");
+    			        } catch (RuntimeException ex) {
+    			            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    			        }
+    			    } else {
+    			        JOptionPane.showMessageDialog(this, "Seleccione un reto primero.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    			    }
+    			});
+    			buttonPanel.add(btnAcceptRetos);
+
+    			// Botón Filtrar por Fecha
+    			JButton btnFilterByDate = new JButton("Filtrar por Fecha");
+    			btnFilterByDate.addActionListener(e -> {
+    			    String fecha = JOptionPane.showInputDialog(this, "Ingrese una fecha (YYYY-MM-DD):");
+    			    if (fecha != null && !fecha.trim().isEmpty()) {
+    			        List<Reto> filteredRetos = controller.consultarRetos(null, fecha);
+    			        populateTable(filteredRetos);
+    			    }
+    			});
+    			buttonPanel.add(btnFilterByDate);
+
+    			// Botón Filtrar por Deporte
+    			JButton btnFilterByDeporte = new JButton("Filtrar por Deporte");
+    			btnFilterByDeporte.addActionListener(e -> {
+    			    String deporte = JOptionPane.showInputDialog(this, "Ingrese un deporte:");
+    			    if (deporte != null && !deporte.trim().isEmpty()) {
+    			        List<Reto> filteredRetos = controller.consultarRetos(deporte, null);
+    			        populateTable(filteredRetos);
+    			    }
+    			});
+    			buttonPanel.add(btnFilterByDeporte);
+
+    			// Agregar el panel de botones debajo de la tabla
+    			centralPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+    			// Agregar el panel central al contenedor principal
+    			add(centralPanel, BorderLayout.CENTER);
+
     			
     			
 
@@ -267,31 +330,33 @@ public class SwingClientGUI extends JFrame {
     			jPanelArticleDetails.add(scrollArticleName);
 
     			jPanelArticleDetails.add(new JLabel("Deporte:"));
-    			lblArticlePrice = new JLabel();
-    			jPanelArticleDetails.add(lblArticlePrice);
+    			JComboBox<String> cbArticleSport = new JComboBox<>(new String[]{"Ciclismo", "Running"});
+    			jPanelArticleDetails.add(cbArticleSport);
 
     			jPanelArticleDetails.add(new JLabel("Fecha inicio:"));
-    			lblArticleBids = new JLabel();
-    			jPanelArticleDetails.add(lblArticleBids);
+    			JSpinner spinStartDate = new JSpinner(new SpinnerDateModel());
+    			spinStartDate.setEditor(new JSpinner.DateEditor(spinStartDate, "yyyy-MM-dd"));
+    			jPanelArticleDetails.add(spinStartDate);
 
     			jPanelArticleDetails.add(new JLabel("Fecha fin:"));
-    			spinBidAmount = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
-    			jPanelArticleDetails.add(spinBidAmount);
+    			JSpinner spinEndDate = new JSpinner(new SpinnerDateModel());
+    			spinEndDate.setEditor(new JSpinner.DateEditor(spinEndDate, "yyyy-MM-dd"));
+    			jPanelArticleDetails.add(spinEndDate);
     			
-    			jPanelArticleDetails.add(new JLabel("Distancia:"));
-    			lblArticleBids = new JLabel();
-    			jPanelArticleDetails.add(lblArticleBids);
+    			jPanelArticleDetails.add(new JLabel("Distancia(km):"));
+    			JSpinner spinDistance = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+    			jPanelArticleDetails.add(spinDistance);
     			
-    			jPanelArticleDetails.add(new JLabel("Tiempo:"));
-    			lblArticleBids = new JLabel();
-    			jPanelArticleDetails.add(lblArticleBids);
+    			jPanelArticleDetails.add(new JLabel("Tiempo(min):"));
+    			JSpinner spinTime = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+    			jPanelArticleDetails.add(spinTime);
 
     			btnBid = new JButton("Crear Reto");
-    			btnBid.setEnabled(false);
+    			btnBid.setEnabled(true);
     			btnBid.addActionListener(new ActionListener() {
     				@Override
     				public void actionPerformed(ActionEvent e) {
-    					placeBid();
+    					CrearReto();
     				}
     			});
 
@@ -367,6 +432,23 @@ public class SwingClientGUI extends JFrame {
             String headerValue = (String) tableColumn.getHeaderValue();
             int headerWidth = metrics.stringWidth(headerValue) + 20; // Añadimos un margen
             tableColumn.setPreferredWidth(headerWidth);
+        }
+    }
+    
+    private void populateTable(List<Reto> retos) {
+        DefaultTableModel model = (DefaultTableModel) jtbleArticles.getModel();
+        model.setRowCount(0); // Limpiar la tabla
+
+        for (Reto reto : retos) {
+            model.addRow(new Object[] {
+//                reto.getId(),
+//                reto.getNombre(),
+//                reto.getDeporte(),
+//                reto.getFechaInicio(),
+//                reto.getFechaFin(),
+//                reto.getDistancia(),
+//                reto.getTiempo()
+            });
         }
     }
 	
@@ -547,7 +629,7 @@ public class SwingClientGUI extends JFrame {
 			Float bidAmount = ((Integer) spinBidAmount.getValue()).floatValue();
 
 			try {
-				controller.crearReto(articleId, bidAmount, currency);
+				controller.placeBid(articleId, bidAmount, currency);
 
 				SwingUtilities.invokeLater(() -> {
 					JOptionPane.showMessageDialog(this, "Bid placed successfully!");
@@ -563,6 +645,35 @@ public class SwingClientGUI extends JFrame {
 				JOptionPane.showMessageDialog(this, e.getMessage());
 			}
 		}
+	}
+	
+	private void CrearReto() {
+		int selectedRow = jtbleArticles.getSelectedRow();
+		String currency = (String) currencyComboBox.getSelectedItem();
+
+		if (selectedRow != -1) {
+			Long articleId = (Long) jtbleArticles.getValueAt(selectedRow, 0);
+			Float bidAmount = ((Integer) spinBidAmount.getValue()).floatValue();
+
+			try {
+				//controller.crearReto();
+
+				SwingUtilities.invokeLater(() -> {
+					JOptionPane.showMessageDialog(this, "Reto creado correctamente!");
+				});
+
+				SwingUtilities.invokeLater(() -> {
+					jtbleArticles.setRowSelectionInterval(selectedRow, selectedRow);
+				});
+			} catch (RuntimeException e) {
+				JOptionPane.showMessageDialog(this, e.getMessage());
+			}
+		}
+	}
+	
+	private void consultarRetos(String deporte, String fecha) {
+		List<Reto> retos = controller.consultarRetos(deporte, fecha);
+		
 	}
 
 	private String formatPrice(float price, String currency) {
