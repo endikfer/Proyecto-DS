@@ -26,6 +26,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
@@ -259,8 +260,11 @@ public class SwingClientGUI extends JFrame {
     			jPanelArticleDetails.setPreferredSize(new Dimension(300, getHeight())); // Remaining width
 
     			jPanelArticleDetails.add(new JLabel("Nombre:"));
-    			lblArticleTitle = new JLabel();
-    			jPanelArticleDetails.add(lblArticleTitle);
+    			JTextArea txtArticleName = new JTextArea(2, 20);
+    			txtArticleName.setLineWrap(true);
+    			txtArticleName.setWrapStyleWord(true);
+    			JScrollPane scrollArticleName = new JScrollPane(txtArticleName);
+    			jPanelArticleDetails.add(scrollArticleName);
 
     			jPanelArticleDetails.add(new JLabel("Deporte:"));
     			lblArticlePrice = new JLabel();
@@ -567,7 +571,7 @@ public class SwingClientGUI extends JFrame {
 			Float bidAmount = ((Integer) spinBidAmount.getValue()).floatValue();
 
 			try {
-				controller.placeBid(articleId, bidAmount, currency);
+				controller.crearReto(articleId, bidAmount, currency);
 
 				SwingUtilities.invokeLater(() -> {
 					JOptionPane.showMessageDialog(this, "Bid placed successfully!");
