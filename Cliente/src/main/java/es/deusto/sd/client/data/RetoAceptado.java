@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public record RetoAceptado(
 		Long id,
+		Long idUsu,
 		String nombre,
 		String deporte,
 		LocalDate fecha_inicio,
