@@ -235,13 +235,10 @@ public class SwingClientGUI extends JFrame {
     }
 
     private void Panel2() {
-    	// Update Central Panel
     	centralPanel.removeAll();
 
-    	// Crear panel principal para la tabla y los botones
     	centralPanel = new JPanel(new BorderLayout());
 
-    	// Configuración de la tabla
     	jtbleArticles = new JTable(new DefaultTableModel(
     	    new Object[]{"ID", "Nombre", "Deporte", "Fecha inicio", "Fecha fin", "Distancia", "Tiempo"}, 0
     	)) {
@@ -255,109 +252,96 @@ public class SwingClientGUI extends JFrame {
     	jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     	jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
     	    if (!e.getValueIsAdjusting()) {
-    	        loadArticleDetails();
+    	    	consultarRetos();
     	    }
     	});
 
-    	// Ajustar ancho de las columnas
     	adjustColumnWidths(jtbleArticles);
 
-    	// Agregar tabla al panel con un JScrollPane
     	articleScrollPane = new JScrollPane(jtbleArticles);
     	articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
     	articleScrollPane.setBorder(new TitledBorder("Retos creados"));
     	centralPanel.add(articleScrollPane, BorderLayout.CENTER);
 
-    	// Crear panel de botones
     	JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
     	buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    	// Componente para filtrar por fecha
-    	JTextField txtFecha = new JTextField(10); // Campo para ingresar la fecha
-    	buttonPanel.add(new JLabel("Fecha:")); // Etiqueta para el campo de fecha
+    	JTextField txtFecha = new JTextField(10);
+    	buttonPanel.add(new JLabel("Fecha:"));
     	buttonPanel.add(txtFecha);
 
-    	// Botón Filtrar por Fecha
     	JButton btnFilterByDate = new JButton("Filtrar por Fecha");
     	buttonPanel.add(btnFilterByDate);
 
-    	// ComboBox para deportes
     	JComboBox<String> cbDeportes = new JComboBox<>(new String[]{"Running", "Ciclismo"});
-    	buttonPanel.add(new JLabel("Deporte:")); // Etiqueta para el ComboBox
+    	buttonPanel.add(new JLabel("Deporte:"));
     	buttonPanel.add(cbDeportes);
 
-    	// Botón Filtrar por Deporte
     	JButton btnFilterByDeporte = new JButton("Filtrar por Deporte");
     	buttonPanel.add(btnFilterByDeporte);
 
-    	// Espaciador para alinear el botón Aceptar Retos a la derecha
     	buttonPanel.add(Box.createHorizontalGlue());
 
-    	// Botón Aceptar Retos
     	JButton btnAcceptRetos = new JButton("Aceptar Retos");
 
     	buttonPanel.add(btnAcceptRetos);
 
-    	// Agregar el panel de botones debajo de la tabla
     	centralPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-    	// Agregar el panel central al contenedor principal
     	add(centralPanel, BorderLayout.CENTER);
 
     			
+
+    	jPanelArticleDetails.removeAll();
+    	jPanelArticleDetails = new JPanel(new GridLayout(7, 2, 10, 10));
+    	jPanelArticleDetails.setBorder(new TitledBorder("Crear retos"));
+    	jPanelArticleDetails.setPreferredSize(new Dimension(300, getHeight())); // Remaining width
+
+    	jPanelArticleDetails.add(new JLabel("Nombre:"));
+    	JTextArea txtArticleName = new JTextArea(2, 20);
+    	txtArticleName.setLineWrap(true);
+    	txtArticleName.setWrapStyleWord(true);
+    	JScrollPane scrollArticleName = new JScrollPane(txtArticleName);
+    	jPanelArticleDetails.add(scrollArticleName);
+
+    	jPanelArticleDetails.add(new JLabel("Deporte:"));
+    	JComboBox<String> cbArticleSport = new JComboBox<>(new String[]{"Ciclismo", "Running"});
+    	jPanelArticleDetails.add(cbArticleSport);
+
+    	jPanelArticleDetails.add(new JLabel("Fecha inicio:"));
+    	JSpinner spinStartDate = new JSpinner(new SpinnerDateModel());
+    	spinStartDate.setEditor(new JSpinner.DateEditor(spinStartDate, "yyyy-MM-dd"));
+    	jPanelArticleDetails.add(spinStartDate);
+
+    	jPanelArticleDetails.add(new JLabel("Fecha fin:"));
+    	JSpinner spinEndDate = new JSpinner(new SpinnerDateModel());
+    	spinEndDate.setEditor(new JSpinner.DateEditor(spinEndDate, "yyyy-MM-dd"));
+    	jPanelArticleDetails.add(spinEndDate);
     			
+    	jPanelArticleDetails.add(new JLabel("Distancia(km):"));
+    	JSpinner spinDistance = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+    	jPanelArticleDetails.add(spinDistance);
+    		
+    	jPanelArticleDetails.add(new JLabel("Tiempo(min):"));
+    	JSpinner spinTime = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+    	jPanelArticleDetails.add(spinTime);
 
-    	        // Update East Panel
-    	        jPanelArticleDetails.removeAll();
-    	        jPanelArticleDetails = new JPanel(new GridLayout(7, 2, 10, 10));
-    			jPanelArticleDetails.setBorder(new TitledBorder("Crear retos"));
-    			jPanelArticleDetails.setPreferredSize(new Dimension(300, getHeight())); // Remaining width
+    	btnBid = new JButton("Crear Reto");
+    	btnBid.setEnabled(true);
+    	btnBid.addActionListener(new ActionListener() {
+    	@Override
+    	public void actionPerformed(ActionEvent e) {
+    		CrearReto();
+    		}
+    	});
 
-    			jPanelArticleDetails.add(new JLabel("Nombre:"));
-    			JTextArea txtArticleName = new JTextArea(2, 20);
-    			txtArticleName.setLineWrap(true);
-    			txtArticleName.setWrapStyleWord(true);
-    			JScrollPane scrollArticleName = new JScrollPane(txtArticleName);
-    			jPanelArticleDetails.add(scrollArticleName);
+    	JPanel jPanelBidButton = new JPanel();
+    	jPanelBidButton.add(btnBid);
+    	jPanelArticleDetails.add(jPanelBidButton);
 
-    			jPanelArticleDetails.add(new JLabel("Deporte:"));
-    			JComboBox<String> cbArticleSport = new JComboBox<>(new String[]{"Ciclismo", "Running"});
-    			jPanelArticleDetails.add(cbArticleSport);
+    	add(jPanelArticleDetails, BorderLayout.EAST);
 
-    			jPanelArticleDetails.add(new JLabel("Fecha inicio:"));
-    			JSpinner spinStartDate = new JSpinner(new SpinnerDateModel());
-    			spinStartDate.setEditor(new JSpinner.DateEditor(spinStartDate, "yyyy-MM-dd"));
-    			jPanelArticleDetails.add(spinStartDate);
-
-    			jPanelArticleDetails.add(new JLabel("Fecha fin:"));
-    			JSpinner spinEndDate = new JSpinner(new SpinnerDateModel());
-    			spinEndDate.setEditor(new JSpinner.DateEditor(spinEndDate, "yyyy-MM-dd"));
-    			jPanelArticleDetails.add(spinEndDate);
-    			
-    			jPanelArticleDetails.add(new JLabel("Distancia(km):"));
-    			JSpinner spinDistance = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
-    			jPanelArticleDetails.add(spinDistance);
-    			
-    			jPanelArticleDetails.add(new JLabel("Tiempo(min):"));
-    			JSpinner spinTime = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
-    			jPanelArticleDetails.add(spinTime);
-
-    			btnBid = new JButton("Crear Reto");
-    			btnBid.setEnabled(true);
-    			btnBid.addActionListener(new ActionListener() {
-    				@Override
-    				public void actionPerformed(ActionEvent e) {
-    					CrearReto();
-    				}
-    			});
-
-    			JPanel jPanelBidButton = new JPanel();
-    			jPanelBidButton.add(btnBid);
-    			jPanelArticleDetails.add(jPanelBidButton);
-
-    			add(jPanelArticleDetails, BorderLayout.EAST);
-
-    	        refreshPanels();
+    	refreshPanels();
     }
 
     private void Panel3() {
@@ -686,10 +670,42 @@ public class SwingClientGUI extends JFrame {
 		}
 	}
 	
-	private void consultarRetos(String deporte, String fecha) {
-		List<Reto> retos = controller.consultarRetos(deporte, fecha);
+	private void consultarRetos() {
+		//List<Reto> retos = controller.consultarRetos(deporte, fecha);
+		
+		//String deporteSeleccionado2 = (String) deporteComboBox.getSelectedItem();
+	    //String fechaSeleccionada2 = fechaTextField.getText();
+	    
+	    String deporteSeleccionado = "0";
+	    String fechaSeleccionada = "0";
+
+	    try {
+	        // Llama al controlador para obtener la lista de retos
+	        List<Reto> retos2 = controller.consultarRetos(deporteSeleccionado, fechaSeleccionada);
+
+	        SwingUtilities.invokeLater(() -> {
+	            // Limpia la tabla antes de llenarla
+	            DefaultTableModel model = (DefaultTableModel) jtbleArticles.getModel();
+	            model.setRowCount(0);
+
+	            // Llena la tabla con los datos de los retos
+	            for (Reto reto : retos2) {
+	                model.addRow(new Object[]{
+	                    reto.nombre(),
+	                    reto.deporte(),
+	                    reto.fecha_inicio(),
+	                    reto.fecha_fin(),
+	                    reto.distancia(),
+	                    reto.tiempo()
+	                });
+	            }
+	        });
+	    } catch (RuntimeException e) {
+	        JOptionPane.showMessageDialog(this, e.getMessage(), "Error al cargar retos", JOptionPane.ERROR_MESSAGE);
+	    }
 		
 	}
+
 
 	private String formatPrice(float price, String currency) {
 		return switch (currency) {
