@@ -269,7 +269,7 @@ public class SwingClientGUI extends JFrame {
 	            int frecCarRep = Integer.parseInt(frecCarRepField.getText());
 
 	            // Validar si el email coincide con el tipo seleccionado
-	            if ((tipo.equals("GOOGLE") && !email.endsWith("@google.com")) || 
+	            if ((tipo.equals("GOOGLE") && !email.endsWith("@gmail.com")) || 
 	                (tipo.equals("META") && !email.endsWith("@meta.com"))) {
 	                throw new IllegalArgumentException("Email domain does not match the selected login type.");
 	            }
