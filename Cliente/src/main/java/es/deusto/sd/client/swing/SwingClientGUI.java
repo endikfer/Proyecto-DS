@@ -47,6 +47,7 @@ import javax.swing.table.TableColumnModel;
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Reto;
+import es.deusto.sd.client.data.RetoAceptado;
 
 /**
  * SwingClientGUI class is a Swing-based client that demonstrates the usage of the
@@ -360,50 +361,74 @@ public class SwingClientGUI extends JFrame {
     }
 
     private void Panel3() {
-    	// Update Central Panel
-    			articleScrollPane.removeAll();
-    			jtbleArticles = new JTable(new DefaultTableModel(new Object[] { "ID", "Nombre", "Deporte", "Fecha Inicio", "Fecha Fin", "Distancia", "Tiempo", "Progreso" }, 0)) {
-    			private static final long serialVersionUID = 1L;
+        // Update Central Panel
+        articleScrollPane.removeAll();
 
-    	        @Override
-    	        public boolean isCellEditable(int row, int column) {
-    	            return false;
-    	            }
-    			};
-    			jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    			jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
-    				if (!e.getValueIsAdjusting()) {
-    					loadArticleDetails();
-    				}
-    			});
-//    			jtbleArticles.getColumnModel().getColumn(0).setMaxWidth(40);
-//    			jtbleArticles.getColumnModel().getColumn(1).setPreferredWidth(200);
-//    			jtbleArticles.getColumnModel().getColumn(3).setMaxWidth(40);
-    			
-    			adjustColumnWidths(jtbleArticles);
+        // Crear el modelo de la tabla con las columnas adecuadas
+        DefaultTableModel tableModel = new DefaultTableModel(
+            new Object[] { "ID", "Nombre", "Deporte", "Fecha Inicio", "Fecha Fin", "Distancia", "Tiempo", "Progreso" }, 0
+        );
 
-    			articleScrollPane = new JScrollPane(jtbleArticles);
-    			articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
-    			articleScrollPane.setBorder(new TitledBorder("Retos Aceptados"));
-    			add(articleScrollPane, BorderLayout.CENTER);
-    			
-    			
+        // Llamar al método para obtener los retos aceptados y llenar el modelo de la tabla
+        try {
+            List<RetoAceptado> retosAceptados = controller.consultarRetosAceptados();
+            for (RetoAceptado reto : retosAceptados) {
+                tableModel.addRow(new Object[] {
+                    reto.id(),
+                    reto.nombre(),
+                    reto.deporte(),
+                    reto.fecha_inicio(),
+                    reto.fecha_fin(),
+                    reto.distancia(),
+                    reto.tiempo(),
+                    reto.progreso()
+                });
+            }
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los retos aceptados: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
-    	        // Update East Panel
-    	        jPanelArticleDetails.removeAll();
-    	        jPanelArticleDetails = new JPanel(new GridLayout(5, 2, 10, 10));
-    			jPanelArticleDetails.setBorder(new TitledBorder(""));
-    			jPanelArticleDetails.setPreferredSize(new Dimension(0, getHeight())); // Remaining width
+        // Crear JTable con el modelo poblado
+        jtbleArticles = new JTable(tableModel) {
+            private static final long serialVersionUID = 1L;
 
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                loadArticleDetails();
+            }
+        });
 
-    			JPanel jPanelBidButton = new JPanel();
-    			jPanelBidButton.add(btnBid);
-    			jPanelArticleDetails.add(jPanelBidButton);
+        // Ajustar las columnas si es necesario
+        adjustColumnWidths(jtbleArticles);
 
-    			add(jPanelArticleDetails, BorderLayout.EAST);
+        // Crear JScrollPane para envolver la tabla
+        articleScrollPane = new JScrollPane(jtbleArticles);
+        articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
+        articleScrollPane.setBorder(new TitledBorder("Retos Aceptados"));
+        add(articleScrollPane, BorderLayout.CENTER);
 
-    	        refreshPanels();
+        // Update East Panel
+        jPanelArticleDetails.removeAll();
+        jPanelArticleDetails = new JPanel(new GridLayout(5, 2, 10, 10));
+        jPanelArticleDetails.setBorder(new TitledBorder(""));
+        jPanelArticleDetails.setPreferredSize(new Dimension(0, getHeight())); // Remaining width
+
+        JPanel jPanelBidButton = new JPanel();
+        jPanelBidButton.add(btnBid);
+        jPanelArticleDetails.add(jPanelBidButton);
+
+        add(jPanelArticleDetails, BorderLayout.EAST);
+
+        refreshPanels();
     }
+
 
     private void refreshPanels() {
     	articleScrollPane.revalidate();
