@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -72,12 +73,14 @@ public class SwingClientGUI extends JFrame {
 	private JButton btnBid;
 	private JScrollPane articleScrollPane;
 	private JPanel jPanelArticleDetails;
+	private JPanel centralPanel;
 
 	private static final String[] CURRENCIES = { "EUR", "USD", "GBP", "JPY" };
 
 	public SwingClientGUI(SwingClientController controller) {
 		this.controller = controller;
 		
+		centralPanel = new JPanel();
 		articleScrollPane = new JScrollPane();
 		jPanelArticleDetails = new JPanel();
 
@@ -232,86 +235,73 @@ public class SwingClientGUI extends JFrame {
 
     private void Panel2() {
     	// Update Central Panel
-    			articleScrollPane.removeAll();
-    			// Crear panel principal para la tabla y los botones
-    			JPanel centralPanel = new JPanel(new BorderLayout());
+    	centralPanel.removeAll();
 
-    			// Configuración de la tabla
-    			jtbleArticles = new JTable(new DefaultTableModel(
-    			    new Object[]{"ID", "Nombre", "Deporte", "Fecha inicio", "Fecha fin", "Distancia", "Tiempo"}, 0
-    			)) {
-    			    private static final long serialVersionUID = 1L;
+    	// Crear panel principal para la tabla y los botones
+    	centralPanel = new JPanel(new BorderLayout());
 
-    			    @Override
-    			    public boolean isCellEditable(int row, int column) {
-    			        return false;
-    			    }
-    			};
-    			jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    			jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
-    			    if (!e.getValueIsAdjusting()) {
-    			        loadArticleDetails();
-    			    }
-    			});
+    	// Configuración de la tabla
+    	jtbleArticles = new JTable(new DefaultTableModel(
+    	    new Object[]{"ID", "Nombre", "Deporte", "Fecha inicio", "Fecha fin", "Distancia", "Tiempo"}, 0
+    	)) {
+    	    private static final long serialVersionUID = 1L;
 
-    			// Ajustar ancho de las columnas
-    			adjustColumnWidths(jtbleArticles);
+    	    @Override
+    	    public boolean isCellEditable(int row, int column) {
+    	        return false;
+    	    }
+    	};
+    	jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    	jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
+    	    if (!e.getValueIsAdjusting()) {
+    	        loadArticleDetails();
+    	    }
+    	});
 
-    			// Agregar tabla al panel con un JScrollPane
-    			articleScrollPane = new JScrollPane(jtbleArticles);
-    			articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
-    			articleScrollPane.setBorder(new TitledBorder("Retos creados"));
-    			centralPanel.add(articleScrollPane, BorderLayout.CENTER);
+    	// Ajustar ancho de las columnas
+    	adjustColumnWidths(jtbleArticles);
 
-    			// Crear panel de botones
-    			JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-    			buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    	// Agregar tabla al panel con un JScrollPane
+    	articleScrollPane = new JScrollPane(jtbleArticles);
+    	articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
+    	articleScrollPane.setBorder(new TitledBorder("Retos creados"));
+    	centralPanel.add(articleScrollPane, BorderLayout.CENTER);
 
-    			// Botón Aceptar Retos
-    			JButton btnAcceptRetos = new JButton("Aceptar Retos");
-    			btnAcceptRetos.addActionListener(e -> {
-    			    int selectedRow = jtbleArticles.getSelectedRow();
-    			    if (selectedRow != -1) {
-    			        Long retoId = (Long) jtbleArticles.getValueAt(selectedRow, 0);
-    			        try {
-    			            controller.aceptarReto(retoId);
-    			            JOptionPane.showMessageDialog(this, "Reto aceptado con éxito.");
-    			        } catch (RuntimeException ex) {
-    			            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    			        }
-    			    } else {
-    			        JOptionPane.showMessageDialog(this, "Seleccione un reto primero.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-    			    }
-    			});
-    			buttonPanel.add(btnAcceptRetos);
+    	// Crear panel de botones
+    	JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+    	buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    			// Botón Filtrar por Fecha
-    			JButton btnFilterByDate = new JButton("Filtrar por Fecha");
-    			btnFilterByDate.addActionListener(e -> {
-    			    String fecha = JOptionPane.showInputDialog(this, "Ingrese una fecha (YYYY-MM-DD):");
-    			    if (fecha != null && !fecha.trim().isEmpty()) {
-    			        List<Reto> filteredRetos = controller.consultarRetos(null, fecha);
-    			        populateTable(filteredRetos);
-    			    }
-    			});
-    			buttonPanel.add(btnFilterByDate);
+    	// Componente para filtrar por fecha
+    	JTextField txtFecha = new JTextField(10); // Campo para ingresar la fecha
+    	buttonPanel.add(new JLabel("Fecha:")); // Etiqueta para el campo de fecha
+    	buttonPanel.add(txtFecha);
 
-    			// Botón Filtrar por Deporte
-    			JButton btnFilterByDeporte = new JButton("Filtrar por Deporte");
-    			btnFilterByDeporte.addActionListener(e -> {
-    			    String deporte = JOptionPane.showInputDialog(this, "Ingrese un deporte:");
-    			    if (deporte != null && !deporte.trim().isEmpty()) {
-    			        List<Reto> filteredRetos = controller.consultarRetos(deporte, null);
-    			        populateTable(filteredRetos);
-    			    }
-    			});
-    			buttonPanel.add(btnFilterByDeporte);
+    	// Botón Filtrar por Fecha
+    	JButton btnFilterByDate = new JButton("Filtrar por Fecha");
+    	buttonPanel.add(btnFilterByDate);
 
-    			// Agregar el panel de botones debajo de la tabla
-    			centralPanel.add(buttonPanel, BorderLayout.SOUTH);
+    	// ComboBox para deportes
+    	JComboBox<String> cbDeportes = new JComboBox<>(new String[]{"Running", "Ciclismo"});
+    	buttonPanel.add(new JLabel("Deporte:")); // Etiqueta para el ComboBox
+    	buttonPanel.add(cbDeportes);
 
-    			// Agregar el panel central al contenedor principal
-    			add(centralPanel, BorderLayout.CENTER);
+    	// Botón Filtrar por Deporte
+    	JButton btnFilterByDeporte = new JButton("Filtrar por Deporte");
+    	buttonPanel.add(btnFilterByDeporte);
+
+    	// Espaciador para alinear el botón Aceptar Retos a la derecha
+    	buttonPanel.add(Box.createHorizontalGlue());
+
+    	// Botón Aceptar Retos
+    	JButton btnAcceptRetos = new JButton("Aceptar Retos");
+
+    	buttonPanel.add(btnAcceptRetos);
+
+    	// Agregar el panel de botones debajo de la tabla
+    	centralPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+    	// Agregar el panel central al contenedor principal
+    	add(centralPanel, BorderLayout.CENTER);
 
     			
     			
