@@ -44,11 +44,6 @@ import es.deusto.sd.client.data.RetoAceptado;
  * (Description generated with ChatGPT 4o mini)
  */
 public interface IStravaServiceProxy {
-	// Method for user login
-	String login(Credentials credentials);
-
-	// Method for user logout
-	void logout(String token);
 
 	// Method to retrieve all categories
 	List<Category> getAllCategories();

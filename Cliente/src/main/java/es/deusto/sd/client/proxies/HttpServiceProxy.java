@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.deusto.sd.client.data.Sesion;
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
-import es.deusto.sd.client.data.Credentials;
 import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.RetoAceptado;
 import es.deusto.sd.client.data.Usuario;
@@ -58,50 +57,6 @@ public class HttpServiceProxy implements IStravaServiceProxy {
     public HttpServiceProxy() {
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
-    }
-
-    @Override
-    public String login(Credentials credentials) {
-        try {
-            String credentialsJson = objectMapper.writeValueAsString(credentials);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/auth/login"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(credentialsJson))
-                .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            return switch (response.statusCode()) {
-                case 200 -> response.body(); // Successful login, returns token
-                case 401 -> throw new RuntimeException("Unauthorized: Invalid credentials");
-                default -> throw new RuntimeException("Login failed with status code: " + response.statusCode());
-            };
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Error during login", e);
-        }
-    }
-
-    @Override
-    public void logout(String token) {
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/auth/logout"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(token))
-                .build();
-
-            HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
-
-            switch (response.statusCode()) {
-                case 204 -> {} // Logout successful
-                case 401 -> throw new RuntimeException("Unauthorized: Invalid token, logout failed");
-                default -> throw new RuntimeException("Logout failed with status code: " + response.statusCode());
-            }
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Error during logout", e);
-        }
     }
 
     @Override
@@ -310,7 +265,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
 
 	        switch (response.statusCode()) {
-	            case 200 -> {} // Usuario registrado correctamente
+	            case 201 -> {} // Usuario registrado correctamente
 	            case 401 -> throw new RuntimeException("Bad Request: Datos inválidos o incompletos");
 	            case 500 -> throw new RuntimeException("Internal server error");
 	            default -> throw new RuntimeException("Fallo al crear usuario con el código de estado: " + response.statusCode());
@@ -319,20 +274,62 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	        throw new RuntimeException("Error registrando usuario.", e);
 	    }
 	}
+    /*@Override
+    public String login(Credentials credentials) {
+        try {
+            String credentialsJson = objectMapper.writeValueAsString(credentials);
 
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/auth/login"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(credentialsJson))
+                .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return switch (response.statusCode()) {
+                case 200 -> response.body(); // Successful login, returns token
+                case 401 -> throw new RuntimeException("Unauthorized: Invalid credentials");
+                default -> throw new RuntimeException("Login failed with status code: " + response.statusCode());
+            };
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error during login", e);
+        }
+    }
+    @Override
+    public void logout(String token) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/auth/logout"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(token))
+                .build();
+
+            HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+
+            switch (response.statusCode()) {
+                case 204 -> {} // Logout successful
+                case 401 -> throw new RuntimeException("Unauthorized: Invalid token, logout failed");
+                default -> throw new RuntimeException("Logout failed with status code: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error during logout", e);
+        }
+    }*/
 	@Override
 	public String logIn(String email, String contrasenia) {
 		 try {
 	        HttpRequest request = HttpRequest.newBuilder()
 	            .uri(URI.create(BASE_URL + "/usuarios/login?email=" + email + "&contraseña=" + contrasenia))
-	            .PUT(HttpRequest.BodyPublishers.noBody())
+                .header("Content-Type", "application/json")
+	            .POST(HttpRequest.BodyPublishers.noBody())
 	            .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
 	        return switch (response.statusCode()) {
 	            case 200 -> response.body();
-	            case 401 -> throw new RuntimeException("Bad Request: Usuario no registrado o datos incorrectos.");
+	            case 400 -> throw new RuntimeException("Bad Request: Usuario no registrado o datos incorrectos.");
 	            case 500 -> throw new RuntimeException("Internal Server Error: Error interno en el servidor.");
 	            default -> throw new RuntimeException("Fallo al hacer login con el código de estado: " + response.statusCode());
 	        };
@@ -341,13 +338,14 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	    }
 		
 	}
-
+   
 	@Override
 	public void LogOut(String token) {
 	    try {
 	        HttpRequest request = HttpRequest.newBuilder()
-	            .uri(URI.create(BASE_URL + "/usuarios/logout?token=" + token))
-	            .DELETE()
+	            .uri(URI.create(BASE_URL + "/usuarios/logout"))
+                .header("Content-Type", "application/json")
+	            .POST(HttpRequest.BodyPublishers.ofString(token))
 	            .build();
 
 	        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());

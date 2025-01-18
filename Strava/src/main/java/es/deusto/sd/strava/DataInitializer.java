@@ -7,6 +7,7 @@ package es.deusto.sd.strava;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +47,11 @@ public class DataInitializer {
 	        usuariorepo.saveAll(List.of(Ana, Maria, Juan, Carlos));
 
 			//usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
-			Thread.sleep(100);
-			//usuarioservice.logIn("support@gmail.com", "456");
 			//Thread.sleep(100);
+	        //usuarioservice.logIn("support@gmail.com", "456");
+	        //Thread.sleep(100);
+	        //usuarioservice.logIn("info@gmail.com", "123");
+
 			logger.info("Users saved!");			
 			
 			//Inicializacion de retos

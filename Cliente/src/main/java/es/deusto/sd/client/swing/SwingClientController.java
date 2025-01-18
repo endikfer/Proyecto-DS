@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
-import es.deusto.sd.client.data.Credentials;
 import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.RetoAceptado;
 import es.deusto.sd.client.data.Sesion;
@@ -82,7 +81,7 @@ public class SwingClientController {
 	public Map<String, Usuario> obtenerTokens() {
 		return serviceProxy.obtenerTokens();
 	}
-	public boolean login(String email, String password) {
+	/*public boolean login(String email, String password) {
         try {
             Credentials credentials = new Credentials(email, password);
             token = serviceProxy.login(credentials);
@@ -95,7 +94,7 @@ public class SwingClientController {
 
     public void logout() {
         serviceProxy.logout(token);
-    }
+    }*/
 	public void registro(String nombre, String email, String tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		serviceProxy.registro(nombre, email, tipo, fecha_nac, peso, altura, frec_car_max, frec_car_rep);
 	}
@@ -105,7 +104,9 @@ public class SwingClientController {
     		token = serviceProxy.logIn(email, contrasenia);      
             return true;
         } catch (RuntimeException e) {
+            e.printStackTrace();
             throw new RuntimeException("Login failed: " + e.getMessage());
+
         }
 	}
 	

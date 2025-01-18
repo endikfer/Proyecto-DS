@@ -122,6 +122,7 @@ public class UsuarioController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: Inicio de sesión exitoso, se devuelve el token."),
                     @ApiResponse(responseCode = "400", description = "Bad Request: Usuario no registrado o datos incorrectos."),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized: Invalid credentials, login failed"),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
             }
     )
@@ -136,7 +137,7 @@ public class UsuarioController {
             if (token.isPresent()) {
             	return new ResponseEntity<>(token.get(), HttpStatus.OK);
             } else {
-            	return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Error 400 sin cuerpo
@@ -157,10 +158,10 @@ public class UsuarioController {
                     @ApiResponse(responseCode = "500", description = "Internal Server Error: Error interno en el servidor.")
             }
     )
-    @DeleteMapping("/logout")
+    @PostMapping("/logout")
     public ResponseEntity<Void> cerrarSesion(
             @Parameter(name = "token", description = "Token de sesión del usuario", required = true)
-            @RequestParam(name = "token") String token) {
+            @RequestBody String token) {
         try {
             if (token == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Token no válido

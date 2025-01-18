@@ -3,7 +3,6 @@ package es.deusto.sd.strava.service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,7 +55,7 @@ public class UsuarioService {
     }
 
     public Optional<String> logIn(String email, String contrasenia) {
-    	String token = "";
+    	String token;
         if (tokens.values().stream().anyMatch(u -> u.getEmail().equals(email))) {
             return Optional.empty();
         }
@@ -75,11 +74,12 @@ public class UsuarioService {
         
         if (serviceGateway.validateLogin(email, contrasenia)) {
                 token = generarToken(usuario);
+                System.out.println(tokens);
+                return Optional.of(token);
         }else {
+
             throw new IllegalArgumentException("Login fallido para el email: " + email);
         }
-        System.out.println(tokens);
-        return Optional.ofNullable(token);
     }
 
     public String generarToken(Usuario u) {

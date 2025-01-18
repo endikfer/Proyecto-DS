@@ -49,8 +49,8 @@ public class SwingClientGUI extends JFrame {
 	private final SwingClientController controller;
 
 	// Default login credentials
-	private String defaultEmail = "blackwidow@marvel.com";
-	private String defaultPassword = "Bl@ckWid0w2023";
+	private String defaultEmail = "support@gmail.com";
+	private String defaultPassword = "456";
 
 	private JLabel logoutLabel;
 	private JComboBox<String> currencyComboBox;
@@ -193,32 +193,109 @@ public class SwingClientGUI extends JFrame {
 		loadCategories();
 		setVisible(true);
 	}
-
 	private boolean performLogin() {
-		JTextField emailField = new JTextField(20);
-		emailField.setText(defaultEmail);
-		JPasswordField passwordField = new JPasswordField(20);
-		passwordField.setText(defaultPassword);
+	    JTextField emailField = new JTextField(20);
+	    emailField.setText(defaultEmail);
+	    JPasswordField passwordField = new JPasswordField(20);
+	    passwordField.setText(defaultPassword);
 
-		Object[] message = { new JLabel("Enter Email:"), emailField, new JLabel("Enter Password:"), passwordField };
+	    // Botones personalizados para Login y Registro
+	    Object[] options = { "Login", "Registrarse", "Cancelar" };
 
-		int option = JOptionPane.showConfirmDialog(this, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+	    // Mensaje del cuadro de diálogo
+	    Object[] message = { 
+	        new JLabel("Enter Email:"), emailField, 
+	        new JLabel("Enter Password:"), passwordField 
+	    };
 
-		if (option == JOptionPane.OK_OPTION) {
-			try {
-				return controller.login(emailField.getText(), new String(passwordField.getPassword()));
-			} catch (RuntimeException e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-				return false;
-			}
-		} else {
-			return false;
-		}
+	    int option = JOptionPane.showOptionDialog(
+	        this, message, "Login", 
+	        JOptionPane.YES_NO_CANCEL_OPTION, 
+	        JOptionPane.PLAIN_MESSAGE, null, 
+	        options, options[0]
+	    );
+
+	    if (option == JOptionPane.YES_OPTION) {
+	        try {
+	            return controller.logIn(emailField.getText(), new String(passwordField.getPassword()));
+	        } catch (RuntimeException e) {
+	            JOptionPane.showMessageDialog(this, e.getMessage());
+	            return performLogin();
+	        }
+	    } else if (option == JOptionPane.NO_OPTION) {
+	        performRegistro();
+	        return performLogin();
+	    } else {
+	        return false;
+	    }
 	}
+
+	private void performRegistro() {
+	    JTextField nombreField = new JTextField(20);
+	    JTextField emailField = new JTextField(20);
+	    JComboBox<String> tipoComboBox = new JComboBox<>(new String[] { "GOOGLE", "META" });
+	    JTextField fechaNacField = new JTextField(20);
+	    JTextField pesoField = new JTextField(20);
+	    JTextField alturaField = new JTextField(20);
+	    JTextField frecCarMaxField = new JTextField(20);
+	    JTextField frecCarRepField = new JTextField(20);
+
+	    // Mensaje del cuadro de diálogo
+	    Object[] message = { 
+	        new JLabel("Enter Name:"), nombreField, 
+	        new JLabel("Enter Email:"), emailField, 
+	        new JLabel("Select Type:"), tipoComboBox, 
+	        new JLabel("Enter Birth Date (yyyy-MM-dd):"), fechaNacField, 
+	        new JLabel("Enter Weight (kg):"), pesoField, 
+	        new JLabel("Enter Height (cm):"), alturaField, 
+	        new JLabel("Enter Max Heart Rate (bpm):"), frecCarMaxField, 
+	        new JLabel("Enter Resting Heart Rate (bpm):"), frecCarRepField 
+	    };
+
+	    int option = JOptionPane.showConfirmDialog(
+	        this, message, "Register", 
+	        JOptionPane.OK_CANCEL_OPTION
+	    );
+
+	    if (option == JOptionPane.OK_OPTION) {
+	        try {
+	            String nombre = nombreField.getText();
+	            String email = emailField.getText();
+	            String tipo = (String) tipoComboBox.getSelectedItem();
+	            String fechaNac = fechaNacField.getText();
+	            float peso = Float.parseFloat(pesoField.getText());
+	            int altura = Integer.parseInt(alturaField.getText());
+	            int frecCarMax = Integer.parseInt(frecCarMaxField.getText());
+	            int frecCarRep = Integer.parseInt(frecCarRepField.getText());
+
+	            // Validar si el email coincide con el tipo seleccionado
+	            if ((tipo.equals("GOOGLE") && !email.endsWith("@google.com")) || 
+	                (tipo.equals("META") && !email.endsWith("@meta.com"))) {
+	                throw new IllegalArgumentException("Email domain does not match the selected login type.");
+	            }
+
+	            controller.registro(nombre, email, tipo, fechaNac, peso, altura, frecCarMax, frecCarRep);
+	            JOptionPane.showMessageDialog(this, "Registration successful!");
+	        } catch (NumberFormatException e) {
+	            JOptionPane.showMessageDialog(this, "Invalid number format. Please check the fields.");
+	            performRegistro();
+	        } catch (IllegalArgumentException e) {
+	            JOptionPane.showMessageDialog(this, e.getMessage());
+	            performRegistro();
+	        } catch (RuntimeException e) {
+	            JOptionPane.showMessageDialog(this, e.getMessage());
+	            performRegistro();
+	        }
+	    } else {
+	        performLogin(); // Vuelve a la ventana de login si se cancela el registro
+	    }
+	}
+
+
 
 	private void performLogout() {
 		try {
-			controller.logout();
+			controller.LogOut();
 			JOptionPane.showMessageDialog(this, "Logged out successfully.");
 			System.exit(0);
 		} catch (RuntimeException e) {
