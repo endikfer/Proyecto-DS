@@ -303,7 +303,7 @@ public class SwingClientGUI extends JFrame {
     private void Panel3() {
     	// Update Central Panel
     			articleScrollPane.removeAll();
-    			jtbleArticles = new JTable(new DefaultTableModel(new Object[] { "ID", "Title", "Current Price", "Bids" }, 0)) {
+    			jtbleArticles = new JTable(new DefaultTableModel(new Object[] { "ID", "Nombre", "Deporte", "Fecha Inicio", "Fecha Fin", "Distancia", "Tiempo", "Progreso" }, 0)) {
     			private static final long serialVersionUID = 1L;
 
     	        @Override
@@ -333,33 +333,9 @@ public class SwingClientGUI extends JFrame {
     	        // Update East Panel
     	        jPanelArticleDetails.removeAll();
     	        jPanelArticleDetails = new JPanel(new GridLayout(5, 2, 10, 10));
-    			jPanelArticleDetails.setBorder(new TitledBorder("Aceptar Retos"));
-    			jPanelArticleDetails.setPreferredSize(new Dimension(300, getHeight())); // Remaining width
+    			jPanelArticleDetails.setBorder(new TitledBorder(""));
+    			jPanelArticleDetails.setPreferredSize(new Dimension(0, getHeight())); // Remaining width
 
-    			jPanelArticleDetails.add(new JLabel("Title:"));
-    			lblArticleTitle = new JLabel();
-    			jPanelArticleDetails.add(lblArticleTitle);
-
-    			jPanelArticleDetails.add(new JLabel("Current Price:"));
-    			lblArticlePrice = new JLabel();
-    			jPanelArticleDetails.add(lblArticlePrice);
-
-    			jPanelArticleDetails.add(new JLabel("Bids:"));
-    			lblArticleBids = new JLabel();
-    			jPanelArticleDetails.add(lblArticleBids);
-
-    			jPanelArticleDetails.add(new JLabel("Bid Amount:"));
-    			spinBidAmount = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
-    			jPanelArticleDetails.add(spinBidAmount);
-
-    			btnBid = new JButton("Place Bid");
-    			btnBid.setEnabled(false);
-    			btnBid.addActionListener(new ActionListener() {
-    				@Override
-    				public void actionPerformed(ActionEvent e) {
-    					placeBid();
-    				}
-    			});
 
     			JPanel jPanelBidButton = new JPanel();
     			jPanelBidButton.add(btnBid);
