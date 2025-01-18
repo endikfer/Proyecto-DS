@@ -254,27 +254,35 @@ public class SwingClientGUI extends JFrame {
 
     	        // Update East Panel
     	        jPanelArticleDetails.removeAll();
-    	        jPanelArticleDetails = new JPanel(new GridLayout(5, 2, 10, 10));
+    	        jPanelArticleDetails = new JPanel(new GridLayout(7, 2, 10, 10));
     			jPanelArticleDetails.setBorder(new TitledBorder("Crear retos"));
     			jPanelArticleDetails.setPreferredSize(new Dimension(300, getHeight())); // Remaining width
 
-    			jPanelArticleDetails.add(new JLabel("Title:"));
+    			jPanelArticleDetails.add(new JLabel("Nombre:"));
     			lblArticleTitle = new JLabel();
     			jPanelArticleDetails.add(lblArticleTitle);
 
-    			jPanelArticleDetails.add(new JLabel("Current Price:"));
+    			jPanelArticleDetails.add(new JLabel("Deporte:"));
     			lblArticlePrice = new JLabel();
     			jPanelArticleDetails.add(lblArticlePrice);
 
-    			jPanelArticleDetails.add(new JLabel("Bids:"));
+    			jPanelArticleDetails.add(new JLabel("Fecha inicio:"));
     			lblArticleBids = new JLabel();
     			jPanelArticleDetails.add(lblArticleBids);
 
-    			jPanelArticleDetails.add(new JLabel("Bid Amount:"));
+    			jPanelArticleDetails.add(new JLabel("Fecha fin:"));
     			spinBidAmount = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
     			jPanelArticleDetails.add(spinBidAmount);
+    			
+    			jPanelArticleDetails.add(new JLabel("Distancia:"));
+    			lblArticleBids = new JLabel();
+    			jPanelArticleDetails.add(lblArticleBids);
+    			
+    			jPanelArticleDetails.add(new JLabel("Tiempo:"));
+    			lblArticleBids = new JLabel();
+    			jPanelArticleDetails.add(lblArticleBids);
 
-    			btnBid = new JButton("Place Bid");
+    			btnBid = new JButton("Crear Reto");
     			btnBid.setEnabled(false);
     			btnBid.addActionListener(new ActionListener() {
     				@Override
