@@ -48,6 +48,7 @@ import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.RetoAceptado;
+import es.deusto.sd.client.data.Sesion;
 
 /**
  * SwingClientGUI class is a Swing-based client that demonstrates the usage of the
@@ -165,7 +166,27 @@ public class SwingClientGUI extends JFrame {
 		if (articleScrollPane != null) {
 	        articleScrollPane.removeAll();
 	    }
-		jtbleArticles = new JTable(new DefaultTableModel(new Object[] { "ID", "Title", "Current Price", "Bids" }, 0)) {
+		
+		DefaultTableModel m = new DefaultTableModel(new Object[] { "ID", "UsuarioId", "Titulo", "Deporte","Distancia","FechaInicio","Duracion" }, 0);
+		
+	       try {
+	            List<Sesion> Sesiones = controller.getSesionesRecientes();
+	            for (Sesion s : Sesiones) {
+	                m.addRow(new Object[] {
+	                    s.id(),
+	                    s.usuarioId(),
+	                    s.titulo(),
+	                    s.deportename(),
+	                    s.distancia(),
+	                    s.fechaInicio(),
+	                    s.duracion(),
+	                });
+	            }
+	        } catch (RuntimeException e) {
+	            JOptionPane.showMessageDialog(this, "Error al cargar los retos aceptados: " + e.getMessage(),
+	                "Error", JOptionPane.ERROR_MESSAGE);
+	        }
+		jtbleArticles = new JTable(m) {
 		private static final long serialVersionUID = 1L;
 
         @Override
