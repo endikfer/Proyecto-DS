@@ -66,8 +66,10 @@ public class DataInitializer {
 			Sesion s3 = new Sesion( "Marathon Practice", Deporte.RUNNING, 1.0, LocalDate.now().minusDays(3), 120);
 			Sesion s4 = new Sesion( "Cycling Challenge", Deporte.CICLISMO, 40.0, LocalDate.now().minusDays(5), 80);
 			Sesion s5 = new Sesion( "Weekend Walk", Deporte.RUNNING, 3.5, LocalDate.now().minusDays(7), 30);
+			Sesion s6 = new Sesion( "Mountain route", Deporte.RUNNING, 1.5, LocalDate.now().minusDays(5), 30);
+			Sesion s7 = new Sesion( "Cycling", Deporte.CICLISMO, 3.3, LocalDate.now().minusDays(3), 30);
 
-			sesionrepo.saveAll(List.of(s1, s2, s3, s4, s5));
+			sesionrepo.saveAll(List.of(s1, s2, s3, s4, s5,s6,s7));
 
             logger.info("Training sessions saved!");
             	
