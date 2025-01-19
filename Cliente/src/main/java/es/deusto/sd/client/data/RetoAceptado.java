@@ -7,8 +7,8 @@ public record RetoAceptado(
 		Long idUsu,
 		String nombre,
 		String deporte,
-		LocalDate fecha_inicio,
-		LocalDate fecha_fin,
+		String fecha_inicio,
+		String fecha_fin,
 		Integer distancia,
 		Integer tiempo,
 		Double progreso

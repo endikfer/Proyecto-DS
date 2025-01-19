@@ -231,25 +231,25 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 
 	@Override
 	public void aceptarReto(Long retoId, String token) {
-		try {
-			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create(BASE_URL + "/acciones/retos/" + retoId + "/aceptar?Authorization=" + token))
-					.header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.noBody()).build();
+	    try {
+	        HttpRequest request = HttpRequest.newBuilder()
+	            .uri(URI.create(BASE_URL + "/acciones/retos/aceptar?retoId=" + retoId))
+	            .header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(token))
+				.build();
 
-			HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+	        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+	        
 
-			switch (response.statusCode()) {
-			case 200 -> {
-			} // Reto aceptado correctamente
-			case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
-			case 404 -> throw new RuntimeException("Not Found: Reto no encontrado");
-			case 500 -> throw new RuntimeException("Internal server error");
-			default -> throw new RuntimeException(
-					"Fallo al aceptar el reto con el código de estado: " + response.statusCode());
-			}
-		} catch (IOException | InterruptedException e) {
-			throw new RuntimeException("Error aceptando el reto.", e);
-		}
+	        switch (response.statusCode()) {
+	            case 200 -> System.out.println("Reto aceptado correctamente" + retoId);
+	            case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
+	            case 409 -> throw new RuntimeException("Conflict: El reto ya fue aceptado previamente");
+	            case 500 -> throw new RuntimeException("Internal server error");
+	            default -> throw new RuntimeException("Fallo al aceptar el reto con el código de estado: " + response.statusCode());
+	        }
+	    } catch (IOException | InterruptedException e) {
+	        throw new RuntimeException("Error aceptando el reto.", e);
+	    }
 	}
 
 	@Override

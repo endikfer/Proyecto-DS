@@ -112,6 +112,10 @@ public class RetoService {
     public boolean aceptarReto(Long retoId, Long UsuId) {
         boolean acptado = false;
         
+        System.out.println("RetoId recibido: " + retoId + "para el usuario:" + UsuId);
+        
+        
+        
         if (!retoADTO.containsKey(UsuId)) {
         	retoADTO.put(UsuId, new ArrayList<>());
         }
@@ -122,12 +126,15 @@ public class RetoService {
         Integer t = r.getTiempo();
         
         
-        RetoAcptadoDTO a = new RetoAcptadoDTO(r.getId(), UsuId, r.getNombre(), r.getDeporte().name(), r.getFecha_inicio(), r.getFecha_fin(), d, t, 0.00);
+        RetoAcptadoDTO a = new RetoAcptadoDTO(r.getId(), UsuId, r.getNombre(), r.getDeporte().name(), r.getFecha_inicio().toString(), r.getFecha_fin().toString(), d, t, 0.00);
         
         if (!retoADTO.get(UsuId).contains(a)) {
         	retoADTO.get(UsuId).add(a);
             acptado = true;
-        }       
+        }   
+        
+        System.out.println("Reto aceptado: " + a + ", para usuario: " + UsuId);
+        System.out.println("Contenido actual de retoADTO: " + retoADTO);
         
         return acptado;
     }
@@ -184,6 +191,8 @@ public class RetoService {
             nuevoReto.setProgreso(calcularProgresoReto(nuevoReto));
             lista.add(nuevoReto);
         }
+        
+        System.out.println("Retos aceptados para usuario " + UsuId + ": " + retosUsuario);
 
         return lista;
     }

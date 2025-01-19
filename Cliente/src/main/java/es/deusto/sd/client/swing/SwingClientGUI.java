@@ -408,11 +408,17 @@ public class SwingClientGUI extends JFrame {
 		btnAcceptRetos.addActionListener(e -> {
 		    int selectedRow = jtbleArticles.getSelectedRow();
 		    if (selectedRow != -1) {
-		        String retoId = jtbleArticles.getValueAt(selectedRow, 0).toString();
-		        JOptionPane.showMessageDialog(null, "Has aceptado el reto con ID: " + retoId);
-		        // Aquí puedes agregar más lógica, como actualizar datos en la base de datos.
+		        // Obtener el ID del reto seleccionado
+		        Long retoId = (Long) jtbleArticles.getValueAt(selectedRow, 0);
+		        try {
+		            // Llamar al método aceptarReto en el controller
+		            controller.aceptarReto(retoId);
+		            JOptionPane.showMessageDialog(btnAcceptRetos, "Reto aceptado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+		        } catch (Exception ex) {
+		            JOptionPane.showMessageDialog(btnAcceptRetos, "Error al aceptar el reto: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		        }
 		    } else {
-		        JOptionPane.showMessageDialog(null, "Por favor, selecciona un reto antes de aceptar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+		        JOptionPane.showMessageDialog(btnAcceptRetos, "Por favor, selecciona un reto antes de aceptar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
 		    }
 		});
 

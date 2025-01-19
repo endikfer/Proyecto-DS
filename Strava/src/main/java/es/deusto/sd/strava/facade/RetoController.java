@@ -122,6 +122,9 @@ public class RetoController {
 			public ResponseEntity<Void> aceptarReto(
 			        @RequestParam("retoId") Long retoId,
 			        @RequestBody String token) {
+			
+			System.out.println("Vamos a aceptar el reto: "+ retoId);
+			
 
 			    try {
 			        Usuario usuario = usuarioService.getUserByToken(token);

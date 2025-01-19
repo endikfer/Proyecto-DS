@@ -72,7 +72,6 @@ public interface IStravaServiceProxy {
 	
 	List<Reto> consultarReto(String deporte, String fecha, String token);
 	
-	
 	void aceptarReto(Long retoId, String token);
 
 	List<RetoAceptado> consultarRetosAceptados(String token);
@@ -82,4 +81,6 @@ public interface IStravaServiceProxy {
 	List<Sesion> getSesionesPorFecha(String startDate, String endDate);
 	
 	void crearSesion(Long id,String titulo,String deporte, double distancia,LocalDate fechaInicio,int duracion);
+
+	
 }

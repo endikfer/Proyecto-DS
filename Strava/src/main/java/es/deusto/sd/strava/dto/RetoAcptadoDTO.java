@@ -8,15 +8,15 @@ public class RetoAcptadoDTO {
 	public long idUsu;
 	public String nombre;
 	public String deporte;  // ciclismo o running
-	public LocalDate fecha_inicio;
-	public LocalDate fecha_fin;
+	public String fecha_inicio;
+	public String fecha_fin;
 	public Integer distancia; //en km
 	public Integer tiempo;  // en minutos
 	public Double progreso;
 	
 	
-	public RetoAcptadoDTO(long id, long idUsu, String nombre, String deporte, LocalDate fecha_inicio,
-			LocalDate fecha_fin, Integer distancia, Integer tiempo, Double progreso) {
+	public RetoAcptadoDTO(long id, long idUsu, String nombre, String deporte, String fecha_inicio,
+			String fecha_fin, Integer distancia, Integer tiempo, Double progreso) {
 		super();
 		this.id = id;
 		this.idUsu = idUsu;
@@ -72,16 +72,16 @@ public class RetoAcptadoDTO {
 	public void setDeporte(String deporte) {
 		this.deporte = deporte;
 	}
-	public LocalDate getFecha_inicio() {
+	public String getFecha_inicio() {
 		return fecha_inicio;
 	}
-	public void setFecha_inicio(LocalDate fecha_inicio) {
+	public void setFecha_inicio(String fecha_inicio) {
 		this.fecha_inicio = fecha_inicio;
 	}
-	public LocalDate getFecha_fin() {
+	public String getFecha_fin() {
 		return fecha_fin;
 	}
-	public void setFecha_fin(LocalDate fecha_fin) {
+	public void setFecha_fin(String fecha_fin) {
 		this.fecha_fin = fecha_fin;
 	}
 	public Integer getDistancia() {
