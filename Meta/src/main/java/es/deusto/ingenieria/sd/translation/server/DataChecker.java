@@ -15,7 +15,7 @@ public class DataChecker {
 	}
 
 	
-	public String LogIn(String email, String contraseña){
+	public String logIn(String email, String contraseña){
 		
 		if(emails.containsKey(email)) {
 			if(emails.get(email).equals(contraseña)) {
@@ -25,7 +25,7 @@ public class DataChecker {
 		return "";
 	}
 	
-	public String Register(String email){
+	public String register(String email){
 		if(emails.containsKey(email)) {
 			return "OK";
 		}

@@ -11,13 +11,13 @@ public class MetaService extends Thread {
 	private DataInputStream in;
 	private DataOutputStream out;
 	private Socket tcpSocket;
-	
+
 	private static String DELIMITER = "#";
-	DataChecker DC;
+	DataChecker dC;
 
 	public MetaService(Socket socket) {
-		DC = new DataChecker();
-		DC.inicializarEmails();
+		dC = new DataChecker();
+		dC.inicializarEmails();
 		try {
 			this.tcpSocket = socket;
 			this.in = new DataInputStream(socket.getInputStream());
@@ -40,16 +40,18 @@ public class MetaService extends Thread {
 				StringTokenizer tokenizer = new StringTokenizer(data, DELIMITER);
 				String email = tokenizer.nextToken();
 				String password = tokenizer.nextToken();
-				respuesta = LogIn(email, password); // llama al metodo necesario aqui
-				System.out.println("   - MetaService - Datos enviados de login '" + tcpSocket.getInetAddress().getHostAddress()
-						+ ":" + tcpSocket.getPort() + "' -> '" + respuesta + "'");
+				respuesta = logIn(email, password); // llama al metodo necesario aqui
+				System.out.println(
+						"   - MetaService - Datos enviados de login '" + tcpSocket.getInetAddress().getHostAddress()
+								+ ":" + tcpSocket.getPort() + "' -> '" + respuesta + "'");
 				this.out.writeUTF(respuesta);
 
 			} else if (data.matches("[^@]+@[^@]+\\.[^@]+")) {
 				// registro
-				respuesta = Register(data); // llama al metodo necesario aqui
-				System.out.println("   - MetaService - Datos enviados de registro '" + tcpSocket.getInetAddress().getHostAddress()
-						+ ":" + tcpSocket.getPort() + "' -> '" + respuesta + "'");
+				respuesta = register(data); // llama al metodo necesario aqui
+				System.out.println(
+						"   - MetaService - Datos enviados de registro '" + tcpSocket.getInetAddress().getHostAddress()
+								+ ":" + tcpSocket.getPort() + "' -> '" + respuesta + "'");
 				this.out.writeUTF(respuesta);
 			} else {
 				this.out.writeUTF("Error: Formato de datos no válido.");
@@ -81,38 +83,37 @@ public class MetaService extends Thread {
 	 * "fake_facebook_access_token"; } return null; }
 	 */
 
-	private String LogIn(String email, String contraseña) {
+	private String logIn(String email, String contraseña) {
 		String respuesta = "";
 		String comprobacion = "OK";
 
 		if (email != null && contraseña != null) {
-			
+
 			try {
-				respuesta = DC.LogIn(email, contraseña);
+				respuesta = dC.logIn(email, contraseña);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		if(respuesta.equals(comprobacion)) {
+		if (respuesta.equals(comprobacion)) {
 			return "OK";
 		}
 		return "ERR";
 	}
 
-	private String Register(String email) {
+	private String register(String email) {
 		String respuesta = "";
 		String comprobacion = "OK";
 
 		if (email != null) {
-			
-			
+
 			try {
-				respuesta = DC.Register(email);
+				respuesta = dC.register(email);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		if(respuesta.equals(comprobacion)) {
+		if (respuesta.equals(comprobacion)) {
 			return "OK";
 		}
 		return "ERR";
