@@ -38,24 +38,6 @@ public class SwingClientController {
 	private IStravaServiceProxy serviceProxy = new HttpServiceProxy();
 	// Token to be used during the session
     private String token;
-
-	
-
-    public List<Category> getCategories() {
-        return serviceProxy.getAllCategories();
-    }
-
-    public List<Article> getArticlesByCategory(String categoryName, String currency) {
-        return serviceProxy.getArticlesByCategory(categoryName, currency);
-    }
-
-    public Article getArticleDetails(Long articleId, String currency) {
-        return serviceProxy.getArticleDetails(articleId, currency);
-    }
-
-    public void placeBid(Long articleId, Float amount, String currency) {
-        serviceProxy.makeBid(articleId, amount, currency, token);
-    }
     
     public void crearReto(String nombre, String deporte, String fecha_inicio, String fecha_fin, Integer distancia,
 			Integer tiempo) {
@@ -96,8 +78,8 @@ public class SwingClientController {
         }
 	}
 	
-	public void LogOut() {
-		serviceProxy.LogOut(token);
+	public void logOut() {
+		serviceProxy.logOut(token);
 	}
 	
 	public List<Sesion> getSesionesRecientes() {

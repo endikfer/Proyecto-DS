@@ -10,7 +10,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -47,7 +46,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.RetoAceptado;
 import es.deusto.sd.client.data.Sesion;
@@ -67,20 +65,15 @@ public class SwingClientGUI extends JFrame {
 	private String defaultPassword = "1a2b3c4d";
 
 	private JLabel logoutLabel;
-	private JComboBox<String> currencyComboBox;
 	private JList<String> categoryList;
 	private JTable jtbleArticles;
-	private JLabel lblArticleTitle;
-	private JLabel lblArticlePrice;
-	private JLabel lblArticleBids;
-	private JSpinner spinBidAmount;
+
 	private JButton btnBid;
 	private JScrollPane articleScrollPane;
 	private JPanel jPanelArticleDetails;
 	private JPanel centralPanel;
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	private static final String[] CURRENCIES = { "EUR", "USD", "GBP", "JPY" };
 
 	public SwingClientGUI(SwingClientController controller) {
 		this.controller = controller;
@@ -101,15 +94,6 @@ public class SwingClientGUI extends JFrame {
 		setLayout(new BorderLayout());
 
 		JPanel topPanel = new JPanel(new BorderLayout());
-
-		// Currency ComboBox
-		currencyComboBox = new JComboBox<>(CURRENCIES);
-		currencyComboBox.setSelectedItem("EUR"); // Default currency
-		currencyComboBox.addActionListener(e -> {
-			loadArticleDetails();
-			// loadArticlesForCategory();
-		});
-		topPanel.add(currencyComboBox, BorderLayout.WEST);
 
 		// Logout Label
 		logoutLabel = new JLabel("Logout", SwingConstants.RIGHT);
@@ -158,13 +142,13 @@ public class SwingClientGUI extends JFrame {
 
 	private void cambioPanel(String option) {
 		switch (option) {
-		case "Sesiones" -> Panel1();
-		case "Retos" -> Panel2();
-		case "Retos Aceptados" -> Panel3();
+		case "Sesiones" -> panel1();
+		case "Retos" -> panel2();
+		case "Retos Aceptados" -> panel3();
 		}
 	}
 
-	private void Panel1() {
+	private void panel1() {
 		centralPanel.removeAll();
 		centralPanel = new JPanel(new BorderLayout());
 
@@ -238,7 +222,7 @@ public class SwingClientGUI extends JFrame {
 		btnBid.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CrearSesion(Long.valueOf(txtUserId.getText()), txtTitle.getText(),
+				crearSesion(Long.valueOf(txtUserId.getText()), txtTitle.getText(),
 						cbArticleSport.getSelectedItem().toString(), Double.valueOf(spinDistance.getValue().toString()),
 						spinStartDate.getValue().toString(), Integer.parseInt(spinTime.getValue().toString()));
 			}
@@ -261,7 +245,7 @@ public class SwingClientGUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ConsultarSesionFecha(txtFecha.getText(), txtFechaF.getText());
+				consultarSesionFecha(txtFecha.getText(), txtFechaF.getText());
 			}
 		});
 
@@ -278,7 +262,7 @@ public class SwingClientGUI extends JFrame {
 		refreshPanels();
 	}
 
-	private void CrearSesion(Long id, String titulo, String deporte, double distancia, String fechaInicio,
+	private void crearSesion(Long id, String titulo, String deporte, double distancia, String fechaInicio,
 			int duracion) {
 		try {
 			controller.crearSesion(id, titulo, deporte, distancia, parseString(fechaInicio), duracion);
@@ -304,7 +288,7 @@ public class SwingClientGUI extends JFrame {
 		}
 	}
 
-	private void ConsultarSesionFecha(String fechaInicioSeleccionado, String fechaFinalSeleccionada) {
+	private void consultarSesionFecha(String fechaInicioSeleccionado, String fechaFinalSeleccionada) {
 
 		try {
 			// Llama al controlador para obtener la lista de sesiones
@@ -327,7 +311,7 @@ public class SwingClientGUI extends JFrame {
 
 	};
 
-	private void Panel2() {
+	private void panel2() {
 		centralPanel.removeAll();
 
 		centralPanel = new JPanel(new BorderLayout());
@@ -530,7 +514,7 @@ public class SwingClientGUI extends JFrame {
 		            JOptionPane.showMessageDialog(null, errores.toString(), "Errores", JOptionPane.ERROR_MESSAGE);
 		        } else {
 		            // Llamar al método CrearReto pasándole los valores obtenidos
-		            CrearReto(nombre, deporte, fechaInicio, fechaFin, distancia, tiempo);
+		            crearReto(nombre, deporte, fechaInicio, fechaFin, distancia, tiempo);
 		            consultarRetos(null, null);
 		        }
 		    }
@@ -546,7 +530,7 @@ public class SwingClientGUI extends JFrame {
 		refreshPanels();
 	}
 
-	private void Panel3() {
+	private void panel3() {
 		centralPanel.removeAll();
 		jPanelArticleDetails.removeAll();
 		jPanelArticleDetails.setBorder(null);
@@ -581,12 +565,6 @@ public class SwingClientGUI extends JFrame {
 				return false;
 			}
 		};
-		jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
-			if (!e.getValueIsAdjusting()) {
-				loadArticleDetails();
-			}
-		});
 
 		// Ajustar las columnas si es necesario
 		adjustColumnWidths(jtbleArticles);
@@ -712,7 +690,7 @@ public class SwingClientGUI extends JFrame {
 
 	private void performLogout() {
 		try {
-			controller.LogOut();
+			controller.logOut();
 			JOptionPane.showMessageDialog(this, "Logged out successfully.");
 			System.exit(0);
 		} catch (RuntimeException e) {
@@ -720,92 +698,8 @@ public class SwingClientGUI extends JFrame {
 		}
 	}
 
-//	private void loadCategories() {
-//		try {
-//			List<Category> categories = controller.getCategories();
-//
-//			SwingUtilities.invokeLater(() -> {
-//				categoryList.setListData(categories.toArray(new Category[0]));
-//			});
-//		} catch (RuntimeException e) {
-//			JOptionPane.showMessageDialog(this, e.getMessage());
-//		}
-//	}
 
-//	private void loadArticlesForCategory() {
-//		Category selectedCategory = categoryList.getSelectedValue();
-//		String currency = (String) currencyComboBox.getSelectedItem();
-//
-//		if (selectedCategory != null) {
-//			try {
-//				List<Article> articles = controller.getArticlesByCategory(selectedCategory.name(), currency);
-//
-//				SwingUtilities.invokeLater(() -> {
-//					DefaultTableModel model = (DefaultTableModel) jtbleArticles.getModel();
-//					model.setRowCount(0);
-//
-//					for (Article article : articles) {
-//						model.addRow(new Object[] { article.id(), article.title(),
-//								formatPrice(article.currentPrice(), currency), article.bids() });
-//					}
-//				});
-//			} catch (RuntimeException e) {
-//				JOptionPane.showMessageDialog(this, e.getMessage());
-//			}
-//		}
-//	}
-
-	private void loadArticleDetails() {
-		int selectedRow = jtbleArticles.getSelectedRow();
-		String currency = (String) currencyComboBox.getSelectedItem();
-
-		if (selectedRow != -1) {
-			Long articleId = (Long) jtbleArticles.getValueAt(selectedRow, 0);
-
-			try {
-				Article article = controller.getArticleDetails(articleId, currency);
-
-				SwingUtilities.invokeLater(() -> {
-					lblArticleTitle.setText(article.title());
-					lblArticlePrice.setText(formatPrice(article.currentPrice(), currency));
-					lblArticleBids.setText(String.valueOf(article.bids()));
-					spinBidAmount.setValue((int) Math.ceil(article.currentPrice()) + 1);
-					btnBid.setEnabled(true);
-				});
-			} catch (RuntimeException e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-			}
-		}
-	}
-
-	private void placeBid() {
-		int selectedRow = jtbleArticles.getSelectedRow();
-		String currency = (String) currencyComboBox.getSelectedItem();
-
-		if (selectedRow != -1) {
-			Long articleId = (Long) jtbleArticles.getValueAt(selectedRow, 0);
-			Float bidAmount = ((Integer) spinBidAmount.getValue()).floatValue();
-
-			try {
-				controller.placeBid(articleId, bidAmount, currency);
-
-				SwingUtilities.invokeLater(() -> {
-					JOptionPane.showMessageDialog(this, "Bid placed successfully!");
-				});
-
-				loadArticleDetails();
-				// loadArticlesForCategory();
-
-				SwingUtilities.invokeLater(() -> {
-					jtbleArticles.setRowSelectionInterval(selectedRow, selectedRow);
-				});
-			} catch (RuntimeException e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-			}
-		}
-	}
-
-	private void CrearReto(String nombre, String deporte, String fecha_inicio, String fecha_fin, Integer distancia,
+	private void crearReto(String nombre, String deporte, String fecha_inicio, String fecha_fin, Integer distancia,
 			Integer tiempo) {
 
 		try {
@@ -837,15 +731,6 @@ public class SwingClientGUI extends JFrame {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error al cargar retos", JOptionPane.ERROR_MESSAGE);
 		}
 
-	}
-
-	private String formatPrice(float price, String currency) {
-		return switch (currency) {
-		case "USD" -> String.format("$ %.2f", price);
-		case "GBP" -> String.format("%.2f £", price);
-		case "JPY" -> String.format("¥ %.2f", price);
-		default -> String.format("%.2f €", price);
-		};
 	}
 
 	public static void main(String[] args) {
