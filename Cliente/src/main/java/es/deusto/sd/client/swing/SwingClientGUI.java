@@ -204,11 +204,9 @@ public class SwingClientGUI extends JFrame {
 		btnBid.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-<<<<<<< Updated upstream
-				crearSesion(Long.valueOf(txtUserId.getText()), txtTitle.getText(),
+				crearSesion(txtTitle.getText(),
 						cbArticleSport.getSelectedItem().toString(), Double.valueOf(spinDistance.getValue().toString()),
 						spinStartDate.getValue().toString(), Integer.parseInt(spinTime.getValue().toString()));
-=======
 				// Obtener los valores de los componentes
 				String titulo = txtTitle.getText().trim(); // Eliminar espacios innecesarios
 				String deporte = cbArticleSport.getSelectedItem().toString();
@@ -238,13 +236,12 @@ public class SwingClientGUI extends JFrame {
 					String formattedDate = sdf.format(selectedDate);
 
 					// Llamar a la función para crear la sesión
-					CrearSesion(titulo, deporte, distancia, formattedDate, duracion);
+					crearSesion(titulo, deporte, distancia, formattedDate, duracion);
 
 					// Actualizar la lista de sesiones (suponiendo que la función 'sesiones' existe)
 					sesiones();
 
 				}
->>>>>>> Stashed changes
 			}
 		});
 
@@ -267,9 +264,6 @@ public class SwingClientGUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-<<<<<<< Updated upstream
-				consultarSesionFecha(txtFecha.getText(), txtFechaF.getText());
-=======
 				Date f = (Date) fecha1.getValue();
 				Date f1 = (Date) fecha.getValue();
 
@@ -315,11 +309,9 @@ public class SwingClientGUI extends JFrame {
 					JOptionPane.showMessageDialog(null, e2.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 				} else {
 
-					ConsultarSesionFecha(fechaInicio, fechaFin);
+					consultarSesionFecha(fechaInicio, fechaFin);
 
 				}
-
->>>>>>> Stashed changes
 			}
 		});
 
@@ -336,13 +328,8 @@ public class SwingClientGUI extends JFrame {
 		refreshPanels();
 	}
 
-<<<<<<< Updated upstream
-	private void crearSesion(Long id, String titulo, String deporte, double distancia, String fechaInicio,
-			int duracion) {
-=======
 	private void sesiones() {
 
->>>>>>> Stashed changes
 		try {
 			List<Sesion> Sesiones = controller.getSesionesRecientes();
 			SwingUtilities.invokeLater(() -> {
@@ -361,7 +348,7 @@ public class SwingClientGUI extends JFrame {
 
 	};;
 
-	private void CrearSesion(String titulo, String deporte, double distancia, String fechaInicio, int duracion) {
+	private void crearSesion(String titulo, String deporte, double distancia, String fechaInicio, int duracion) {
 		try {
 			controller.crearSesion(titulo, deporte, distancia, fechaInicio, duracion);
 
@@ -612,7 +599,6 @@ public class SwingClientGUI extends JFrame {
 							"Solo uno de los campos de distancia o tiempo puede tener valor distinto de cero.\n");
 				}
 
-<<<<<<< Updated upstream
 		        // Si hay errores, mostrar mensaje y no ejecutar CrearReto ni consultarRetos
 		        if (errores.length() > 0) {
 		            JOptionPane.showMessageDialog(null, errores.toString(), "Errores", JOptionPane.ERROR_MESSAGE);
@@ -622,17 +608,6 @@ public class SwingClientGUI extends JFrame {
 		            consultarRetos(null, null);
 		        }
 		    }
-=======
-				// Si hay errores, mostrar mensaje y no ejecutar CrearReto ni consultarRetos
-				if (errores.length() > 0) {
-					JOptionPane.showMessageDialog(null, errores.toString(), "Errores", JOptionPane.ERROR_MESSAGE);
-				} else {
-					// Llamar al método CrearReto pasándole los valores obtenidos
-					CrearReto(nombre, deporte, fechaInicio, fechaFin, distancia, tiempo);
-					consultarRetos(null, null);
-				}
-			}
->>>>>>> Stashed changes
 		});
 
 		JPanel jPanelBidButton = new JPanel();
