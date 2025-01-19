@@ -204,9 +204,6 @@ public class SwingClientGUI extends JFrame {
 		btnBid.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				crearSesion(txtTitle.getText(),
-						cbArticleSport.getSelectedItem().toString(), Double.valueOf(spinDistance.getValue().toString()),
-						spinStartDate.getValue().toString(), Integer.parseInt(spinTime.getValue().toString()));
 				// Obtener los valores de los componentes
 				String titulo = txtTitle.getText().trim(); // Eliminar espacios innecesarios
 				String deporte = cbArticleSport.getSelectedItem().toString();
