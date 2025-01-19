@@ -1,22 +1,15 @@
 package es.deusto.sd.strava.facade;
 
 import es.deusto.sd.strava.dto.SesionDTO;
-import es.deusto.sd.strava.dto.UsuarioDTO;
-import es.deusto.sd.strava.entity.Deporte;
-import es.deusto.sd.strava.entity.Sesion;
-import es.deusto.sd.strava.entity.Usuario;
 import es.deusto.sd.strava.service.TrainingSessionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/sesion")

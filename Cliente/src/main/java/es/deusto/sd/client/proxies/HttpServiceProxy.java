@@ -330,6 +330,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	        return switch (response.statusCode()) {
 	            case 200 -> response.body();
 	            case 400 -> throw new RuntimeException("Bad Request: Usuario no registrado o datos incorrectos.");
+	            case 401 -> throw new RuntimeException("Unauthorized: Invalid credentials, login failed");
 	            case 500 -> throw new RuntimeException("Internal Server Error: Error interno en el servidor.");
 	            default -> throw new RuntimeException("Fallo al hacer login con el código de estado: " + response.statusCode());
 	        };
