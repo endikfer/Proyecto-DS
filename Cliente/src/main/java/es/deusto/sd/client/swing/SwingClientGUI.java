@@ -174,7 +174,7 @@ public class SwingClientGUI extends JFrame {
 		try {
 			List<Sesion> Sesiones = controller.getSesionesRecientes();
 			for (Sesion s : Sesiones) {
-				m.addRow(new Object[] { s.id(), s.usuarioId(), s.titulo(), s.deportename(), s.distancia(),
+				m.addRow(new Object[] { s.id(), s.titulo(), s.deportename(), s.distancia(),
 						s.fechaInicio(), s.duracion(), });
 			}
 		} catch (RuntimeException e) {
@@ -317,7 +317,7 @@ public class SwingClientGUI extends JFrame {
 
 				// Llena la tabla con los datos de los retos
 				for (Sesion sesion : sesiones) {
-					model.addRow(new Object[] { sesion.id(), sesion.usuarioId(), sesion.titulo(), sesion.deportename(),
+					model.addRow(new Object[] { sesion.id(), sesion.titulo(), sesion.deportename(),
 							sesion.distancia(), sesion.fechaInicio(), sesion.duracion() });
 				}
 			});

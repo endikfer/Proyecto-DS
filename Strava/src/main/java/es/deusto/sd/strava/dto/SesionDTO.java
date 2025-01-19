@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class SesionDTO {
 
-    private Long id; // Solo necesario cuando se devuelve la sesión
+    private Long id;// Solo necesario cuando se devuelve la sesión
     private String titulo;
     private String deporte;  // Tipo de deporte como String (se usa un enum en el backend)
     private double distancia; 
@@ -13,7 +13,7 @@ public class SesionDTO {
 
     // Constructor para la creación de sesiones
     public SesionDTO(String titulo, String deporte, double distancia, LocalDate fechaInicio, int duracion) {
-        this.titulo = titulo;
+    	this.titulo = titulo;
         this.deporte = deporte;
         this.distancia = distancia;
         this.fechaInicio = fechaInicio;
@@ -30,9 +30,10 @@ public class SesionDTO {
         this.duracion = duracion;
     }
 
-    public SesionDTO() {
-    	
-    }
+
+	public SesionDTO() {
+		// TODO Auto-generated constructor stub
+	}
 
 	// Getters y Setters
     public Long getId() {
@@ -82,4 +83,5 @@ public class SesionDTO {
     public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
+    
 }

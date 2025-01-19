@@ -31,7 +31,7 @@ public class TrainingSessionController {
 	@PostMapping("/crear")
 	public ResponseEntity<Void> crearSesion(@RequestParam("sesionId") Long id, @RequestParam("titulo") String titulo,
 			@RequestParam("deporte") String deporte, @RequestParam("distancia") double distancia,
-			@RequestParam("fechaInicio") LocalDate fechaInicio, @RequestParam("tiempo") int duracion) {
+			@RequestParam("fechaInicio") LocalDate fechaInicio, @RequestParam("dur") int duracion) {
 		try {
 			SesionDTO sesionDTO = new SesionDTO(titulo, deporte, distancia, fechaInicio, duracion);
 			trainingSessionService.crearSesion(sesionDTO);
@@ -96,14 +96,7 @@ public class TrainingSessionController {
 	
     // Método para convertir Sesion a SesionDTO
     private SesionDTO toDTO(Sesion sesion) {
-    	return new SesionDTO(
-    	sesion.getId(), 
-        sesion.getTitulo(),
-        sesion.getDeporte().name().toLowerCase(),
-        sesion.getDistancia(),
-        sesion.getFechaInicio(),
-        sesion.getDuracion()
-        );
+    	return new SesionDTO(sesion.getId(), sesion.getTitulo(), sesion.getDeporte().toString(), sesion.getDistancia(), sesion.getFechaInicio(), sesion.getDuracion());
 
     }
 

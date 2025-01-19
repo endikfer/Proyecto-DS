@@ -20,9 +20,6 @@ public class Sesion {
     private Long id;
 
     @Column(nullable = false)
-    private Long usuarioId;
-
-    @Column(nullable = false)
     private String titulo;
 
     @Enumerated(EnumType.STRING)
@@ -38,17 +35,15 @@ public class Sesion {
     @Column(nullable = false)
     private int duracion;
 
-    @Column(nullable = false)
-    private int tiempo;
+
 
     public Sesion() {
 		super();
 	}
 
-	public Sesion(Long id, Long usuarioId, String titulo, Deporte deporte, double distancia,
+	public Sesion(Long id, String titulo, Deporte deporte, double distancia,
                   LocalDate fechaInicio, int duracion) {
         this.id = id;
-        this.usuarioId = usuarioId;
         this.titulo = titulo;
         this.deporte = deporte;
         this.distancia = distancia;
@@ -64,13 +59,7 @@ public class Sesion {
         this.id = id;
     }
 
-    public Long getUsuarioId() {
-        return usuarioId;
-    }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
-    }
 
     public String getTitulo() {
         return titulo;
@@ -112,11 +101,5 @@ public class Sesion {
         this.duracion = duracion;
     }
 
-    public int getTiempo() {
-        return tiempo;
-    }
 
-    public void setTiempo(int tiempo) {
-        this.tiempo = tiempo;
-    }
 }
