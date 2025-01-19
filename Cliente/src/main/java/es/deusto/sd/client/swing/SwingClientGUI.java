@@ -63,8 +63,8 @@ public class SwingClientGUI extends JFrame {
 	private final SwingClientController controller;
 
 	// Default login credentials
-	private String defaultEmail = "contact@meta.com";
-	private String defaultPassword = "1a2b3c4d";
+	private String defaultEmail = "info@gmail.com";
+	private String defaultPassword = "123";
 
 	private JLabel logoutLabel;
 	private JComboBox<String> currencyComboBox;
@@ -180,7 +180,6 @@ public class SwingClientGUI extends JFrame {
 		} catch (RuntimeException e) {
 			JOptionPane.showMessageDialog(this, "Error al cargar las sesiones recientes: " + e.getMessage(), "Error",
 					JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
 		}
 		jtbleArticles = new JTable(m) {
 			private static final long serialVersionUID = 1L;

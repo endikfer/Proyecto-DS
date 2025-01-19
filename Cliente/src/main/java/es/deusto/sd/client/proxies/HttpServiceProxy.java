@@ -369,9 +369,11 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	@Override
 	public List<Sesion> getSesionesRecientes() {
 		try {
-			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(BASE_URL + "/api/sesion/sesiones/recientes"))
-					.header("Content-Type", "application/json").GET().build();
-
+			HttpRequest request = HttpRequest.newBuilder()
+	                .uri(URI.create(BASE_URL + "/sesiones/recientes"))
+	                .header("Content-Type", "application/json")
+	                .GET()
+	                .build();
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
 			return switch (response.statusCode()) {

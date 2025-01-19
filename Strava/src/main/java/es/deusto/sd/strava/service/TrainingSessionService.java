@@ -17,7 +17,10 @@ public class TrainingSessionService {
     private final List<Sesion> sesiones = new ArrayList<>();
     private Long Id = 1L;
     private SesionRepository sesionrepo;
-
+    
+    public TrainingSessionService(SesionRepository sesionrepo) {
+        this.sesionrepo = sesionrepo;
+    }
     // Crear una nueva sesión
     public void crearSesion(SesionDTO dto) {
         Sesion sesion = new Sesion();
@@ -35,14 +38,16 @@ public class TrainingSessionService {
 
     // Obtener las 5 últimas sesiones
     public List<Sesion> getSesionesRecientes() {
+        List<Sesion> Sessions = sesionrepo.findAll();
+
+        int totalSessions = Sessions.size();
+        int limit = totalSessions > 5 ? 5 : totalSessions; 
+        
         List<Sesion> recentSessions = new ArrayList<>();
-        List<Sesion> Sessions = sesionrepo.findAll(); 
-        for (int i = 0; i < Sessions.size(); i++) {
-        	if (i<4) {
-				recentSessions.add(Sessions.get(i));
-			}
-			
-		}
+        for (int i = totalSessions - limit; i < totalSessions; i++) {
+            Sesion sesion = Sessions.get(i); 
+            recentSessions.add(sesion);
+        }
 
         return recentSessions;
     }
