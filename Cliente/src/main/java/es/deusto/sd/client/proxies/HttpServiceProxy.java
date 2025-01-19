@@ -374,7 +374,9 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	                .header("Content-Type", "application/json")
 	                .GET()
 	                .build();
+			System.out.println("HOLA");
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+			System.out.println(response.body());
 
 			return switch (response.statusCode()) {
 			case 200 -> objectMapper.readValue(response.body(),
