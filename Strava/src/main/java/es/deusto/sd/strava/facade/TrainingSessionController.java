@@ -10,11 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sesion")
+@RequestMapping("/sesiones")
 public class TrainingSessionController {
 
 	private final TrainingSessionService trainingSessionService;
@@ -28,7 +27,7 @@ public class TrainingSessionController {
 			@ApiResponse(responseCode = "400", description = "Bad Request: Datos inválidos o incompletos"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	// Crear una nueva sesión
-	@PostMapping("/sesiones/crear")
+	@PostMapping("/crear")
 	public ResponseEntity<Void> crearSesion(@RequestParam("sesionId") Long id, @RequestParam("titulo") String titulo,
 			@RequestParam("deporte") String deporte, @RequestParam("distancia") double distancia,
 			@RequestParam("fechaInicio") LocalDate fechaInicio, @RequestParam("tiempo") int duracion) {
@@ -51,34 +50,27 @@ public class TrainingSessionController {
 			@ApiResponse(responseCode = "204", description = "No Content: No existen sesiones"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	// Obtener las últimas 5 sesiones
-	@GetMapping("/sesiones/recientes")
+	@GetMapping("/recientes")
 	public ResponseEntity<List<SesionDTO>> getSesionesRecientes() {
-		try {
-			
-			List<Sesion> sesiones = trainingSessionService.getSesionesRecientes();
-			List<SesionDTO> sesionesDTO = new ArrayList<SesionDTO>();
-			
-			if (sesiones.size()==0) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-			for (Sesion sesion : sesiones) {
-				sesionesDTO.add(toDTO(sesion));
-				
-			}
-			// Retornamos la lista de sesiones con estado OK
-			return new ResponseEntity<>(sesionesDTO, HttpStatus.OK);
-		} catch (Exception e) {
-			// En caso de error, retornamos INTERNAL_SERVER_ERROR
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	    try {
+	        List<Sesion> sesiones = trainingSessionService.getSesionesRecientes();
+	        if (sesiones.isEmpty()) {
+	            return ResponseEntity.noContent().build();
+	        }
+	        List<SesionDTO> sesionesDTO = sesiones.stream().map(this::toDTO).toList();
+	        return ResponseEntity.ok(sesionesDTO);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); 
+	    }
 	}
+
 
 	@Operation(summary = "Obtener sesiones entre fechas", description = "Devuelve sesiones entre un rango de fechas", responses = {
 			@ApiResponse(responseCode = "200", description = "Sesiones obtenidas correctamente"),
 			@ApiResponse(responseCode = "204", description = "No se encontraron sesiones en el rango de fechas"),
 			@ApiResponse(responseCode = "400", description = "Formato de fecha inválido"),
 			@ApiResponse(responseCode = "500", description = "Error interno del servidor") })
-	@GetMapping("/sesiones/sesionesporfecha")
+	@GetMapping("/sesionesporfecha")
 	public ResponseEntity<List<SesionDTO>> getSesionesPorFecha(@RequestParam(value = "startDate") String startDate,
 			@RequestParam(value = "endDate") String endDate) {
 		try {
@@ -102,14 +94,15 @@ public class TrainingSessionController {
 	
     // Método para convertir Sesion a SesionDTO
     private SesionDTO toDTO(Sesion sesion) {
-        SesionDTO dto = new SesionDTO();
-        dto.setId(sesion.getId()); 
-        dto.setTitulo(sesion.getTitulo());
-        dto.setDeporte(sesion.getDeporte().name().toLowerCase()); 
-        dto.setDistancia(sesion.getDistancia());
-        dto.setFechaInicio(sesion.getFechaInicio());
-        dto.setDuracion(sesion.getDuracion());
-        return dto;
+    	return new SesionDTO(
+    	sesion.getId(), 
+        sesion.getTitulo(),
+        sesion.getDeporte().name().toLowerCase(),
+        sesion.getDistancia(),
+        sesion.getFechaInicio(),
+        sesion.getDuracion()
+        );
+
     }
 
 }

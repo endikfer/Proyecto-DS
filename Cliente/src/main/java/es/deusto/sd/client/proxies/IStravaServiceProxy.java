@@ -12,7 +12,6 @@ import es.deusto.sd.client.data.Usuario;
 import es.deusto.sd.client.data.Sesion;
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
-import es.deusto.sd.client.data.Credentials;
 import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.RetoAceptado;
 
