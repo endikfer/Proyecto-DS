@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,8 +54,8 @@ public class RetoController {
 		    @RequestParam("fecha_fin") LocalDate fecha_fin,
 		    @RequestParam("distancia") Integer distancia,
 		    @RequestParam("tiempo") Integer tiempo,
-		    @RequestParam(value = "Authorization") String token
-		){
+		    @RequestBody String token)
+		{
 		    try {
 		    	Usuario user = usuarioService.getUserByToken(token);
 		    	
@@ -88,7 +90,7 @@ public class RetoController {
 		    @RequestParam(value = "fecha", required = false) String fechaFiltroStr,
 
 		    @Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
-		    @RequestParam(value = "Authorization") String token) {
+		    @RequestHeader String token) {
 		    
 		    try {
 		        // Verifica si el usuario está autorizado

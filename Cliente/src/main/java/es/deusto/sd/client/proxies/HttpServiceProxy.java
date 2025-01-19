@@ -163,9 +163,9 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 			HttpRequest request = HttpRequest.newBuilder()
 	                .uri(URI.create(BASE_URL + "/acciones/retos/crear?nombre=" + nombre + "&deporte=" + 
 	                		deporte + "&fecha_inicio=" + fecha_inicio + "&fecha_fin=" + fecha_fin + "&distancia=" +
-	                		distancia + "&tiempo=" + tiempo + "&Authorization=" + token))
+	                		distancia + "&tiempo=" + tiempo))
 	                .header("Content-Type", "application/json")
-	                .POST(HttpRequest.BodyPublishers.noBody())
+	                .POST(HttpRequest.BodyPublishers.ofString(token))
 	                .build();
 
 	            HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
@@ -186,8 +186,9 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
 	                .uri(URI.create(BASE_URL + "/acciones/retos?deporte=" + deporte + "&fecha=" + 
-	                		fecha + "&Authorization=" + token))
+	                		fecha))
 	                .header("Content-Type", "application/json")
+	                .header("Authorization", token)
 	                .GET()
 	                .build();
 
