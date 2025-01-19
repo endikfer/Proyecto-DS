@@ -28,7 +28,7 @@ public class TrainingSessionService {
         sesion.setTitulo(dto.getTitulo());
         sesion.setDeporte(Deporte.valueOf(dto.getDeporte().toUpperCase())); 
         sesion.setDistancia(dto.getDistancia());
-        sesion.setFechaInicio(dto.getFechaInicio()); 
+        sesion.setFechaInicio(LocalDate.parse(dto.getFechaInicio())); 
         sesion.setDuracion(dto.getDuracion());
 
         sesiones.add(sesion);
@@ -73,7 +73,7 @@ public class TrainingSessionService {
         dto.setTitulo(sesion.getTitulo());
         dto.setDeporte(sesion.getDeporte().name().toLowerCase()); 
         dto.setDistancia(sesion.getDistancia());
-        dto.setFechaInicio(sesion.getFechaInicio());
+        dto.setFechaInicio(sesion.getFechaInicio().toString());
         dto.setDuracion(sesion.getDuracion());
         return dto;
     }

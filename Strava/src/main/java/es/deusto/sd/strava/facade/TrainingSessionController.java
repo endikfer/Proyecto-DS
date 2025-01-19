@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class TrainingSessionController {
 	@PostMapping("/crear")
 	public ResponseEntity<Void> crearSesion(@RequestParam("sesionId") Long id, @RequestParam("titulo") String titulo,
 			@RequestParam("deporte") String deporte, @RequestParam("distancia") double distancia,
-			@RequestParam("fechaInicio") LocalDate fechaInicio, @RequestParam("dur") int duracion) {
+			@RequestParam("fechaInicio") String fechaInicio, @RequestParam("dur") int duracion) {
 		try {
 			SesionDTO sesionDTO = new SesionDTO(titulo, deporte, distancia, fechaInicio, duracion);
 			trainingSessionService.crearSesion(sesionDTO);
@@ -95,9 +96,18 @@ public class TrainingSessionController {
 	}
 	
     // Método para convertir Sesion a SesionDTO
-    private SesionDTO toDTO(Sesion sesion) {
-    	return new SesionDTO(sesion.getId(), sesion.getTitulo(), sesion.getDeporte().toString(), sesion.getDistancia(), sesion.getFechaInicio(), sesion.getDuracion());
+private SesionDTO toDTO(Sesion sesion) {
+    // Formato para las fechas
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    return new SesionDTO(
+            sesion.getId(),
+            sesion.getTitulo(),
+            sesion.getDeporte().name().toLowerCase(),  // Convertir Enum a minúsculas
+            sesion.getDistancia(),
+            sesion.getFechaInicio().format(formatter),  // Convertir LocalDate a String
+            sesion.getDuracion()
+    );
+}
 
-    }
 
 }

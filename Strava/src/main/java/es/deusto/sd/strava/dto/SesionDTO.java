@@ -8,11 +8,11 @@ public class SesionDTO {
     private String titulo;
     private String deporte;  // Tipo de deporte como String (se usa un enum en el backend)
     private double distancia; 
-    private LocalDate fechaInicio;
+    private String fechaInicio;
     private int duracion;
 
     // Constructor para la creación de sesiones
-    public SesionDTO(String titulo, String deporte, double distancia, LocalDate fechaInicio, int duracion) {
+    public SesionDTO(String titulo, String deporte, double distancia, String fechaInicio, int duracion) {
     	this.titulo = titulo;
         this.deporte = deporte;
         this.distancia = distancia;
@@ -21,7 +21,7 @@ public class SesionDTO {
     }
 
     // Constructor para cuando ya existe una sesión (con ID)
-    public SesionDTO(Long id, String titulo, String deporte, double distancia, LocalDate fechaInicio, int duracion) {
+    public SesionDTO(Long id, String titulo, String deporte, double distancia, String fechaInicio, int duracion) {
         this.id = id;
         this.titulo = titulo;
         this.deporte = deporte;
@@ -68,11 +68,11 @@ public class SesionDTO {
         this.distancia = distancia;
     }
 
-    public LocalDate getFechaInicio() {
+    public String getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(LocalDate fechaInicio) {
+    public void setFechaInicio(String fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
