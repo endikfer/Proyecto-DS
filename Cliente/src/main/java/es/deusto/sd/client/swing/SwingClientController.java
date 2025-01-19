@@ -81,20 +81,7 @@ public class SwingClientController {
 	public Map<String, Usuario> obtenerTokens() {
 		return serviceProxy.obtenerTokens();
 	}
-	/*public boolean login(String email, String password) {
-        try {
-            Credentials credentials = new Credentials(email, password);
-            token = serviceProxy.login(credentials);
-            
-            return true;
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Login failed: " + e.getMessage());
-        }
-    }
-
-    public void logout() {
-        serviceProxy.logout(token);
-    }*/
+	
 	public void registro(String nombre, String email, String tipo, String fecha_nac, float peso, int altura, int frec_car_max, int frec_car_rep) {
 		serviceProxy.registro(nombre, email, tipo, fecha_nac, peso, altura, frec_car_max, frec_car_rep);
 	}
@@ -104,7 +91,6 @@ public class SwingClientController {
     		token = serviceProxy.logIn(email, contrasenia);      
             return true;
         } catch (RuntimeException e) {
-            e.printStackTrace();
             throw new RuntimeException("Login failed: " + e.getMessage());
 
         }

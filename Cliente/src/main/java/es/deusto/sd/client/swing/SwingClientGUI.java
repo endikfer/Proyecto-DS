@@ -15,7 +15,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -37,15 +36,11 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
 import es.deusto.sd.client.data.Article;
-import es.deusto.sd.client.data.Category;
 import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.RetoAceptado;
 import es.deusto.sd.client.data.Sesion;
@@ -91,7 +86,7 @@ public class SwingClientGUI extends JFrame {
 		}
 
 		setTitle("Auctions Client");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(1024, 400);
 		setResizable(false);
 		setLocationRelativeTo(null);

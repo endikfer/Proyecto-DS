@@ -274,48 +274,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	        throw new RuntimeException("Error registrando usuario.", e);
 	    }
 	}
-    /*@Override
-    public String login(Credentials credentials) {
-        try {
-            String credentialsJson = objectMapper.writeValueAsString(credentials);
 
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/auth/login"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(credentialsJson))
-                .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            return switch (response.statusCode()) {
-                case 200 -> response.body(); // Successful login, returns token
-                case 401 -> throw new RuntimeException("Unauthorized: Invalid credentials");
-                default -> throw new RuntimeException("Login failed with status code: " + response.statusCode());
-            };
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Error during login", e);
-        }
-    }
-    @Override
-    public void logout(String token) {
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/auth/logout"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(token))
-                .build();
-
-            HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
-
-            switch (response.statusCode()) {
-                case 204 -> {} // Logout successful
-                case 401 -> throw new RuntimeException("Unauthorized: Invalid token, logout failed");
-                default -> throw new RuntimeException("Logout failed with status code: " + response.statusCode());
-            }
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Error during logout", e);
-        }
-    }*/
 	@Override
 	public String logIn(String email, String contrasenia) {
 		 try {
