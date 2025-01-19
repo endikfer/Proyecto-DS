@@ -30,7 +30,6 @@ public class TrainingSessionService {
         sesion.setDistancia(dto.getDistancia());
         sesion.setFechaInicio(dto.getFechaInicio()); 
         sesion.setDuracion(dto.getDuracion());
-        sesion.setTiempo(dto.getDuracion() * 60); 
 
         sesiones.add(sesion);
         sesionrepo.save(sesion);
