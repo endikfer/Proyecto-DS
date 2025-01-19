@@ -34,15 +34,16 @@ public class TrainingSessionService {
     }
 
     // Obtener las 5 últimas sesiones
-    public List<SesionDTO> getSesionesRecientes() {
-        List<SesionDTO> recentSessions = new ArrayList<>();
+    public List<Sesion> getSesionesRecientes() {
+        List<Sesion> recentSessions = new ArrayList<>();
+        List<Sesion> Sessions = sesionrepo.findAll();
 
-        int totalSessions = sesiones.size();
+        int totalSessions = Sessions.size();
         int limit = totalSessions > 5 ? 5 : totalSessions; 
-
+         
         for (int i = totalSessions - limit; i < totalSessions; i++) {
-            Sesion sesion = sesiones.get(i); 
-            recentSessions.add(toDTO(sesion));
+            Sesion sesion = Sessions.get(i); 
+            recentSessions.add(sesion);
         }
 
         return recentSessions;

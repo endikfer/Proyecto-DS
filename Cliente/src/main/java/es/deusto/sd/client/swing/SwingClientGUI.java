@@ -176,6 +176,7 @@ public class SwingClientGUI extends JFrame {
 		} catch (RuntimeException e) {
 			JOptionPane.showMessageDialog(this, "Error al cargar las sesiones recientes: " + e.getMessage(), "Error",
 					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
 		}
 		jtbleArticles = new JTable(m) {
 			private static final long serialVersionUID = 1L;
