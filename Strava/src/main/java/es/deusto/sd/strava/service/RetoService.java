@@ -51,8 +51,10 @@ public class RetoService {
 			throw new IllegalArgumentException("El deporte '" + deporte + "' no es válido. Los valores permitidos son: "
 					+ Arrays.toString(Deporte.values()));
 		}
+		
+		String nombre_final = reemplazarHashes(nombre);
 
-		Reto reto = new Reto(nombre, deporteEnum, fecha_inicio, fecha_fin, distancia, tiempo);
+		Reto reto = new Reto(nombre_final, deporteEnum, fecha_inicio, fecha_fin, distancia, tiempo);
 		retorepo.save(reto);
 	}
 
@@ -193,6 +195,13 @@ public class RetoService {
 		}
 
 		return lista;
+	}
+	
+	public String reemplazarHashes(String texto) {
+	    if (texto == null) {
+	        return null; // Manejo de caso nulo
+	    }
+	    return texto.replace("_", " ");
 	}
 
 	private RetoDTO retoToDTO(Reto reto) {

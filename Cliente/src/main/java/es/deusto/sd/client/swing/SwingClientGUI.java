@@ -521,6 +521,8 @@ public class SwingClientGUI extends JFrame {
 		        Date fechaFinDate = (Date) spinEndDate.getValue(); // Valor del JSpinner (fecha de fin)
 		        int distancia = (int) spinDistance.getValue(); // Valor del JSpinner (distancia)
 		        int tiempo = (int) spinTime.getValue(); // Valor del JSpinner (tiempo)
+		        
+		        String nombre_final = reemplazarEspacios(nombre);
 
 		        // Convertir las fechas a String (formato "yyyy-MM-dd")
 		        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -579,7 +581,7 @@ public class SwingClientGUI extends JFrame {
 		            JOptionPane.showMessageDialog(null, errores.toString(), "Errores", JOptionPane.ERROR_MESSAGE);
 		        } else {
 		            // Llamar al método CrearReto pasándole los valores obtenidos
-		            crearReto(nombre, deporte, fechaInicio, fechaFin, distancia, tiempo);
+		            crearReto(nombre_final, deporte, fechaInicio, fechaFin, distancia, tiempo);
 		            consultarRetos(null, null);
 		        }
 		    }
@@ -770,6 +772,13 @@ public class SwingClientGUI extends JFrame {
 		} catch (RuntimeException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 		}
+	}
+	
+	public String reemplazarEspacios(String texto) {
+	    if (texto == null) {
+	        return null;
+	    }
+	    return texto.replace(" ", "_");
 	}
 
 	private void consultarRetos(String deporte, String fecha) {
