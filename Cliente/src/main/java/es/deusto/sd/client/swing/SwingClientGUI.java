@@ -734,8 +734,8 @@ public class SwingClientGUI extends JFrame {
 		// String deporteSeleccionado2 = (String) deporteComboBox.getSelectedItem();
 		// String fechaSeleccionada2 = fechaTextField.getText();
 
-		String deporteSeleccionado = null;
-		String fechaSeleccionada = null;
+		String deporteSeleccionado = "0";
+		String fechaSeleccionada = "0";
 
 		try {
 			// Llama al controlador para obtener la lista de retos
