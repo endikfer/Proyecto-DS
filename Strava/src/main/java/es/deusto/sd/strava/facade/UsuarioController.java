@@ -26,7 +26,6 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // Obtener todos los usuarios
     @Operation(
             summary = "Obtener todos los usuarios",
             description = "Devuelve una lista con todos los usuarios registrados.",
@@ -52,7 +51,6 @@ public class UsuarioController {
         }
     }
     
-    // Obtener la lista de tokens
     @Operation(
             summary = "Obtener la lista de tokens",
             description = "Devuelve un mapa con los tokens activos y sus usuarios asociados.",
@@ -64,10 +62,8 @@ public class UsuarioController {
     @GetMapping("/tokens")
     public ResponseEntity<Map<String, UsuarioDTO>> obtenerTokens() {
         try {
-            // Obtener los tokens del servicio
             Map<String, Usuario> tokens = usuarioService.obtenerTokens();
 
-            // Convertir los valores de Usuario a UsuarioDTO
             Map<String, UsuarioDTO> tokensDTO = tokens.entrySet().stream()
                     .collect(Collectors.toMap(
                             Map.Entry::getKey,
@@ -76,12 +72,10 @@ public class UsuarioController {
 
             return new ResponseEntity<>(tokensDTO, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();  // Loguear el error
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);  // Respuesta con error 500
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
-    // Registrar un nuevo usuario
     @Operation(
             summary = "Registrar un nuevo usuario",
             description = "Registra un nuevo usuario con los datos proporcionados.",
@@ -106,16 +100,13 @@ public class UsuarioController {
             usuarioService.registro(nombre,email, tipo, fecha_nac,peso,altura,frec_car_max,frec_car_rep);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);  // Error de solicitud mal formada
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            // Loguea el error y proporciona un mensaje genérico
-            e.printStackTrace();  // O usa un logger
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);  // Error de servidor interno
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    
- // Iniciar sesión (PUT)
     @Operation(
             summary = "Iniciar sesión",
             description = "Permite a un usuario iniciar sesión verificando si tiene un token asignado. Si no, genera uno nuevo.",
@@ -131,7 +122,6 @@ public class UsuarioController {
             @RequestParam(name = "email") String email,
             @RequestParam(name = "contraseña") String contraseña) {
         try {
-            // Llamada al servicio para hacer login
         	Optional<String> token = usuarioService.logIn(email, contraseña);
 
             if (token.isPresent()) {
@@ -146,9 +136,6 @@ public class UsuarioController {
         }
     }
 
-
-
-    // Cerrar sesión (DELETE)
     @Operation(
             summary = "Cerrar sesión",
             description = "Permite a un usuario cerrar sesión eliminando su token.",
@@ -164,9 +151,8 @@ public class UsuarioController {
             @RequestBody String token) {
         try {
             if (token == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // Token no válido
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
-            // Eliminar el token del mapa de tokens
             Optional<Boolean> result = usuarioService.logout(token);
             
             if (result.isPresent() && result.get()) {
@@ -176,11 +162,10 @@ public class UsuarioController {
             }  
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Error 500 sin contenido
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    // Convertir un Usuario a UsuarioDTO
     private UsuarioDTO convertirUsuarioADTO(Usuario usuario) {
         return new UsuarioDTO(
         		usuario.getNombre(), 

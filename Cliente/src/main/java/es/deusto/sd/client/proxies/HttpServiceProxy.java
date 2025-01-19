@@ -186,55 +186,50 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 
 	@Override
 	public List<Reto> consultarReto(String deporte, String fecha, String token) {
-	    try {
-	        // Construir la URL base
-	        StringBuilder urlBuilder = new StringBuilder(BASE_URL + "/acciones/retos");
+		try {
+			// Construir la URL base
+			StringBuilder urlBuilder = new StringBuilder(BASE_URL + "/acciones/retos");
 
-	        // Si 'deporte' no es null, añadirlo a la URL
-	        if (deporte != null) {
-	            urlBuilder.append("?deporte=").append(deporte);
-	        }
+			// Si 'deporte' no es null, añadirlo a la URL
+			if (deporte != null) {
+				urlBuilder.append("?deporte=").append(deporte);
+			}
 
-	        // Si 'fecha' no es null, añadirlo a la URL
-	        if (fecha != null) {
-	            // Si ya se añadió un parámetro, agregamos el '&'
-	            if (deporte != null) {
-	                urlBuilder.append("&");
-	            } else {
-	                // Si no se añadió 'deporte', no necesitamos '&'
-	                urlBuilder.append("?");
-	            }
-	            urlBuilder.append("fecha=").append(fecha);
-	        }
+			// Si 'fecha' no es null, añadirlo a la URL
+			if (fecha != null) {
+				// Si ya se añadió un parámetro, agregamos el '&'
+				if (deporte != null) {
+					urlBuilder.append("&");
+				} else {
+					// Si no se añadió 'deporte', no necesitamos '&'
+					urlBuilder.append("?");
+				}
+				urlBuilder.append("fecha=").append(fecha);
+			}
 
-	        // Construir la solicitud
-	        HttpRequest request = HttpRequest.newBuilder()
-	                .uri(URI.create(urlBuilder.toString()))
-	                .header("Content-Type", "application/json")
-	                .header("token", token)
-	                .GET()
-	                .build();
+			// Construir la solicitud
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(urlBuilder.toString()))
+					.header("Content-Type", "application/json").header("token", token).GET().build();
 
-	        // Enviar la solicitud y obtener la respuesta
-	        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+			// Enviar la solicitud y obtener la respuesta
+			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-	        System.out.println("Response body: " + response.body());
+			System.out.println("Response body: " + response.body());
 
-	        // Procesar la respuesta
-	        return switch (response.statusCode()) {
-	            case 200 -> objectMapper.readValue(response.body(),
-	                    objectMapper.getTypeFactory().constructCollectionType(List.class, Reto.class));
-	            case 204 -> throw new RuntimeException("No Content: No hay retos aceptados");
-	            case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
-	            case 500 -> throw new RuntimeException("Internal server error");
-	            default -> throw new RuntimeException(
-	                    "Fallo al obtener los reto con el codigo de estatus: " + response.statusCode());
-	        };
-	    } catch (IOException | InterruptedException e) {
-	        throw new RuntimeException("Error obteniendo el reto.", e);
-	    }
+			// Procesar la respuesta
+			return switch (response.statusCode()) {
+			case 200 -> objectMapper.readValue(response.body(),
+					objectMapper.getTypeFactory().constructCollectionType(List.class, Reto.class));
+			case 204 -> throw new RuntimeException("No Content: No hay retos aceptados");
+			case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
+			case 500 -> throw new RuntimeException("Internal server error");
+			default -> throw new RuntimeException(
+					"Fallo al obtener los reto con el codigo de estatus: " + response.statusCode());
+			};
+		} catch (IOException | InterruptedException e) {
+			throw new RuntimeException("Error obteniendo el reto.", e);
+		}
 	}
-
 
 	@Override
 	public void aceptarReto(Long retoId, String token) {
@@ -261,16 +256,20 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 
 	@Override
 	public List<RetoAceptado> consultarRetosAceptados(String token) {
+
 		try {
+			// Codificar el token para que sea válido en una URI
+			String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8);
+
 			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create(BASE_URL + "/acciones/retos/aceptados?Authorization=" + token))
+					.uri(URI.create(BASE_URL + "/acciones/retos/aceptados?Authorization=" + encodedToken))
 					.header("Content-Type", "application/json").GET().build();
 
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
 			return switch (response.statusCode()) {
 			case 200 -> objectMapper.readValue(response.body(),
-					objectMapper.getTypeFactory().constructCollectionType(List.class, Reto.class));
+					objectMapper.getTypeFactory().constructCollectionType(List.class, RetoAceptado.class));
 			case 204 -> throw new RuntimeException("No Content: No hay retos aceptados");
 			case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
 			case 500 -> throw new RuntimeException("Internal server error");
@@ -280,6 +279,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 		} catch (IOException | InterruptedException e) {
 			throw new RuntimeException("Error consultando los retos aceptados.", e);
 		}
+
 	}
 
 	@Override
@@ -308,23 +308,6 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	}
 
 	/*
-	 * @Override public String login(Credentials credentials) { try { String
-	 * credentialsJson = objectMapper.writeValueAsString(credentials);
-	 * 
-	 * HttpRequest request = HttpRequest.newBuilder() .uri(URI.create(BASE_URL +
-	 * "/auth/login")) .header("Content-Type", "application/json")
-	 * .POST(HttpRequest.BodyPublishers.ofString(credentialsJson)) .build();
-	 * 
-	 * HttpResponse<String> response = httpClient.send(request,
-	 * HttpResponse.BodyHandlers.ofString());
-	 * 
-	 * return switch (response.statusCode()) { case 200 -> response.body(); //
-	 * Successful login, returns token case 401 -> throw new
-	 * RuntimeException("Unauthorized: Invalid credentials"); default -> throw new
-	 * RuntimeException("Login failed with status code: " + response.statusCode());
-	 * }; } catch (IOException | InterruptedException e) { throw new
-	 * RuntimeException("Error during login", e); } }
-	 * 
 	 * @Override public void logout(String token) { try { HttpRequest request =
 	 * HttpRequest.newBuilder() .uri(URI.create(BASE_URL + "/auth/logout"))
 	 * .header("Content-Type", "application/json")
@@ -339,6 +322,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	 * response.statusCode()); } } catch (IOException | InterruptedException e) {
 	 * throw new RuntimeException("Error during logout", e); } }
 	 */
+
 	@Override
 	public String logIn(String email, String contrasenia) {
 		try {
@@ -387,7 +371,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	@Override
 	public List<Sesion> getSesionesRecientes() {
 		try {
-			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(BASE_URL + "/sesiones/recientes"))
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(BASE_URL + "/api/sesion/sesiones/recientes"))
 					.header("Content-Type", "application/json").GET().build();
 
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

@@ -1,6 +1,7 @@
 package es.deusto.sd.strava.facade;
 
 import es.deusto.sd.strava.dto.SesionDTO;
+import es.deusto.sd.strava.entity.Sesion;
 import es.deusto.sd.strava.service.TrainingSessionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -52,12 +54,17 @@ public class TrainingSessionController {
 	@GetMapping("/sesiones/recientes")
 	public ResponseEntity<List<SesionDTO>> getSesionesRecientes() {
 		try {
-			List<SesionDTO> sesionesDTO = trainingSessionService.getSesionesRecientes();
 			
-			if (sesionesDTO.isEmpty()) {
+			List<Sesion> sesiones = trainingSessionService.getSesionesRecientes();
+			List<SesionDTO> sesionesDTO = new ArrayList<SesionDTO>();
+			
+			if (sesiones.size()==0) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
-
+			for (Sesion sesion : sesiones) {
+				sesionesDTO.add(toDTO(sesion));
+				
+			}
 			// Retornamos la lista de sesiones con estado OK
 			return new ResponseEntity<>(sesionesDTO, HttpStatus.OK);
 		} catch (Exception e) {
@@ -75,8 +82,6 @@ public class TrainingSessionController {
 	public ResponseEntity<List<SesionDTO>> getSesionesPorFecha(@RequestParam(value = "startDate") String startDate,
 			@RequestParam(value = "endDate") String endDate) {
 		try {
-			LocalDate start = LocalDate.parse(startDate);
-			LocalDate end = LocalDate.parse(endDate);
 
 			List<SesionDTO> sesionesDTO = trainingSessionService.getSesionesPorFecha(startDate, endDate);
 
@@ -94,5 +99,17 @@ public class TrainingSessionController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+    // Método para convertir Sesion a SesionDTO
+    private SesionDTO toDTO(Sesion sesion) {
+        SesionDTO dto = new SesionDTO();
+        dto.setId(sesion.getId()); 
+        dto.setTitulo(sesion.getTitulo());
+        dto.setDeporte(sesion.getDeporte().name().toLowerCase()); 
+        dto.setDistancia(sesion.getDistancia());
+        dto.setFechaInicio(sesion.getFechaInicio());
+        dto.setDuracion(sesion.getDuracion());
+        return dto;
+    }
 
 }
