@@ -36,15 +36,13 @@ public class TrainingSessionService {
     // Obtener las 5 últimas sesiones
     public List<Sesion> getSesionesRecientes() {
         List<Sesion> recentSessions = new ArrayList<>();
-        List<Sesion> Sessions = sesionrepo.findAll();
-
-        int totalSessions = Sessions.size();
-        int limit = totalSessions > 5 ? 5 : totalSessions; 
-         
-        for (int i = totalSessions - limit; i < totalSessions; i++) {
-            Sesion sesion = Sessions.get(i); 
-            recentSessions.add(sesion);
-        }
+        List<Sesion> Sessions = sesionrepo.findAll(); 
+        for (int i = 0; i < Sessions.size(); i++) {
+        	if (i<4) {
+				recentSessions.add(Sessions.get(i));
+			}
+			
+		}
 
         return recentSessions;
     }
