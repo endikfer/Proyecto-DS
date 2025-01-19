@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -55,12 +56,13 @@ public class TrainingSessionController {
 	    try {
 	        List<Sesion> sesiones = trainingSessionService.getSesionesRecientes();
 	        if (sesiones.isEmpty()) {
-	            return ResponseEntity.noContent().build();
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	        }
-	        List<SesionDTO> sesionesDTO = sesiones.stream().map(this::toDTO).toList();
-	        return ResponseEntity.ok(sesionesDTO);
+	        List<SesionDTO> sesionesDTO = new ArrayList<SesionDTO>();
+	        sesiones.forEach(sesion -> sesionesDTO.add(toDTO(sesion)));
+			return new ResponseEntity<>(sesionesDTO, HttpStatus.OK);
 	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); 
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
 
