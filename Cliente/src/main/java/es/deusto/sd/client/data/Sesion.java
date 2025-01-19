@@ -4,8 +4,8 @@ public record Sesion(
         Long id,
         String titulo,
         String deportename,
-        double distancia,
+        Double distancia,
         String fechaInicio,
-        int duracion
+        Integer duracion
 ) {
 }
