@@ -22,7 +22,6 @@ public class TrainingSessionService {
         this.sesionrepo = sesionrepo;
     }
     // Crear una nueva sesión
-<<<<<<< Updated upstream
     public void crearSesion(SesionDTO dto) {
         Sesion sesion = new Sesion();
         sesion.setId(id++); 
@@ -31,11 +30,9 @@ public class TrainingSessionService {
         sesion.setDistancia(dto.getDistancia());
         sesion.setFechaInicio(LocalDate.parse(dto.getFechaInicio())); 
         sesion.setDuracion(dto.getDuracion());
+    }
 
-=======
-    public void crearSesion(Sesion sesion) {      
-    	
->>>>>>> Stashed changes
+    public void crearSesion(Sesion sesion) {
         sesiones.add(sesion);
         sesionrepo.save(sesion);
     }
