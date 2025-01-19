@@ -63,8 +63,8 @@ public class SwingClientGUI extends JFrame {
 	private final SwingClientController controller;
 
 	// Default login credentials
-	private String defaultEmail = "info@gmail.com";
-	private String defaultPassword = "123";
+	private String defaultEmail = "contact@meta.com";
+	private String defaultPassword = "1a2b3c4d";
 
 	private JLabel logoutLabel;
 	private JComboBox<String> currencyComboBox;
@@ -541,8 +541,13 @@ public class SwingClientGUI extends JFrame {
 	}
 
 	private void Panel3() {
-		// Update Central Panel
-		articleScrollPane.removeAll();
+		centralPanel.removeAll();
+		jPanelArticleDetails.removeAll();
+		jPanelArticleDetails.setBorder(null);
+		
+		remove(jPanelArticleDetails);
+		
+		centralPanel = new JPanel(new BorderLayout());
 
 		// Crear el modelo de la tabla con las columnas adecuadas
 		DefaultTableModel tableModel = new DefaultTableModel(new Object[] { "ID", "Nombre", "Deporte", "Fecha Inicio",
@@ -582,28 +587,23 @@ public class SwingClientGUI extends JFrame {
 
 		// Crear JScrollPane para envolver la tabla
 		articleScrollPane = new JScrollPane(jtbleArticles);
-		articleScrollPane.setPreferredSize(new Dimension(600, getHeight()));
+		articleScrollPane.setPreferredSize(new Dimension(getWidth(), getHeight()));
 		articleScrollPane.setBorder(new TitledBorder("Retos Aceptados"));
-		add(articleScrollPane, BorderLayout.CENTER);
-
-		// Update East Panel
-		jPanelArticleDetails.removeAll();
-		jPanelArticleDetails = new JPanel(new GridLayout(5, 2, 10, 10));
-		jPanelArticleDetails.setBorder(new TitledBorder(""));
-		jPanelArticleDetails.setPreferredSize(new Dimension(0, getHeight())); // Remaining width
-
-		JPanel jPanelBidButton = new JPanel();
-		jPanelBidButton.add(btnBid);
-		jPanelArticleDetails.add(jPanelBidButton);
-
-		add(jPanelArticleDetails, BorderLayout.EAST);
+		centralPanel.add(articleScrollPane, BorderLayout.CENTER);
+		
+		
+		add(centralPanel, BorderLayout.CENTER);
+		
+		
 
 		refreshPanels();
+		
+		
 	}
 
 	private void refreshPanels() {
-		articleScrollPane.revalidate();
-		articleScrollPane.repaint();
+		centralPanel.revalidate();
+		centralPanel.repaint();
 		jPanelArticleDetails.revalidate();
 		jPanelArticleDetails.repaint();
 	}
