@@ -7,15 +7,12 @@ package es.deusto.sd.strava;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
-
 import es.deusto.sd.strava.dao.RetoRepository;
 import es.deusto.sd.strava.dao.SesionRepository;
 import es.deusto.sd.strava.dao.UsuarioRepository;
