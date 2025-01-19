@@ -167,8 +167,6 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 			// Enviar la solicitud y obtener la respuesta
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-			System.out.println("Response body: " + response.body());
-
 			// Procesar la respuesta
 			return switch (response.statusCode()) {
 			case 200 -> objectMapper.readValue(response.body(),
@@ -209,22 +207,6 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 			throw new RuntimeException("Error registrando usuario.", e);
 		}
 	}
-
-	/*
-	 * @Override public void logout(String token) { try { HttpRequest request =
-	 * HttpRequest.newBuilder() .uri(URI.create(BASE_URL + "/auth/logout"))
-	 * .header("Content-Type", "application/json")
-	 * .POST(HttpRequest.BodyPublishers.ofString(token)) .build();
-	 * 
-	 * HttpResponse<Void> response = httpClient.send(request,
-	 * HttpResponse.BodyHandlers.discarding());
-	 * 
-	 * switch (response.statusCode()) { case 204 -> {} // Logout successful case 401
-	 * -> throw new RuntimeException("Unauthorized: Invalid token, logout failed");
-	 * default -> throw new RuntimeException("Logout failed with status code: " +
-	 * response.statusCode()); } } catch (IOException | InterruptedException e) {
-	 * throw new RuntimeException("Error during logout", e); } }
-	 */
 
 	@Override
 	public String logIn(String email, String contrasenia) {
@@ -327,9 +309,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 							+ "&deporte=" + deporte + "&distancia=" + distancia + "&fechaInicio=" + fechaInicio
 							+ "&duracion=" + duracion))
 					.header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.noBody()).build();
-			System.out.println("3");
 			HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
-			System.out.println(request);
 			switch (response.statusCode()) {
 			case 200 -> {
 			} // Sesión creada exitosamente
