@@ -410,13 +410,6 @@ public class SwingClientGUI extends JFrame {
 		jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		consultarRetos(null, null);
 
-		jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
-			System.out.println(e.getValueIsAdjusting());
-			if (!e.getValueIsAdjusting()) {
-				// consultarRetos();
-			}
-		});
-
 		adjustColumnWidths(jtbleArticles);
 
 		articleScrollPane = new JScrollPane(jtbleArticles);
