@@ -273,7 +273,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 			return switch (response.statusCode()) {
 			case 200 -> objectMapper.readValue(response.body(),
 					objectMapper.getTypeFactory().constructCollectionType(List.class, RetoAceptado.class));
-			case 204 -> throw new RuntimeException("No Content: No hay retos aceptados");
+			case 204 -> throw new RuntimeException("No Content :(: No hay retos aceptados");
 			case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
 			case 500 -> throw new RuntimeException("Internal server error");
 			default -> throw new RuntimeException(
