@@ -1,7 +1,5 @@
 package es.deusto.sd.client.data;
 
-import java.time.LocalDate;
-
 public record RetoAceptado(
 		Long id,
 		Long idUsu,

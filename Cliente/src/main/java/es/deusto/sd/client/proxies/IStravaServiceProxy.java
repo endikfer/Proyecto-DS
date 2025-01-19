@@ -44,18 +44,6 @@ import es.deusto.sd.client.data.Usuario;
  * (Description generated with ChatGPT 4o mini)
  */
 public interface IStravaServiceProxy {
-
-	// Method to retrieve all categories
-	List<Category> getAllCategories();
-
-	// Method to retrieve articles by category name
-	List<Article> getArticlesByCategory(String categoryName, String currency);
-
-	// Method to get details of a specific article by ID
-	Article getArticleDetails(Long articleId, String currency);
-
-	// Method to place a bid on an article
-	void makeBid(Long articleId, Float amount, String currency, String token);
 	
 	List<Usuario> obtenerTodosLosUsuarios();
 	
@@ -65,7 +53,7 @@ public interface IStravaServiceProxy {
 	
 	String logIn(String email, String contrasenia);
 	
-	void LogOut(String token);
+	void logOut(String token);
 	
 	void crearReto(String nombre, String deporte, String fecha_inicio, 
 			String fecha_fin, Integer distancia, Integer tiempo, String token);
