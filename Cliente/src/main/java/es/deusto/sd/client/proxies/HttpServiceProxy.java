@@ -159,7 +159,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	}
 
 	@Override
-	public void crearReto(String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
+	public void crearReto(String nombre, String deporte, String fecha_inicio, String fecha_fin, Integer distancia,
 			Integer tiempo, String token) {
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
@@ -213,8 +213,6 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 
 			// Enviar la solicitud y obtener la respuesta
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-			System.out.println("Response body: " + response.body());
 
 			// Procesar la respuesta
 			return switch (response.statusCode()) {

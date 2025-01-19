@@ -57,7 +57,7 @@ public class SwingClientController {
         serviceProxy.makeBid(articleId, amount, currency, token);
     }
     
-    public void crearReto(String nombre, String deporte, LocalDate fecha_inicio, LocalDate fecha_fin, Integer distancia,
+    public void crearReto(String nombre, String deporte, String fecha_inicio, String fecha_fin, Integer distancia,
 			Integer tiempo) {
         serviceProxy.crearReto(nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo, token);
     }

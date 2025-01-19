@@ -20,7 +20,7 @@ public class Reto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
 	
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	public String nombre;
 	
 	@Enumerated(EnumType.STRING)

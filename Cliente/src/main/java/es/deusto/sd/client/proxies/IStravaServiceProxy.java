@@ -8,13 +8,13 @@ package es.deusto.sd.client.proxies;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import es.deusto.sd.client.data.Usuario;
-import es.deusto.sd.client.data.Sesion;
+
 import es.deusto.sd.client.data.Article;
 import es.deusto.sd.client.data.Category;
-import es.deusto.sd.client.data.Credentials;
 import es.deusto.sd.client.data.Reto;
 import es.deusto.sd.client.data.RetoAceptado;
+import es.deusto.sd.client.data.Sesion;
+import es.deusto.sd.client.data.Usuario;
 
 /**
  * IAuctionsServiceProxy interface defines a contract for communication 
@@ -67,8 +67,8 @@ public interface IStravaServiceProxy {
 	
 	void LogOut(String token);
 	
-	void crearReto(String nombre, String deporte, LocalDate fecha_inicio, 
-			LocalDate fecha_fin, Integer distancia, Integer tiempo, String token);
+	void crearReto(String nombre, String deporte, String fecha_inicio, 
+			String fecha_fin, Integer distancia, Integer tiempo, String token);
 	
 	List<Reto> consultarReto(String deporte, String fecha, String token);
 	

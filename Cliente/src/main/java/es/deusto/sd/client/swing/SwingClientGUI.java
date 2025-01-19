@@ -15,9 +15,12 @@ import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -236,12 +239,13 @@ public class SwingClientGUI extends JFrame {
 		btnBid.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CrearSesion(Long.valueOf(txtUserId.getText()),txtTitle.getText(),cbArticleSport.getSelectedItem().toString(),Double.valueOf(spinDistance.getValue().toString()),spinStartDate.getValue().toString(),Integer.parseInt(spinTime.getValue().toString()));
+				CrearSesion(Long.valueOf(txtUserId.getText()), txtTitle.getText(),
+						cbArticleSport.getSelectedItem().toString(), Double.valueOf(spinDistance.getValue().toString()),
+						spinStartDate.getValue().toString(), Integer.parseInt(spinTime.getValue().toString()));
 			}
 		});
 
 		JPanel buttonPanel = new JPanel(new FlowLayout());
-		
 
 		JTextField txtFecha = new JTextField(10);
 		buttonPanel.add(new JLabel("FechaInicio:"));
@@ -274,21 +278,21 @@ public class SwingClientGUI extends JFrame {
 
 		refreshPanels();
 	}
-	
 
 	private void CrearSesion(Long id, String titulo, String deporte, double distancia, String fechaInicio,
 			int duracion) {
-			try {
-				controller.crearSesion(id, titulo, deporte, distancia, parseString(fechaInicio), duracion);
+		try {
+			controller.crearSesion(id, titulo, deporte, distancia, parseString(fechaInicio), duracion);
 
-				SwingUtilities.invokeLater(() -> {
-					JOptionPane.showMessageDialog(this, "Reto creado correctamente!");
-				});
+			SwingUtilities.invokeLater(() -> {
+				JOptionPane.showMessageDialog(this, "Reto creado correctamente!");
+			});
 
-			} catch (RuntimeException e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-			}
-		};
+		} catch (RuntimeException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		}
+	};
+
 	public static LocalDate parseString(String dateString) throws DateTimeParseException {
 		if (dateString == null || dateString.trim().isEmpty()) {
 			throw new DateTimeParseException("Date string cannot be null or empty", dateString, 0);
@@ -297,12 +301,9 @@ public class SwingClientGUI extends JFrame {
 			return LocalDate.parse(dateString, DATE_FORMATTER);
 		} catch (DateTimeParseException e) {
 			System.err.println("Error parsing date: " + e.getMessage());
-			throw e; 
+			throw e;
 		}
 	}
-	
-	
-
 
 	private void ConsultarSesionFecha(String fechaInicioSeleccionado, String fechaFinalSeleccionada) {
 
@@ -327,7 +328,6 @@ public class SwingClientGUI extends JFrame {
 
 	};
 
-
 	private void Panel2() {
 		centralPanel.removeAll();
 
@@ -344,13 +344,11 @@ public class SwingClientGUI extends JFrame {
 		};
 		jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		consultarRetos(null, null);
-		
-		
-		
+
 		jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
 			System.out.println(e.getValueIsAdjusting());
 			if (!e.getValueIsAdjusting()) {
-				//consultarRetos();
+				// consultarRetos();
 			}
 		});
 
@@ -372,20 +370,34 @@ public class SwingClientGUI extends JFrame {
 		JButton btnFilterByDate = new JButton("Filtrar");
 		buttonPanel.add(btnFilterByDate);
 
+		btnFilterByDate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Obtener el valor del JSpinner (una instancia de Date)
+				Date selectedDate = (Date) txtFecha.getValue();
+
+				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+				String formattedDate = sdf.format(selectedDate);
+
+				consultarRetos(null, formattedDate);
+
+			}
+		});
+
 		JComboBox<String> cbDeportes = new JComboBox<>(new String[] { "Running", "Ciclismo" });
 		buttonPanel.add(new JLabel("Deporte:"));
 		buttonPanel.add(cbDeportes);
 
 		JButton btnFilterByDeporte = new JButton("Filtrar");
-		//btnFilterByDeporte.setFont(new Font("Arial", Font.PLAIN, 12)); 
+		// btnFilterByDeporte.setFont(new Font("Arial", Font.PLAIN, 12));
 		buttonPanel.add(btnFilterByDeporte);
-		
+
 		btnFilterByDeporte.addActionListener(e -> {
-		    // Obtener el valor seleccionado en el JComboBox
-		    String deporte = (String) cbDeportes.getSelectedItem();
-		    
-		    consultarRetos(deporte, null);
-		    
+			// Obtener el valor seleccionado en el JComboBox
+			String deporte = (String) cbDeportes.getSelectedItem();
+
+			consultarRetos(deporte, null);
+
 		});
 
 		buttonPanel.add(Box.createHorizontalGlue());
@@ -435,11 +447,79 @@ public class SwingClientGUI extends JFrame {
 		btnBid = new JButton("Crear Reto");
 		btnBid.setEnabled(true);
 		btnBid.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				CrearReto();
-			}
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Obtener los valores de cada componente
+		        String nombre = txtArticleName.getText(); // Texto del JTextArea
+		        String deporte = (String) cbArticleSport.getSelectedItem(); // Valor seleccionado en el JComboBox
+		        Date fechaInicioDate = (Date) spinStartDate.getValue(); // Valor del JSpinner (fecha de inicio)
+		        Date fechaFinDate = (Date) spinEndDate.getValue(); // Valor del JSpinner (fecha de fin)
+		        int distancia = (int) spinDistance.getValue(); // Valor del JSpinner (distancia)
+		        int tiempo = (int) spinTime.getValue(); // Valor del JSpinner (tiempo)
+
+		        // Convertir las fechas a String (formato "yyyy-MM-dd")
+		        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		        String fechaInicio = sdf.format(fechaInicioDate);
+		        String fechaFin = sdf.format(fechaFinDate);
+
+		        // Establecer hora a las 00:00:00 para comparar solo las fechas
+		        Calendar calInicio = Calendar.getInstance();
+		        calInicio.setTime(fechaInicioDate);
+		        calInicio.set(Calendar.HOUR_OF_DAY, 0);
+		        calInicio.set(Calendar.MINUTE, 0);
+		        calInicio.set(Calendar.SECOND, 0);
+		        calInicio.set(Calendar.MILLISECOND, 0);
+		        Date fechaInicioSinHora = calInicio.getTime();
+
+		        Calendar calFin = Calendar.getInstance();
+		        calFin.setTime(fechaFinDate);
+		        calFin.set(Calendar.HOUR_OF_DAY, 0);
+		        calFin.set(Calendar.MINUTE, 0);
+		        calFin.set(Calendar.SECOND, 0);
+		        calFin.set(Calendar.MILLISECOND, 0);
+		        Date fechaFinSinHora = calFin.getTime();
+
+		        // Comprobaciones antes de ejecutar CrearReto
+		        StringBuilder errores = new StringBuilder();
+
+		        // Verificar que el campo nombre no esté vacío
+		        if (nombre.trim().isEmpty()) {
+		            errores.append("El nombre del reto no puede estar vacío.\n");
+		        }
+
+		        // Verificar que la fecha de inicio sea anterior a la fecha de fin
+		        if (fechaInicioSinHora != null && fechaFinSinHora != null) {
+		            if (fechaInicioSinHora.after(fechaFinSinHora)) {
+		                errores.append("La fecha de inicio debe ser anterior a la fecha de fin.\n");
+		            }
+
+		            // Verificar que la fecha de fin sea posterior a la fecha de inicio
+		            if (fechaFinSinHora.before(fechaInicioSinHora)) {
+		                errores.append("La fecha de fin debe ser posterior a la fecha de inicio.\n");
+		            }
+
+		            // Verificar que las fechas de inicio y fin no sean iguales
+		            if (fechaInicioSinHora.equals(fechaFinSinHora)) {
+		                errores.append("La fecha de inicio no puede ser igual a la fecha de fin.\n");
+		            }
+		        }
+
+		        // Verificar que los campos distancia y tiempo no sean ambos cero ni ambos con valor
+		        if ((distancia == 0 && tiempo == 0) || (distancia != 0 && tiempo != 0)) {
+		            errores.append("Solo uno de los campos de distancia o tiempo puede tener valor distinto de cero.\n");
+		        }
+
+		        // Si hay errores, mostrar mensaje y no ejecutar CrearReto ni consultarRetos
+		        if (errores.length() > 0) {
+		            JOptionPane.showMessageDialog(null, errores.toString(), "Errores", JOptionPane.ERROR_MESSAGE);
+		        } else {
+		            // Llamar al método CrearReto pasándole los valores obtenidos
+		            CrearReto(nombre, deporte, fechaInicio, fechaFin, distancia, tiempo);
+		            consultarRetos(null, null);
+		        }
+		    }
 		});
+
 
 		JPanel jPanelBidButton = new JPanel();
 		jPanelBidButton.add(btnBid);
@@ -709,27 +789,14 @@ public class SwingClientGUI extends JFrame {
 		}
 	}
 
-	private void CrearReto() {
-		int selectedRow = jtbleArticles.getSelectedRow();
-		String currency = (String) currencyComboBox.getSelectedItem();
+	private void CrearReto(String nombre, String deporte, String fecha_inicio, String fecha_fin, Integer distancia,
+			Integer tiempo) {
 
-		if (selectedRow != -1) {
-			Long articleId = (Long) jtbleArticles.getValueAt(selectedRow, 0);
-			Float bidAmount = ((Integer) spinBidAmount.getValue()).floatValue();
+		try {
+			controller.crearReto(nombre, deporte, fecha_inicio, fecha_fin, distancia, tiempo);
 
-			try {
-				// controller.crearReto();
-
-				SwingUtilities.invokeLater(() -> {
-					JOptionPane.showMessageDialog(this, "Reto creado correctamente!");
-				});
-
-				SwingUtilities.invokeLater(() -> {
-					jtbleArticles.setRowSelectionInterval(selectedRow, selectedRow);
-				});
-			} catch (RuntimeException e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-			}
+		} catch (RuntimeException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
 		}
 	}
 
@@ -738,8 +805,6 @@ public class SwingClientGUI extends JFrame {
 		try {
 			// Llama al controlador para obtener la lista de retos
 			List<Reto> retos = controller.consultarRetos(deporte, fecha);
-			//List<Reto> retos2 = controller.consultarRetos(deporteSeleccionado, fechaSeleccionada);
-			System.out.println("lista obtenida.");
 
 			SwingUtilities.invokeLater(() -> {
 				// Limpia la tabla antes de llenarla
@@ -748,8 +813,8 @@ public class SwingClientGUI extends JFrame {
 
 				// Llena la tabla con los datos de los retos
 				for (Reto reto : retos) {
-					model.addRow(new Object[] { reto.id(), reto.nombre(), reto.deporte(), reto.fecha_inicio(), reto.fecha_fin(),
-							reto.distancia(), reto.tiempo() });
+					model.addRow(new Object[] { reto.id(), reto.nombre(), reto.deporte(), reto.fecha_inicio(),
+							reto.fecha_fin(), reto.distancia(), reto.tiempo() });
 				}
 			});
 		} catch (RuntimeException e) {
