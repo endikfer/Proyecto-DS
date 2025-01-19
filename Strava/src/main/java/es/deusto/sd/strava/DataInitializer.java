@@ -36,18 +36,13 @@ public class DataInitializer {
 	        usuariorepo.deleteAll();
 	        sesionrepo.deleteAll();
 	        
+			//Inicializacion de usuarios
 	        Usuario Ana = new Usuario("Ana López", "contact@meta.com", Login.META, "2000-12-01", 62.0f, 165, 180, 55);
 	        Usuario Maria = new Usuario("María Gómez", "help@meta.com", Login.META, "1993-10-10", 68.0f, 170, 185, 58);
 	        Usuario Juan = new Usuario("Juan Pérez", "info@gmail.com", Login.GOOGLE, "1985-07-25", 70.5f, 175, 190, 60);
 	        Usuario Carlos = new Usuario("Carlos Díaz", "support@gmail.com", Login.GOOGLE, "1990-05-15", 80.0f, 180, 195, 65);
 
 	        usuariorepo.saveAll(List.of(Ana, Maria, Juan, Carlos));
-
-			//usuarioservice.logIn("contact@meta.com", "1a2b3c4d");
-			//Thread.sleep(100);
-	        //usuarioservice.logIn("support@gmail.com", "456");
-	        //Thread.sleep(100);
-	        //usuarioservice.logIn("info@gmail.com", "123");
 
 			logger.info("Users saved!");			
 			

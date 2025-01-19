@@ -74,7 +74,6 @@ public class UsuarioService {
         
         if (serviceGateway.validateLogin(email, contrasenia)) {
                 token = generarToken(usuario);
-                System.out.println(tokens);
                 return Optional.of(token);
         }else {
 
@@ -91,7 +90,6 @@ public class UsuarioService {
     public Optional<Boolean> logout(String token) {
         if (tokens.containsKey(token)) {
             tokens.remove(token);
-            System.out.println(tokens);
             return Optional.of(true);
         } else {
             return Optional.empty();

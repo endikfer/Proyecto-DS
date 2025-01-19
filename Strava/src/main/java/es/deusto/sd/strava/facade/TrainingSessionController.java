@@ -75,8 +75,6 @@ public class TrainingSessionController {
 	public ResponseEntity<List<SesionDTO>> getSesionesPorFecha(@RequestParam(value = "startDate") String startDate,
 			@RequestParam(value = "endDate") String endDate) {
 		try {
-			LocalDate start = LocalDate.parse(startDate);
-			LocalDate end = LocalDate.parse(endDate);
 
 			List<SesionDTO> sesionesDTO = trainingSessionService.getSesionesPorFecha(startDate, endDate);
 
