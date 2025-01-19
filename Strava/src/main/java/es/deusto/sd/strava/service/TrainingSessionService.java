@@ -59,11 +59,12 @@ public class TrainingSessionService {
         List<SesionDTO> filteredSessions = new ArrayList<>();
         LocalDate fechaInicio = LocalDate.parse(startDate);
         LocalDate fechaFin = LocalDate.parse(endDate);
-        for (Sesion sesion : sesiones) {
+        for (Sesion sesion : sesionrepo.findAll()) {
             if (!sesion.getFechaInicio().isBefore(fechaInicio) && !sesion.getFechaInicio().isAfter(fechaFin)) {
                 filteredSessions.add(toDTO(sesion));
             }
         }
+        System.out.println(filteredSessions);
         return filteredSessions;
     }
 
