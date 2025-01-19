@@ -1,6 +1,7 @@
 package es.deusto.sd.strava.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -62,7 +63,6 @@ public class RetoService {
 
             // Convierte la fecha desde el parámetro si se pasa, sino usa la fecha actual
             LocalDate fechaBusqueda = (fechaFiltroStr != null && !fechaFiltroStr.isEmpty()) ? LocalDate.parse(fechaFiltroStr) : LocalDate.now();
-
             // Filtra los retos por fecha
             List<Reto> retosFiltradosPorFecha = new ArrayList<>();
             for (Reto reto : retos) {
@@ -80,7 +80,6 @@ public class RetoService {
                     }
                 }
             }
-
             // Si no se filtra por deporte, mantén los retos filtrados solo por fecha
             List<Reto> resultadosFinales = (deporteFiltro != null && !deporteFiltro.isEmpty()) ? retosFiltradosPorDeporte : retosFiltradosPorFecha;
 
@@ -190,12 +189,16 @@ public class RetoService {
     }
     
     private RetoDTO retoToDTO(Reto reto) {
-		return new RetoDTO( reto.getId(),
-				reto.getNombre(),
-				reto.getDeporte().name().toLowerCase(),
-				reto.getFecha_inicio(),
-				reto.getFecha_fin(),
-				reto.getDistancia(), 
-				reto.getTiempo());
+        // Formato para las fechas
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return new RetoDTO(
+                reto.getId(),
+                reto.getNombre(),
+                reto.getDeporte().name().toLowerCase(),
+                reto.getFecha_inicio().format(formatter),  // Convertir LocalDate a String
+                reto.getFecha_fin().format(formatter),     // Convertir LocalDate a String
+                reto.getDistancia(), 
+                reto.getTiempo()
+        );
 	}
 }
