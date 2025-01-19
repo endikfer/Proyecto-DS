@@ -98,7 +98,7 @@ public class SwingClientGUI extends JFrame {
 		setTitle("Auctions Client");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1024, 400);
-		setResizable(false);
+		setResizable(true);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 
@@ -245,6 +245,7 @@ public class SwingClientGUI extends JFrame {
 		});
 
 		JPanel buttonPanel = new JPanel(new FlowLayout());
+		
 
 		JTextField txtFecha = new JTextField(10);
 		buttonPanel.add(new JLabel("FechaInicio:"));
@@ -346,7 +347,12 @@ public class SwingClientGUI extends JFrame {
 			}
 		};
 		jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		consultarRetos();
+		
+		
+		
 		jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
+			System.out.println(e.getValueIsAdjusting());
 			if (!e.getValueIsAdjusting()) {
 				consultarRetos();
 			}
@@ -362,7 +368,8 @@ public class SwingClientGUI extends JFrame {
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		JTextField txtFecha = new JTextField(10);
+		JSpinner txtFecha = new JSpinner(new SpinnerDateModel());
+		txtFecha.setEditor(new JSpinner.DateEditor(txtFecha, "yyyy-MM-dd"));
 		buttonPanel.add(new JLabel("Fecha:"));
 		buttonPanel.add(txtFecha);
 
@@ -516,23 +523,6 @@ public class SwingClientGUI extends JFrame {
 			String headerValue = (String) tableColumn.getHeaderValue();
 			int headerWidth = metrics.stringWidth(headerValue) + 20; // Añadimos un margen
 			tableColumn.setPreferredWidth(headerWidth);
-		}
-	}
-
-	private void populateTable(List<Reto> retos) {
-		DefaultTableModel model = (DefaultTableModel) jtbleArticles.getModel();
-		model.setRowCount(0); // Limpiar la tabla
-
-		for (Reto reto : retos) {
-			model.addRow(new Object[] {
-//                reto.getId(),
-//                reto.getNombre(),
-//                reto.getDeporte(),
-//                reto.getFechaInicio(),
-//                reto.getFechaFin(),
-//                reto.getDistancia(),
-//                reto.getTiempo()
-			});
 		}
 	}
 
@@ -744,12 +734,13 @@ public class SwingClientGUI extends JFrame {
 		// String deporteSeleccionado2 = (String) deporteComboBox.getSelectedItem();
 		// String fechaSeleccionada2 = fechaTextField.getText();
 
-		String deporteSeleccionado = "0";
-		String fechaSeleccionada = "0";
+		String deporteSeleccionado = null;
+		String fechaSeleccionada = null;
 
 		try {
 			// Llama al controlador para obtener la lista de retos
 			List<Reto> retos2 = controller.consultarRetos(deporteSeleccionado, fechaSeleccionada);
+			System.out.println("lista obtenida.");
 
 			SwingUtilities.invokeLater(() -> {
 				// Limpia la tabla antes de llenarla
