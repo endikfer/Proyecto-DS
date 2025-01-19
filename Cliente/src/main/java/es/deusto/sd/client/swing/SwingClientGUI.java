@@ -18,11 +18,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-<<<<<<< HEAD
-=======
-import java.util.Optional;
-
->>>>>>> 2306c8c16a08568066cc7551da52853f10374c50
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
