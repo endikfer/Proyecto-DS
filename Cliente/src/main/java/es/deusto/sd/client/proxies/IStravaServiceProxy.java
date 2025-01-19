@@ -65,7 +65,7 @@ public interface IStravaServiceProxy {
 	
 	List<Sesion> getSesionesPorFecha(String startDate, String endDate);
 	
-	void crearSesion(Long id,String titulo,String deporte, double distancia,LocalDate fechaInicio,int duracion);
+	void crearSesion(String titulo,String deporte, double distancia,String fechaInicio,int duracion);
 
 	
 }

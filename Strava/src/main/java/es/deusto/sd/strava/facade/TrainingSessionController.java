@@ -1,6 +1,7 @@
 package es.deusto.sd.strava.facade;
 
 import es.deusto.sd.strava.dto.SesionDTO;
+import es.deusto.sd.strava.entity.Deporte;
 import es.deusto.sd.strava.entity.Sesion;
 import es.deusto.sd.strava.service.TrainingSessionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,21 +31,32 @@ public class TrainingSessionController {
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	// Crear una nueva sesión
 	@PostMapping("/crear")
-	public ResponseEntity<Void> crearSesion(@RequestParam("sesionId") Long id, @RequestParam("titulo") String titulo,
-			@RequestParam("deporte") String deporte, @RequestParam("distancia") double distancia,
-			@RequestParam("fechaInicio") String fechaInicio, @RequestParam("dur") int duracion) {
+	public ResponseEntity<Void> crearSesion(
+			@RequestParam("titulo") String titulo,
+			@RequestParam("deporte") String deporte, 
+			@RequestParam("distancia") double distancia,
+			@RequestParam("fechaInicio") String fechaInicio, 
+			@RequestParam("duracion") int duracion) {
 		try {
-			SesionDTO sesionDTO = new SesionDTO(titulo, deporte, distancia, fechaInicio, duracion);
-			trainingSessionService.crearSesion(sesionDTO);
+// Definir el formato de la fecha
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+// Convertir fechaInicio de String a LocalDate
+			LocalDate fechaInicioParsed = LocalDate.parse(fechaInicio, formatter);
+
+// Crear la sesión con la fecha convertida
+			Sesion sesion = new Sesion(titulo, Deporte.valueOf(deporte.toUpperCase()), distancia, fechaInicioParsed,
+					duracion);
+
+// Llamar al servicio para guardar la sesión
+			trainingSessionService.crearSesion(sesion);
 
 			return new ResponseEntity<>(HttpStatus.OK);
-
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Error de solicitud mal formada
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@Operation(summary = "Obtener sesiones recientes", description = "Devuelve las ultimas 5 sesiones", responses = {
@@ -54,19 +66,18 @@ public class TrainingSessionController {
 	// Obtener las últimas 5 sesiones
 	@GetMapping("/recientes")
 	public ResponseEntity<List<SesionDTO>> getSesionesRecientes() {
-	    try {
-	        List<Sesion> sesiones = trainingSessionService.getSesionesRecientes();
-	        if (sesiones.isEmpty()) {
+		try {
+			List<Sesion> sesiones = trainingSessionService.getSesionesRecientes();
+			if (sesiones.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	        }
-	        List<SesionDTO> sesionesDTO = new ArrayList<SesionDTO>();
-	        sesiones.forEach(sesion -> sesionesDTO.add(toDTO(sesion)));
+			}
+			List<SesionDTO> sesionesDTO = new ArrayList<SesionDTO>();
+			sesiones.forEach(sesion -> sesionesDTO.add(toDTO(sesion)));
 			return new ResponseEntity<>(sesionesDTO, HttpStatus.OK);
-	    } catch (Exception e) {
+		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
+		}
 	}
-
 
 	@Operation(summary = "Obtener sesiones entre fechas", description = "Devuelve sesiones entre un rango de fechas", responses = {
 			@ApiResponse(responseCode = "200", description = "Sesiones obtenidas correctamente"),
@@ -94,20 +105,16 @@ public class TrainingSessionController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-    // Método para convertir Sesion a SesionDTO
-private SesionDTO toDTO(Sesion sesion) {
-    // Formato para las fechas
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    return new SesionDTO(
-            sesion.getId(),
-            sesion.getTitulo(),
-            sesion.getDeporte().name().toLowerCase(),  // Convertir Enum a minúsculas
-            sesion.getDistancia(),
-            sesion.getFechaInicio().format(formatter),  // Convertir LocalDate a String
-            sesion.getDuracion()
-    );
-}
 
+	// Método para convertir Sesion a SesionDTO
+	private SesionDTO toDTO(Sesion sesion) {
+		// Formato para las fechas
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		return new SesionDTO(sesion.getId(), sesion.getTitulo(), sesion.getDeporte().name().toLowerCase(), // Convertir
+																											// Enum a
+																											// minúsculas
+				sesion.getDistancia(), sesion.getFechaInicio().format(formatter), // Convertir LocalDate a String
+				sesion.getDuracion());
+	}
 
 }

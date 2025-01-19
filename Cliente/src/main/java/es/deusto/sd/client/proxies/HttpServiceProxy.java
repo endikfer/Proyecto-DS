@@ -132,25 +132,25 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 
 	@Override
 	public void aceptarReto(Long retoId, String token) {
-	    try {
-	        HttpRequest request = HttpRequest.newBuilder()
-	            .uri(URI.create(BASE_URL + "/acciones/retos/aceptar?retoId=" + retoId))
-	            .header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(token))
-				.build();
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(BASE_URL + "/acciones/retos/" + retoId + "/aceptar?Authorization=" + token))
+					.header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.noBody()).build();
 
-	        HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
-	        
+			HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
 
-	        switch (response.statusCode()) {
-	            case 200 -> System.out.println("Reto aceptado correctamente" + retoId);
-	            case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
-	            case 409 -> throw new RuntimeException("Conflict: El reto ya fue aceptado previamente");
-	            case 500 -> throw new RuntimeException("Internal server error");
-	            default -> throw new RuntimeException("Fallo al aceptar el reto con el código de estado: " + response.statusCode());
-	        }
-	    } catch (IOException | InterruptedException e) {
-	        throw new RuntimeException("Error aceptando el reto.", e);
-	    }
+			switch (response.statusCode()) {
+			case 200 -> {
+			} // Reto aceptado correctamente
+			case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
+			case 404 -> throw new RuntimeException("Not Found: Reto no encontrado");
+			case 500 -> throw new RuntimeException("Internal server error");
+			default -> throw new RuntimeException(
+					"Fallo al aceptar el reto con el código de estado: " + response.statusCode());
+			}
+		} catch (IOException | InterruptedException e) {
+			throw new RuntimeException("Error aceptando el reto.", e);
+		}
 	}
 
 	@Override
@@ -280,10 +280,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	                .header("Content-Type", "application/json")
 	                .GET()
 	                .build();
-			System.out.println("HOLA");
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println(response.body());
-			System.out.println(response.statusCode());
 			return switch (response.statusCode()) {
 			case 200 -> objectMapper.readValue(response.body(),
 					objectMapper.getTypeFactory().constructCollectionType(List.class, Sesion.class));
@@ -293,6 +290,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 				throw new RuntimeException("Fallo al acceder a las sesiones recientes: " + response.statusCode());
 			};
 		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
 			throw new RuntimeException("Error accediendo a las sesiones recientes.", e);
 		}
 	}
@@ -322,17 +320,17 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	}
 
 	@Override
-	public void crearSesion(Long sesionId, String titulo, String deporte, double distancia, LocalDate fechaInicio,
+	public void crearSesion(String titulo, String deporte, double distancia, String fechaInicio,
 			int duracion) {
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create(BASE_URL + "/sesiones/crear/?sesionId=" + sesionId + "&titulo=" + titulo
+					.uri(URI.create(BASE_URL + "/sesiones/crear?titulo=" + titulo
 							+ "&deporte=" + deporte + "&distancia=" + distancia + "&fechaInicio=" + fechaInicio
 							+ "&duracion=" + duracion))
 					.header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.noBody()).build();
-
+			System.out.println("3");
 			HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
-
+			System.out.println(request);
 			switch (response.statusCode()) {
 			case 200 -> {
 			} // Sesión creada exitosamente

@@ -41,9 +41,8 @@ public class Sesion {
 		super();
 	}
 
-	public Sesion(Long id, String titulo, Deporte deporte, double distancia,
+	public Sesion( String titulo, Deporte deporte, double distancia,
                   LocalDate fechaInicio, int duracion) {
-        this.id = id;
         this.titulo = titulo;
         this.deporte = deporte;
         this.distancia = distancia;

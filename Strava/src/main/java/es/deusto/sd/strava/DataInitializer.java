@@ -61,11 +61,11 @@ public class DataInitializer {
 			logger.info("Retos saved!");
 			
 			// Inicialización de sesiones de entrenamiento
-			Sesion s1 = new Sesion(null, "Morning Run", Deporte.RUNNING, 5.0, LocalDate.now().minusDays(2), 45);
-			Sesion s2 = new Sesion(null, "Evening Ride", Deporte.CICLISMO, 20.0, LocalDate.now().minusDays(1), 90);
-			Sesion s3 = new Sesion(null, "Marathon Practice", Deporte.RUNNING, 1.0, LocalDate.now().minusDays(3), 120);
-			Sesion s4 = new Sesion(null, "Cycling Challenge", Deporte.CICLISMO, 40.0, LocalDate.now().minusDays(5), 80);
-			Sesion s5 = new Sesion(null, "Weekend Walk", Deporte.RUNNING, 3.5, LocalDate.now().minusDays(7), 30);
+			Sesion s1 = new Sesion( "Morning Run", Deporte.RUNNING, 5.0, LocalDate.now().minusDays(2), 45);
+			Sesion s2 = new Sesion( "Evening Ride", Deporte.CICLISMO, 20.0, LocalDate.now().minusDays(1), 90);
+			Sesion s3 = new Sesion( "Marathon Practice", Deporte.RUNNING, 1.0, LocalDate.now().minusDays(3), 120);
+			Sesion s4 = new Sesion( "Cycling Challenge", Deporte.CICLISMO, 40.0, LocalDate.now().minusDays(5), 80);
+			Sesion s5 = new Sesion( "Weekend Walk", Deporte.RUNNING, 3.5, LocalDate.now().minusDays(7), 30);
 
 			sesionrepo.saveAll(List.of(s1, s2, s3, s4, s5));
 

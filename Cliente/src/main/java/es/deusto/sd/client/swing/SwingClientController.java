@@ -88,8 +88,8 @@ public class SwingClientController {
 		return serviceProxy.getSesionesPorFecha(startDate, endDate);
 	}
 	
-	public void crearSesion(Long id,String titulo,String deporte, double distancia,LocalDate fechaInicio,int duracion) {
-		serviceProxy.crearSesion(id, titulo, deporte, distancia, fechaInicio, duracion);
+	public void crearSesion(String titulo,String deporte, double distancia,String fechaInicio,int duracion) {
+		serviceProxy.crearSesion( titulo, deporte, distancia, fechaInicio, duracion);
 	}
 
 }
