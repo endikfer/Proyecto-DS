@@ -133,8 +133,6 @@ public class RetoService {
             acptado = true;
         }   
         
-        System.out.println("Reto aceptado: " + a + ", para usuario: " + UsuId);
-        System.out.println("Contenido actual de retoADTO: " + retoADTO);
         
         return acptado;
     }
@@ -192,7 +190,6 @@ public class RetoService {
             lista.add(nuevoReto);
         }
         
-        System.out.println("Retos aceptados para usuario " + UsuId + ": " + retosUsuario);
 
         return lista;
     }
