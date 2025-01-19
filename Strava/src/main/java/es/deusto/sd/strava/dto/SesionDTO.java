@@ -1,7 +1,5 @@
 package es.deusto.sd.strava.dto;
 
-import java.time.LocalDate;
-
 public class SesionDTO {
 
     private Long id;// Solo necesario cuando se devuelve la sesión

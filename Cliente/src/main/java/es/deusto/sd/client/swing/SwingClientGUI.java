@@ -204,9 +204,6 @@ public class SwingClientGUI extends JFrame {
 		btnBid.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				crearSesion(txtTitle.getText(),
-						cbArticleSport.getSelectedItem().toString(), Double.valueOf(spinDistance.getValue().toString()),
-						spinStartDate.getValue().toString(), Integer.parseInt(spinTime.getValue().toString()));
 				// Obtener los valores de los componentes
 				String titulo = txtTitle.getText().trim(); // Eliminar espacios innecesarios
 				String deporte = cbArticleSport.getSelectedItem().toString();
@@ -474,26 +471,6 @@ public class SwingClientGUI extends JFrame {
 
 		buttonPanel.add(btnAcceptRetos);
 
-		btnAcceptRetos.addActionListener(e -> {
-			int selectedRow = jtbleArticles.getSelectedRow();
-			if (selectedRow != -1) {
-				// Obtener el ID del reto seleccionado
-				Long retoId = (Long) jtbleArticles.getValueAt(selectedRow, 0);
-				try {
-					// Llamar al método aceptarReto en el controller
-					controller.aceptarReto(retoId);
-					JOptionPane.showMessageDialog(btnAcceptRetos, "Reto aceptado con éxito.", "Éxito",
-							JOptionPane.INFORMATION_MESSAGE);
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(btnAcceptRetos, "Error al aceptar el reto: " + ex.getMessage(),
-							"Error", JOptionPane.ERROR_MESSAGE);
-				}
-			} else {
-				JOptionPane.showMessageDialog(btnAcceptRetos, "Por favor, selecciona un reto antes de aceptar.",
-						"Advertencia", JOptionPane.WARNING_MESSAGE);
-			}
-		});
-
 		centralPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		add(centralPanel, BorderLayout.CENTER);
@@ -535,69 +512,67 @@ public class SwingClientGUI extends JFrame {
 		btnBid = new JButton("Crear Reto");
 		btnBid.setEnabled(true);
 		btnBid.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Obtener los valores de cada componente
-				String nombre = txtArticleName.getText(); // Texto del JTextArea
-				String deporte = (String) cbArticleSport.getSelectedItem(); // Valor seleccionado en el JComboBox
-				Date fechaInicioDate = (Date) spinStartDate.getValue(); // Valor del JSpinner (fecha de inicio)
-				Date fechaFinDate = (Date) spinEndDate.getValue(); // Valor del JSpinner (fecha de fin)
-				int distancia = (int) spinDistance.getValue(); // Valor del JSpinner (distancia)
-				int tiempo = (int) spinTime.getValue(); // Valor del JSpinner (tiempo)
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Obtener los valores de cada componente
+		        String nombre = txtArticleName.getText(); // Texto del JTextArea
+		        String deporte = (String) cbArticleSport.getSelectedItem(); // Valor seleccionado en el JComboBox
+		        Date fechaInicioDate = (Date) spinStartDate.getValue(); // Valor del JSpinner (fecha de inicio)
+		        Date fechaFinDate = (Date) spinEndDate.getValue(); // Valor del JSpinner (fecha de fin)
+		        int distancia = (int) spinDistance.getValue(); // Valor del JSpinner (distancia)
+		        int tiempo = (int) spinTime.getValue(); // Valor del JSpinner (tiempo)
 
-				// Convertir las fechas a String (formato "yyyy-MM-dd")
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				String fechaInicio = sdf.format(fechaInicioDate);
-				String fechaFin = sdf.format(fechaFinDate);
+		        // Convertir las fechas a String (formato "yyyy-MM-dd")
+		        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		        String fechaInicio = sdf.format(fechaInicioDate);
+		        String fechaFin = sdf.format(fechaFinDate);
 
-				// Establecer hora a las 00:00:00 para comparar solo las fechas
-				Calendar calInicio = Calendar.getInstance();
-				calInicio.setTime(fechaInicioDate);
-				calInicio.set(Calendar.HOUR_OF_DAY, 0);
-				calInicio.set(Calendar.MINUTE, 0);
-				calInicio.set(Calendar.SECOND, 0);
-				calInicio.set(Calendar.MILLISECOND, 0);
-				Date fechaInicioSinHora = calInicio.getTime();
+		        // Establecer hora a las 00:00:00 para comparar solo las fechas
+		        Calendar calInicio = Calendar.getInstance();
+		        calInicio.setTime(fechaInicioDate);
+		        calInicio.set(Calendar.HOUR_OF_DAY, 0);
+		        calInicio.set(Calendar.MINUTE, 0);
+		        calInicio.set(Calendar.SECOND, 0);
+		        calInicio.set(Calendar.MILLISECOND, 0);
+		        Date fechaInicioSinHora = calInicio.getTime();
 
-				Calendar calFin = Calendar.getInstance();
-				calFin.setTime(fechaFinDate);
-				calFin.set(Calendar.HOUR_OF_DAY, 0);
-				calFin.set(Calendar.MINUTE, 0);
-				calFin.set(Calendar.SECOND, 0);
-				calFin.set(Calendar.MILLISECOND, 0);
-				Date fechaFinSinHora = calFin.getTime();
+		        Calendar calFin = Calendar.getInstance();
+		        calFin.setTime(fechaFinDate);
+		        calFin.set(Calendar.HOUR_OF_DAY, 0);
+		        calFin.set(Calendar.MINUTE, 0);
+		        calFin.set(Calendar.SECOND, 0);
+		        calFin.set(Calendar.MILLISECOND, 0);
+		        Date fechaFinSinHora = calFin.getTime();
 
-				// Comprobaciones antes de ejecutar CrearReto
-				StringBuilder errores = new StringBuilder();
+		        // Comprobaciones antes de ejecutar CrearReto
+		        StringBuilder errores = new StringBuilder();
 
-				// Verificar que el campo nombre no esté vacío
-				if (nombre.trim().isEmpty()) {
-					errores.append("El nombre del reto no puede estar vacío.\n");
-				}
+		        // Verificar que el campo nombre no esté vacío
+		        if (nombre.trim().isEmpty()) {
+		            errores.append("El nombre del reto no puede estar vacío.\n");
+		        }
 
-				// Verificar que la fecha de inicio sea anterior a la fecha de fin
-				if (fechaInicioSinHora != null && fechaFinSinHora != null) {
-					if (fechaInicioSinHora.after(fechaFinSinHora)) {
-						errores.append("La fecha de inicio debe ser anterior a la fecha de fin.\n");
-					}
+		        // Verificar que la fecha de inicio sea anterior a la fecha de fin
+		        if (fechaInicioSinHora != null && fechaFinSinHora != null) {
+		            if (fechaInicioSinHora.after(fechaFinSinHora)) {
+		                errores.append("La fecha de inicio debe ser anterior a la fecha de fin.\n");
+		            }
 
-					// Verificar que la fecha de fin sea posterior a la fecha de inicio
-					if (fechaFinSinHora.before(fechaInicioSinHora)) {
-						errores.append("La fecha de fin debe ser posterior a la fecha de inicio.\n");
-					}
+		            // Verificar que la fecha de fin sea posterior a la fecha de inicio
+		            if (fechaFinSinHora.before(fechaInicioSinHora)) {
+		                errores.append("La fecha de fin debe ser posterior a la fecha de inicio.\n");
+		            }
 
-					// Verificar que las fechas de inicio y fin no sean iguales
-					if (fechaInicioSinHora.equals(fechaFinSinHora)) {
-						errores.append("La fecha de inicio no puede ser igual a la fecha de fin.\n");
-					}
-				}
+		            // Verificar que las fechas de inicio y fin no sean iguales
+		            if (fechaInicioSinHora.equals(fechaFinSinHora)) {
+		                errores.append("La fecha de inicio no puede ser igual a la fecha de fin.\n");
+		            }
+		        }
 
-				// Verificar que los campos distancia y tiempo no sean ambos cero ni ambos con
-				// valor
-				if ((distancia == 0 && tiempo == 0) || (distancia != 0 && tiempo != 0)) {
-					errores.append(
-							"Solo uno de los campos de distancia o tiempo puede tener valor distinto de cero.\n");
-				}
+		        // Verificar que los campos distancia y tiempo no sean ambos cero ni ambos con valor
+		        if ((distancia == 0 && tiempo == 0) || (distancia != 0 && tiempo != 0)) {
+		            errores.append("Solo uno de los campos de distancia o tiempo puede tener valor distinto de cero.\n");
+		        }
 
 		        // Si hay errores, mostrar mensaje y no ejecutar CrearReto ni consultarRetos
 		        if (errores.length() > 0) {
@@ -610,6 +585,7 @@ public class SwingClientGUI extends JFrame {
 		    }
 		});
 
+
 		JPanel jPanelBidButton = new JPanel();
 		jPanelBidButton.add(btnBid);
 		jPanelArticleDetails.add(jPanelBidButton);
@@ -618,6 +594,7 @@ public class SwingClientGUI extends JFrame {
 
 		refreshPanels();
 	}
+
 
 	private void panel3() {
 		centralPanel.removeAll();

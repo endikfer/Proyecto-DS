@@ -5,7 +5,6 @@
  */
 package es.deusto.sd.client.swing;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import es.deusto.sd.client.data.Reto;

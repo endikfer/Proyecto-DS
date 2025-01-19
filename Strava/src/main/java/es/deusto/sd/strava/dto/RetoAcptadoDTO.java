@@ -1,6 +1,5 @@
 package es.deusto.sd.strava.dto;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 public class RetoAcptadoDTO {
