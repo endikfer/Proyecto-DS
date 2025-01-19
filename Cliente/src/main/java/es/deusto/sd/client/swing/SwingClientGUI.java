@@ -60,8 +60,8 @@ public class SwingClientGUI extends JFrame {
 	private final SwingClientController controller;
 
 	// Default login credentials
-	private String defaultEmail = "contact@meta.com";
-	private String defaultPassword = "1a2b3c4d";
+	private String defaultEmail = "info@gmail.com";
+	private String defaultPassword = "123";
 
 	private JLabel logoutLabel;
 	private JComboBox<String> currencyComboBox;
