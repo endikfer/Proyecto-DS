@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class TrainingSessionService {
 
     private final List<Sesion> sesiones = new ArrayList<>();
-    private Long Id = 1L;
+    private Long id = 1L;
     private SesionRepository sesionrepo;
     
     public TrainingSessionService(SesionRepository sesionrepo) {
@@ -24,7 +24,7 @@ public class TrainingSessionService {
     // Crear una nueva sesión
     public void crearSesion(SesionDTO dto) {
         Sesion sesion = new Sesion();
-        sesion.setId(Id++); 
+        sesion.setId(id++); 
         sesion.setTitulo(dto.getTitulo());
         sesion.setDeporte(Deporte.valueOf(dto.getDeporte().toUpperCase())); 
         sesion.setDistancia(dto.getDistancia());
@@ -37,14 +37,14 @@ public class TrainingSessionService {
 
     // Obtener las 5 últimas sesiones
     public List<Sesion> getSesionesRecientes() {
-        List<Sesion> Sessions = sesionrepo.findAll();
+        List<Sesion> sessions = sesionrepo.findAll();
 
-        int totalSessions = Sessions.size();
+        int totalSessions = sessions.size();
         int limit = totalSessions > 5 ? 5 : totalSessions; 
         
         List<Sesion> recentSessions = new ArrayList<>();
         for (int i = totalSessions - limit; i < totalSessions; i++) {
-            Sesion sesion = Sessions.get(i); 
+            Sesion sesion = sessions.get(i); 
             recentSessions.add(sesion);
         }
 

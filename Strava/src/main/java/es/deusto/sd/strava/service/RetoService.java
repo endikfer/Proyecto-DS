@@ -114,13 +114,13 @@ public class RetoService {
 		}
 	}
 
-	public boolean aceptarReto(Long retoId, Long UsuId) {
+	public boolean aceptarReto(Long retoId, Long usuId) {
 		boolean acptado = false;
 
-		System.out.println("RetoId recibido: " + retoId + "para el usuario:" + UsuId);
+		System.out.println("RetoId recibido: " + retoId + "para el usuario:" + usuId);
 
-		if (!retoADTO.containsKey(UsuId)) {
-			retoADTO.put(UsuId, new ArrayList<>());
+		if (!retoADTO.containsKey(usuId)) {
+			retoADTO.put(usuId, new ArrayList<>());
 		}
 
 		Reto r = obtenerReto(retoId);
@@ -128,11 +128,11 @@ public class RetoService {
 		Integer d = r.getDistancia();
 		Integer t = r.getTiempo();
 
-		RetoAcptadoDTO a = new RetoAcptadoDTO(r.getId(), UsuId, r.getNombre(), r.getDeporte().name(),
+		RetoAcptadoDTO a = new RetoAcptadoDTO(r.getId(), usuId, r.getNombre(), r.getDeporte().name(),
 				r.getFecha_inicio().toString(), r.getFecha_fin().toString(), d, t, 0.00);
 
-		if (!retoADTO.get(UsuId).contains(a)) {
-			retoADTO.get(UsuId).add(a);
+		if (!retoADTO.get(usuId).contains(a)) {
+			retoADTO.get(usuId).add(a);
 			acptado = true;
 		}
 
@@ -142,9 +142,9 @@ public class RetoService {
 	public Double calcularProgresoReto(RetoAcptadoDTO r) {
 
 		// Obtiene las sesiones dentro del rango de fechas del reto
-		List<SesionDTO> ListaS = tss.getSesionesPorFecha(r.getFecha_inicio().toString(), r.getFecha_fin().toString());
-		if (ListaS == null) {
-			ListaS = new ArrayList<>();
+		List<SesionDTO> listaS = tss.getSesionesPorFecha(r.getFecha_inicio().toString(), r.getFecha_fin().toString());
+		if (listaS == null) {
+			listaS = new ArrayList<>();
 		}
 
 		double p = 0.0; // Progreso acumulado (distancia o tiempo)
@@ -152,14 +152,14 @@ public class RetoService {
 
 		// Calcula el progreso basado en tiempo o distancia
 		if (r.getTiempo() != null && r.getTiempo() > 0) {
-			for (SesionDTO s : ListaS) {
+			for (SesionDTO s : listaS) {
 				if (r.getDeporte().toUpperCase().equals(s.getDeporte().toUpperCase())) {
 					p += s.getDuracion(); // Suma la duración de las sesiones
 				}
 			}
 			progreso = p / r.getTiempo();
 		} else if (r.getDistancia() != null && r.getDistancia() > 0) {
-			for (SesionDTO s : ListaS) {
+			for (SesionDTO s : listaS) {
 				if (r.getDeporte().toUpperCase().equals(s.getDeporte().toUpperCase())) {
 					p += s.getDistancia(); // Suma la distancia de las sesiones
 				}
@@ -178,10 +178,10 @@ public class RetoService {
 		return progreso;
 	}
 
-	public List<RetoAcptadoDTO> getRetosAceptados(Long UsuId) {
+	public List<RetoAcptadoDTO> getRetosAceptados(Long usuId) {
 
 		// Obtiene la lista de retos aceptados para el usuario o un valor por defecto
-		List<RetoAcptadoDTO> retosUsuario = retoADTO.getOrDefault(UsuId, new ArrayList<>());
+		List<RetoAcptadoDTO> retosUsuario = retoADTO.getOrDefault(usuId, new ArrayList<>());
 		List<RetoAcptadoDTO> lista = new ArrayList<>();
 
 		// Calcula el progreso de cada reto y agrega a la lista de resultados
