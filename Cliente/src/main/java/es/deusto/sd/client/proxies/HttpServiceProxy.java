@@ -232,6 +232,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	@Override
 	public List<RetoAceptado> consultarRetosAceptados(String token) {
 	    try {
+	    	String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8);
 	        HttpRequest request = HttpRequest.newBuilder()
 	            .uri(URI.create(BASE_URL + "/acciones/retos/aceptados?Authorization=" + token))
 	            .header("Content-Type", "application/json")
