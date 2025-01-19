@@ -256,26 +256,31 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	public List<RetoAceptado> consultarRetosAceptados(String token) {
 
 		try {
-			// Codificar el token para que sea válido en una URI
-			String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8);
+			// Construir la URL base
+			StringBuilder urlBuilder = new StringBuilder(BASE_URL + "/acciones/retos/aceptados");
 
-			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create(BASE_URL + "/acciones/retos/aceptados?Authorization=" + encodedToken))
-					.header("Content-Type", "application/json").GET().build();
 
+			// Construir la solicitud
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(urlBuilder.toString()))
+					.header("Content-Type", "application/json").header("token", token).GET().build();
+
+			// Enviar la solicitud y obtener la respuesta
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
+			System.out.println("Response body: " + response.body());
+
+			// Procesar la respuesta
 			return switch (response.statusCode()) {
 			case 200 -> objectMapper.readValue(response.body(),
 					objectMapper.getTypeFactory().constructCollectionType(List.class, RetoAceptado.class));
-			case 204 -> throw new RuntimeException("No Content: No hay retos aceptados");
+			case 204 -> throw new RuntimeException("No Content :(: No hay retos aceptados");
 			case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
 			case 500 -> throw new RuntimeException("Internal server error");
 			default -> throw new RuntimeException(
-					"Fallo al consultar los retos aceptados con el código de estado: " + response.statusCode());
+					"Fallo al obtener los reto con el codigo de estatus: " + response.statusCode());
 			};
 		} catch (IOException | InterruptedException e) {
-			throw new RuntimeException("Error consultando los retos aceptados.", e);
+			throw new RuntimeException("Error obteniendo el reto.", e);
 		}
 
 	}
