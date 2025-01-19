@@ -121,8 +121,7 @@ public class RetoController {
 			@PostMapping("/retos/aceptar")
 			public ResponseEntity<Void> aceptarReto(
 			        @RequestParam("retoId") Long retoId,
-			        @Parameter(name = "token", description = "Authorization token", required = true)
-			        @RequestParam(value = "Authorization") String token) {
+			        @RequestBody String token) {
 
 			    try {
 			        Usuario usuario = usuarioService.getUserByToken(token);
@@ -152,23 +151,24 @@ public class RetoController {
 			        @ApiResponse(responseCode = "500", description = "Internal server error")
 			    }
 			)
-		@GetMapping("/retos/aceptados")
-		public ResponseEntity<List<RetoAcptadoDTO>> consultarRetosAceptados(
-		        @Parameter(name = "token", description = "Authorization token", required = true)
-		        @RequestParam(value = "Authorization") String token) {
+			@GetMapping("/retos/aceptados")
+			public ResponseEntity<List<RetoAcptadoDTO>> consultarRetosAceptados(
+					@Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
+				    @RequestHeader("token") String token) {
 
-		    try {
-		        Usuario usuario = usuarioService.getUserByToken(token);
-		        if (usuario == null) {
-		            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		        }
-		        List<RetoAcptadoDTO> retosAceptados = retoService.getRetosAceptados(usuario.getId());
-		        if (retosAceptados.isEmpty()) {
-		            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		        }
-		        return new ResponseEntity<>(retosAceptados, HttpStatus.OK);
-		    } catch (Exception e) {
-		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		    }
-		}
+			    try {
+			        Usuario usuario = usuarioService.getUserByToken(token);
+			        if (usuario == null) {
+			            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			        }
+			        List<RetoAcptadoDTO> retosAceptados = retoService.getRetosAceptados(usuario.getId());
+			        if (retosAceptados.isEmpty()) {
+			            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			        }
+			        return new ResponseEntity<>(retosAceptados, HttpStatus.OK);
+			    } catch (Exception e) {
+			        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			    }
+			}
+
 }
