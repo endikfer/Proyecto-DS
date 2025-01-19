@@ -1,13 +1,11 @@
 package es.deusto.sd.client.data;
 
-import java.time.LocalDate;
-
 public record Reto(
 		Long id,
 		String nombre,
 		String deporte,
-		LocalDate fecha_inicio,
-		LocalDate fecha_fin,
+		String fecha_inicio,
+		String fecha_fin,
 		Integer distancia,
 		Integer tiempo
 	) {}

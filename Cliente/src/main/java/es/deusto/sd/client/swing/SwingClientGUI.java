@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -65,8 +66,8 @@ public class SwingClientGUI extends JFrame {
 	private final SwingClientController controller;
 
 	// Default login credentials
-	private String defaultEmail = "support@gmail.com";
-	private String defaultPassword = "456";
+	private String defaultEmail = "contact@meta.com";
+	private String defaultPassword = "1a2b3c4d";
 
 	private JLabel logoutLabel;
 	private JComboBox<String> currencyComboBox;
@@ -347,14 +348,14 @@ public class SwingClientGUI extends JFrame {
 			}
 		};
 		jtbleArticles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		consultarRetos();
+		consultarRetos(null, null);
 		
 		
 		
 		jtbleArticles.getSelectionModel().addListSelectionListener(e -> {
 			System.out.println(e.getValueIsAdjusting());
 			if (!e.getValueIsAdjusting()) {
-				consultarRetos();
+				//consultarRetos();
 			}
 		});
 
@@ -373,19 +374,28 @@ public class SwingClientGUI extends JFrame {
 		buttonPanel.add(new JLabel("Fecha:"));
 		buttonPanel.add(txtFecha);
 
-		JButton btnFilterByDate = new JButton("Filtrar por Fecha");
+		JButton btnFilterByDate = new JButton("Filtrar");
 		buttonPanel.add(btnFilterByDate);
 
 		JComboBox<String> cbDeportes = new JComboBox<>(new String[] { "Running", "Ciclismo" });
 		buttonPanel.add(new JLabel("Deporte:"));
 		buttonPanel.add(cbDeportes);
 
-		JButton btnFilterByDeporte = new JButton("Filtrar por Deporte");
+		JButton btnFilterByDeporte = new JButton("Filtrar");
+		//btnFilterByDeporte.setFont(new Font("Arial", Font.PLAIN, 12)); 
 		buttonPanel.add(btnFilterByDeporte);
+		
+		btnFilterByDeporte.addActionListener(e -> {
+		    // Obtener el valor seleccionado en el JComboBox
+		    String deporte = (String) cbDeportes.getSelectedItem();
+		    
+		    consultarRetos(deporte, null);
+		    
+		});
 
 		buttonPanel.add(Box.createHorizontalGlue());
 
-		JButton btnAcceptRetos = new JButton("Aceptar Retos");
+		JButton btnAcceptRetos = new JButton("Acept");
 
 		buttonPanel.add(btnAcceptRetos);
 
@@ -728,18 +738,12 @@ public class SwingClientGUI extends JFrame {
 		}
 	}
 
-	private void consultarRetos() {
-		// List<Reto> retos = controller.consultarRetos(deporte, fecha);
-
-		// String deporteSeleccionado2 = (String) deporteComboBox.getSelectedItem();
-		// String fechaSeleccionada2 = fechaTextField.getText();
-
-		String deporteSeleccionado = "0";
-		String fechaSeleccionada = "0";
+	private void consultarRetos(String deporte, String fecha) {
 
 		try {
 			// Llama al controlador para obtener la lista de retos
-			List<Reto> retos2 = controller.consultarRetos(deporteSeleccionado, fechaSeleccionada);
+			List<Reto> retos = controller.consultarRetos(deporte, fecha);
+			//List<Reto> retos2 = controller.consultarRetos(deporteSeleccionado, fechaSeleccionada);
 			System.out.println("lista obtenida.");
 
 			SwingUtilities.invokeLater(() -> {
@@ -748,8 +752,8 @@ public class SwingClientGUI extends JFrame {
 				model.setRowCount(0);
 
 				// Llena la tabla con los datos de los retos
-				for (Reto reto : retos2) {
-					model.addRow(new Object[] { reto.nombre(), reto.deporte(), reto.fecha_inicio(), reto.fecha_fin(),
+				for (Reto reto : retos) {
+					model.addRow(new Object[] { reto.id(), reto.nombre(), reto.deporte(), reto.fecha_inicio(), reto.fecha_fin(),
 							reto.distancia(), reto.tiempo() });
 				}
 			});

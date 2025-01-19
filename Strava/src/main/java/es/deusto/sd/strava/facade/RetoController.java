@@ -90,8 +90,7 @@ public class RetoController {
 		    @RequestParam(value = "fecha", required = false) String fechaFiltroStr,
 
 		    @Parameter(name = "token", description = "Authorization token", required = true, example = "1727786726773")
-		    @RequestHeader String token) {
-		    
+		    @RequestHeader("token") String token) {
 		    try {
 		        // Verifica si el usuario está autorizado
 		        Usuario user = usuarioService.getUserByToken(token);
@@ -100,9 +99,9 @@ public class RetoController {
 		        }
 		        
 		        List<RetoDTO> retos = retoService.obtenerRetos(deporteFiltro, fechaFiltroStr);
-
 		        return new ResponseEntity<>(retos, HttpStatus.OK);
 		    } catch (Exception e) {
+		    	e.printStackTrace();
 		        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		    }
 		}
