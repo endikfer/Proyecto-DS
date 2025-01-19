@@ -232,9 +232,11 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	@Override
 	public List<RetoAceptado> consultarRetosAceptados(String token) {
 	    try {
-	    	String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8);
+	        // Codificar el token para que sea válido en una URI
+	        String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8);
+
 	        HttpRequest request = HttpRequest.newBuilder()
-	            .uri(URI.create(BASE_URL + "/acciones/retos/aceptados?Authorization=" + token))
+	            .uri(URI.create(BASE_URL + "/acciones/retos/aceptados?Authorization=" + encodedToken))
 	            .header("Content-Type", "application/json")
 	            .GET()
 	            .build();
@@ -242,7 +244,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
 	        return switch (response.statusCode()) {
-	            case 200 -> objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class, Reto.class));
+	            case 200 -> objectMapper.readValue(response.body(), objectMapper.getTypeFactory().constructCollectionType(List.class, RetoAceptado.class));
 	            case 204 -> throw new RuntimeException("No Content: No hay retos aceptados");
 	            case 401 -> throw new RuntimeException("Unauthorized: Usuario no autenticado");
 	            case 500 -> throw new RuntimeException("Internal server error");
@@ -252,6 +254,7 @@ public class HttpServiceProxy implements IStravaServiceProxy {
 	        throw new RuntimeException("Error consultando los retos aceptados.", e);
 	    }
 	}
+
 
 	@Override
 	public void registro(String nombre, String email, String tipo, String fecha_nac, float peso, int altura,
