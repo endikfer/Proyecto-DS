@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+    <fullyQualifiedTypeName name="com.deustocoches.controller.CocheController"/>
+    <fullyQualifiedTypeName name="com.deustocoches.service.CocheService"/>
+    <fullyQualifiedTypeName name="com.deustocoches.model.Reserva"/>
+    <fullyQualifiedTypeName name="com.deustocoches.client.IServiceProxy"/>
+    <fullyQualifiedTypeName name="org.springframework.http.HttpEntity"/>
+    <fullyQualifiedTypeName name="org.springframework.http.HttpMethod"/>
+    <fullyQualifiedTypeName name="com.deustocoches.client.RestTemplateServiceProxy"/>
+</qualifiedTypeNameHistroy>
